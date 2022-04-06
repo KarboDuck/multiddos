@@ -4,7 +4,7 @@
 ![multiddos](https://user-images.githubusercontent.com/53382906/161972523-a1197762-a166-45f2-9b68-6e13cc940d99.gif)
 
 На данный момент скрипт запускает:
-* [auto_bash](https://github.com/Aruiem234/auto_mhddos/tree/main/bash) от украинского жнеца ([канал](https://t.me/ukrainian_reaper_ddos), [чат](https://t.me/+azRzzKp-STpkMjNi))
+* [auto_bash](https://github.com/Aruiem234/auto_mhddos/tree/main/bash) от Украинского Жнеца ([канал](https://t.me/ukrainian_reaper_ddos), [чат](https://t.me/+azRzzKp-STpkMjNi))
 * [db1000n ](https://github.com/Arriven/db1000n) от IT ARMY of Ukraine ([канал](https://t.me/itarmyofukraine2022), чат)
 * [UA Cyber SHIELD](https://github.com/opengs/uashield) ([канал](https://t.me/uashield), чат)
 
