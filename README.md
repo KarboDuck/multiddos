@@ -32,7 +32,7 @@ curl -s https://raw.githubusercontent.com/KarboDuck/multiddos/main/multiddos.sh 
 Если у вас всего одна сессия Tmux, то используйте: `tmux a` (tmux attach)
 Если у вас несколько сессий, подключайтесь по имени: `tmux attach-session -t multiddos`
 
-## Версия с матрицей по просьбам трудящихся
+## Версия с матрицей, по просьбам трудящихся
 
 Отличается только наличием cmatrix.
 ```
