@@ -13,7 +13,7 @@ if [ ! -f "/usr/local/bin/gotop" ]; then
     wget https://github.com/cjbassi/gotop/releases/download/3.0.0/gotop_3.0.0_linux_amd64.deb
     sudo dpkg -i gotop_3.0.0_linux_amd64.deb
 fi
-rm *.tar.gz
+rm *.tar.gz *.deb
 
 tmux new-session -s "multiddos" -d 'gotop -asc solarized'
 tmux split-window -h -p 75 'curl -s https://raw.githubusercontent.com/KarboDuck/mhddos_bash/master/runner.sh | bash'
