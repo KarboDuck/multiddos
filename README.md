@@ -29,5 +29,5 @@ curl -s https://raw.githubusercontent.com/KarboDuck/multiddos/main/multiddos.sh 
 Сначала выйдите из Tmux: `Нажмите Ctrl +b и отпустите` `Нажмите d`
 Выполните в терминале команду `tmux kill-session -t multiddos`
 * Переподключиться к сессии Tmux.
-Если у вас всего одна сессия Tmux, то используйте: `tmux a' (tmux attach)
+Если у вас всего одна сессия Tmux, то используйте: `tmux a` (tmux attach)
 Если у вас несколько сессий, подключайтесь по имени: `tmux attach-session -t multiddos`
