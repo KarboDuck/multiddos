@@ -21,4 +21,5 @@ tmux split-window -h -p 75 'curl -s https://raw.githubusercontent.com/KarboDuck/
 tmux split-window -v 'docker run -it --rm  ghcr.io/opengs/uashield:master 512 true'
 tmux split-window -v 'torsocks -i ./db1000n'
 #tmux split-window -v 'docker run --rm -it --pull always ghcr.io/arriven/db1000n'
-tmux -2 attach-session -d
+#tmux -2 attach-session -d
+tmux a -t multiddos
