@@ -13,7 +13,7 @@
 ## Команда для запуска в Linux
 
 ```
-curl -s https://raw.githubusercontent.com/KarboDuck/multiddos/main/multiddos.sh | bash
+curl -s https://raw.githubusercontent.com/KarboDuck/multiddos/main/multiddos.sh -o multiddos.sh && bash multiddos.sh
 ```
 
 Скрипт запускает tmux сессию. Если ssh сессия оборвется, то программы не закроются, а будут дальше работать в фоне. После повторного подключения по ssh окно Tmux с ними можно восстановить.
