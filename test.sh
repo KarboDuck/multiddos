@@ -1,5 +1,8 @@
 #!/bin/bash
 # curl -s https://raw.githubusercontent.com/KarboDuck/multiddos/main/test.sh -o md.sh && bash md.sh
+grep -qxF 'set -g mouse on' ~/.tmux.conf || echo 'set -g mouse on' >> ~/.tmux.conf
+source ~/.tmux.conf
+
 sudo apt-get update -y
 sudo apt-get install -y tmux wget torsocks python3 python3-pip gcc libc-dev libffi-dev libssl-dev python3-dev rustc
 pip install --upgrade pip
