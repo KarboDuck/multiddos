@@ -1,7 +1,7 @@
 #!/bin/bash
 # curl -s https://raw.githubusercontent.com/KarboDuck/multiddos/main/md2.sh -o md2.sh && bash md2.sh
 sudo apt-get update -y
-sudo apt-get install -y tmux wget torsocks vnstat fish python3 python3-pip gcc libc-dev libffi-dev libssl-dev python3-dev rustc
+sudo apt-get install -y tmux wget torsocks python3 python3-pip gcc libc-dev libffi-dev libssl-dev python3-dev rustc
 pip install --upgrade pip
 #install docker
 sudo apt install apt-transport-https ca-certificates curl software-properties-common
@@ -31,5 +31,5 @@ tmux split-window -v 'curl https://raw.githubusercontent.com/Arriven/db1000n/mai
 #tmux split-window -v 'docker run --rm -it --pull always ghcr.io/arriven/db1000n'
 tmux select-pane -t 0
 sleep 0.1
-tmux split-window -v 'vnstat -l'
+#tmux split-window -v 'vnstat -l'
 tmux -2 attach-session -d
