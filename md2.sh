@@ -4,11 +4,12 @@ sudo apt-get update -y
 sudo apt-get install -y tmux wget torsocks vnstat fish python3 python3-pip gcc libc-dev libffi-dev libssl-dev python3-dev rustc
 pip install --upgrade pip
 #install docker
-sudo apt install apt-transport-https ca-certificates curl software-properties-common
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
-sudo apt install docker-ce -y
+#sudo apt install apt-transport-https ca-certificates curl software-properties-common
+#curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+#sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+#sudo apt install docker-ce -y
 
+#tmux mouse support
 grep -qxF 'set -g mouse on' ~/.tmux.conf || echo 'set -g mouse on' >> ~/.tmux.conf
 tmux source-file ~/.tmux.conf
 
