@@ -6,7 +6,7 @@
 На данный момент скрипт запускает:
 * [auto_bash](https://github.com/Aruiem234/auto_mhddos/tree/main/bash) от Украинского Жнеца ([канал](https://t.me/ukrainian_reaper_ddos), [чат](https://t.me/+azRzzKp-STpkMjNi))
 * [db1000n ](https://github.com/Arriven/db1000n) от IT ARMY of Ukraine ([канал](https://t.me/itarmyofukraine2022), чат)
-* [UA Cyber SHIELD](https://github.com/opengs/uashield) ([канал](https://t.me/uashield), чат)
+* ~~[UA Cyber SHIELD](https://github.com/opengs/uashield) ([канал](https://t.me/uashield), чат)~~ (Убрали, не понятна эффективность, а CPU у других утилит забирает очень активно)
 
 Все эти утилиты автоматизированы, то есть автоматически подтягивают новые цели от своих разработчиков.
 
@@ -31,7 +31,6 @@ curl -s https://raw.githubusercontent.com/KarboDuck/multiddos/main/multiddos_mat
 ![cmatrix](https://user-images.githubusercontent.com/53382906/162016355-5062d73e-16a1-4311-8090-14e24b696304.gif)
   
 </details>
-
 
 ## Управление
 
