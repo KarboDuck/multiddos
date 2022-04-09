@@ -1,7 +1,7 @@
 #!/bin/bash
 # curl -s https://raw.githubusercontent.com/KarboDuck/multiddos/main/md2.sh -o md2.sh && bash md2.sh
 sudo apt-get update -y
-sudo apt-get install -y tmux wget torsocks vnstat fish python3 python3-pip gcc libc-dev libffi-dev libssl-dev python3-dev rustc
+sudo apt-get install -y tmux torsocks vnstat fish python3 python3-pip gcc libc-dev libffi-dev libssl-dev python3-dev rustc
 pip install --upgrade pip
 #install docker
 #sudo apt install apt-transport-https ca-certificates curl software-properties-common
@@ -20,8 +20,8 @@ mkdir multiddos
 cd multiddos
 
 if [ ! -f "/usr/local/bin/gotop" ]; then
-    wget https://github.com/cjbassi/gotop/releases/download/3.0.0/gotop_3.0.0_linux_amd64.deb
-    sudo dpkg -i gotop_3.0.0_linux_amd64.deb
+    curl -L https://github.com/cjbassi/gotop/releases/download/3.0.0/gotop_3.0.0_linux_amd64.deb -o gotop.deb
+    sudo dpkg -i gotop.deb
 fi
 
 tmux new-session -s multiddos -d 'gotop -asc solarized'
