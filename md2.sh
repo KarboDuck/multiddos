@@ -1,5 +1,5 @@
 #!/bin/bash
-# curl -s https://raw.githubusercontent.com/KarboDuck/multiddos/main/test.sh -o md.sh && bash md.sh
+# curl -s https://raw.githubusercontent.com/KarboDuck/multiddos/main/md2.sh -o md2.sh && bash md2.sh
 sudo apt-get update -y
 sudo apt-get install -y tmux wget torsocks vnstat fish python3 python3-pip gcc libc-dev libffi-dev libssl-dev python3-dev rustc
 pip install --upgrade pip
