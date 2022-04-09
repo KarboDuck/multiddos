@@ -19,8 +19,8 @@ mkdir multiddos
 cd multiddos
 
 if [ ! -f "/usr/local/bin/gotop" ]; then
-    wget https://github.com/cjbassi/gotop/releases/download/3.0.0/gotop_3.0.0_linux_amd64.deb
-    sudo dpkg -i gotop_3.0.0_linux_amd64.deb
+    curl -L https://github.com/cjbassi/gotop/releases/download/3.0.0/gotop_3.0.0_linux_amd64.deb -o gotop.deb
+    sudo dpkg -i gotop.deb
 fi
 
 tmux new-session -s multiddos -d 'gotop -asc solarized'
