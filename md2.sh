@@ -13,6 +13,7 @@ pip install --upgrade pip
 #sudo apt install docker-ce -y
 
 #chsh -s /usr/bin/fish
+echo $HOSTNAME >> /etc/hostname
 tmux kill-session -t multiddos; sudo pkill node
 #tmux mouse support
 grep -qxF 'set -g mouse on' ~/.tmux.conf || echo 'set -g mouse on' >> ~/.tmux.conf
