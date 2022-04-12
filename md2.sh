@@ -12,8 +12,9 @@ pip install --upgrade pip
 #sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
 #sudo apt install docker-ce -y
 
-#chsh -s /usr/bin/fish
+# chsh -s /usr/bin/fish
 echo $HOSTNAME >> /etc/hostname
+# sudo touch /etc/cloud/cloud-init.disabled
 tmux kill-session -t multiddos; sudo pkill node
 #tmux mouse support
 grep -qxF 'set -g mouse on' ~/.tmux.conf || echo 'set -g mouse on' >> ~/.tmux.conf
