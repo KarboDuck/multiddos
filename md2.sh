@@ -1,6 +1,7 @@
 #!/bin/bash
 # curl -s https://raw.githubusercontent.com/KarboDuck/multiddos/main/md2.sh -o md2.sh && bash md2.sh
 sudo fallocate -l 1G /swapfile && sudo chmod 600 /swapfile && sudo mkswap /swapfile && sudo swapon /swapfile
+sleep 5
 sudo apt update -y
 sudo apt install -y tmux vnstat python3 python3-pip
 # sudo apt install torsocks fish
