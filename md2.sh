@@ -31,7 +31,7 @@ if [ ! -f "/usr/local/bin/gotop" ]; then
     sudo dpkg -i gotop.deb
 fi
 
-tmux new-session -s multiddos -d 'gotop -asc solarized'
+tmux new-session -s multiddos -d 'gotop -ac solarized'
 sleep 0.1
 tmux split-window -v 'vnstat -l'
 sleep 0.1
