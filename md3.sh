@@ -35,3 +35,4 @@ tmux select-pane -t 0
 sleep 0.1
 # tmux split-window -v 'vnstat -l'
 # tmux -2 attach-session -d
+tmux a || tmux
