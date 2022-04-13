@@ -25,7 +25,7 @@ if [ ! -f "/usr/local/bin/gotop" ]; then
     sudo dpkg -i gotop.deb
 fi
 
-tmux new-session -s multiddos -d 'gotop -ac solarized'
+tmux new-session -s multiddos 'gotop -ac solarized'
 sleep 0.1
 tmux split-window -h -p 75 'curl -s https://raw.githubusercontent.com/Aruiem234/auto_mhddos/main/bash/auto_bash.sh | bash'
 sleep 0.1
