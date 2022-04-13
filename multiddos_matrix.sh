@@ -34,4 +34,4 @@ sleep 0.1
 tmux select-pane -t 0
 tmux split-window -v -p 33 'cmatrix'
 #tmux split-window -v 'docker run --rm -it --pull always ghcr.io/arriven/db1000n'
-tmux -2 attach-session -d
+#tmux -2 attach-session -d
