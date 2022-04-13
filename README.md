@@ -13,7 +13,7 @@
 ## Команда для запуска в Linux
 
 ```
-curl -L tiny.one/multiddos -o md.sh && bash md.sh
+curl -L tiny.one/multiddos | bash && tmux a
 ```
 
 Скрипт запускает tmux сессию. Если ssh сессия оборвется, то программы не закроются, а будут дальше работать в фоне. После повторного подключения по ssh окно Tmux можно восстановить.
@@ -26,7 +26,7 @@ curl -L tiny.one/multiddos -o md.sh && bash md.sh
   
 Отличается только наличием cmatrix.
 ```
-curl -s https://raw.githubusercontent.com/KarboDuck/multiddos/main/multiddos_matrix.sh -o multiddos_m.sh && bash multiddos_m.sh
+curl -s https://raw.githubusercontent.com/KarboDuck/multiddos/main/multiddos_matrix.sh | bash && tmux a
 ```
 ![cmatrix](https://user-images.githubusercontent.com/53382906/162016355-5062d73e-16a1-4311-8090-14e24b696304.gif)
   
