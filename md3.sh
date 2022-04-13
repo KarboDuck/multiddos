@@ -34,4 +34,4 @@ tmux split-window -v 'curl https://raw.githubusercontent.com/Arriven/db1000n/mai
 tmux select-pane -t 0
 sleep 0.1
 #tmux split-window -v 'vnstat -l'
-tmux attach-session -t multiddos
+tmux a
