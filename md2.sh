@@ -3,11 +3,12 @@
 sudo fallocate -l 1G /swapfile && sudo chmod 600 /swapfile && sudo mkswap /swapfile && sudo swapon /swapfile
 sleep 5
 sudo apt update -y
-sudo apt install -y tmux vnstat python3 python3-pip
-# sudo apt install torsocks fish
+sudo apt install -y tmux fish vnstat python3 python3-pip
+# sudo apt install torsocks
 # sudo apt instal gcc libc-dev libffi-dev libssl-dev python3-dev rustc
 pip install --upgrade pip
 # install docker
+sudo apt install docker.io
 #sudo apt install apt-transport-https ca-certificates curl software-properties-common
 #curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
 #sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
