@@ -75,9 +75,7 @@ if [[ $mode == "-m3" ]]; then
 #curl -L https://github.com/opengs/uashield/releases/download/v1.0.3/shield-1.0.3.tar.gz -o shield.tar.gz
 #tar -xzf shield.tar.gz --strip 1
 #tmux split-window -v './shield'
-tmux split-window -v 'curl -L https://github.com/opengs/uashield/releases/download/v1.0.3/shield-1.0.3.tar.gz -o shield.tar.gz'
-tmux 'tar -xzf shield.tar.gz --strip 1'
-tmux './shield'
+tmux split-window -v 'curl -L https://github.com/opengs/uashield/releases/download/v1.0.3/shield-1.0.3.tar.gz -o shield.tar.gz && tar -xzf shield.tar.gz --strip 1 && ./shield'
 fi
 
 tmux select-pane -t 0
