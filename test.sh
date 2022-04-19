@@ -70,11 +70,8 @@ if [[ $mode == "-m2" || $mode == "-m3" ]]; then
 tmux split-window -v 'curl https://raw.githubusercontent.com/Arriven/db1000n/main/install.sh | bash && torsocks -i ./db1000n'
 #tmux split-window -v 'docker run --rm -it --pull always ghcr.io/arriven/db1000n'
 fi
-
+sleep 0.1
 if [[ $mode == "-m3" ]]; then
-#curl -L https://github.com/opengs/uashield/releases/download/v1.0.3/shield-1.0.3.tar.gz -o shield.tar.gz
-#tar -xzf shield.tar.gz --strip 1
-#tmux split-window -v './shield'
 tmux split-window -v 'curl -L https://github.com/opengs/uashield/releases/download/v1.0.3/shield-1.0.3.tar.gz -o shield.tar.gz && tar -xzf shield.tar.gz --strip 1 && ./shield'
 fi
 
@@ -84,14 +81,15 @@ sleep 0.1
 tmux -2 attach-session -d
 }
 
-
 mode="-m2"
+if [[ "$1" = ""  ]]; then launch; fi
+
 while [ "$1" != "" ]; do
     case $1 in
         -m1 )   mode=$1; shift; launch ;;
         -m2 )   mode=$1; shift; launch ;;
         -m3 )   mode=$1; shift; launch ;;
         -a  )   mode=$1; shift; launch ;;
-        -h | --help )      usage;   exit ;;
+        -h | --help )    usage;   exit ;;
     esac
 done
