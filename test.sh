@@ -45,6 +45,9 @@ tmux kill-session -t multiddos; sudo pkill node; sudo pkill shield
 grep -qxF 'set -g mouse on' ~/.tmux.conf || echo 'set -g mouse on' >> ~/.tmux.conf
 tmux source-file ~/.tmux.conf
 
+echo "threads: " $threads
+sleep 3
+
 tmux new-session -s multiddos -d 'gotop -asc solarized'
 sleep 0.2
 tmux split-window -h -p 66 'bash auto_bash.sh'
