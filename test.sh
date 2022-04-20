@@ -45,9 +45,6 @@ tmux kill-session -t multiddos; sudo pkill node; sudo pkill shield
 grep -qxF 'set -g mouse on' ~/.tmux.conf || echo 'set -g mouse on' >> ~/.tmux.conf
 tmux source-file ~/.tmux.conf
 
-echo "threads: " $threads
-sleep 3
-
 tmux new-session -s multiddos -d 'gotop -asc solarized'
 sleep 0.2
 tmux split-window -h -p 66 'bash auto_bash.sh'
@@ -95,7 +92,7 @@ while [ "$1" != "" ]; do
         -m1 )   mode=$1; shift ;;
         -m2 )   mode=$1; shift ;;
         -m3 )   mode=$1; shift ;;
-        -t  )   threads="-t $2"; shift 2;;
+        -t  )   threads="-t $2"; shift 2 ;;
         --matrix )   matrix="on"; shift ;;
         -h | --help )    usage;   exit ;;
     esac
