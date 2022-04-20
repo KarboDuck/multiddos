@@ -75,13 +75,12 @@ curl -L tiny.one/multiddos -o mul.ti && bash mul.ti -u && tmux a
 * `-m` или `--matrix` подключает эффект матрицы в небольшом окне. Был добавлен в режиме тестирования, позже решили оставить как опцию.
 
 ```
-curl -L tiny.one/multiddos -o mul.ti && bash mul.ti --matrix && tmux a
+curl -L tiny.one/multiddos -o mul.ti && bash mul.ti -m && tmux a
 ```
 * Комбинация вариантов для запуска всех трех утилит и матрицы
 
 ```
 curl -L tiny.one/multiddos -o mul.ti && bash mul.ti -d -u -m && tmux a
 ```
-
 
 </details>
