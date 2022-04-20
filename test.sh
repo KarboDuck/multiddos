@@ -6,8 +6,8 @@ mkdir multiddos
 cd multiddos
 
 # sudo apt install docker.io gcc libc-dev libffi-dev libssl-dev python3-dev rustc -qq -y 
-sudo apt-get update -qq -y
-sudo apt-get install -qq -y tmux torsocks python3 python3-pip
+sudo apt-get update -q -y
+sudo apt-get install -q -y tmux torsocks python3 python3-pip
 pip install --upgrade pip
 
 cat > auto_bash.sh << 'EOF'
