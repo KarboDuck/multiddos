@@ -22,6 +22,9 @@ curl -L tiny.one/multiddos | bash && tmux a
 Внутри окна Multiddos запускается утилита для мониторинга gotop (можно смотреть за исходящим трафиком, нагрузкой на процессор, и использованием RAM) и утилиты, перечисленные выше. 
 
 ## Выбор режима
+<details>
+  <summary>развернуть</summary>
+  
 
 В программе доступно 3 основных режима. -m1, -m2, -m3, по количеству запускаемых утилит.
 
@@ -45,6 +48,8 @@ curl -L tiny.one/multiddos -o mul.ti && bash mul.ti -m3 && tmux a
 ```
 curl -L tiny.one/multiddos -o mul.ti && bash mul.ti --matrix && tmux a
 ```
+ 
+</details>
 
 ## Запуск в фоне
 
