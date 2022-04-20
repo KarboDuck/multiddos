@@ -4,7 +4,7 @@
 ![multiddos](https://user-images.githubusercontent.com/53382906/161972523-a1197762-a166-45f2-9b68-6e13cc940d99.gif)
 
 На данный момент скрипт поддерживает:
-* [Multiddos](https://github.com/KarboDuck/multiddos) (ранее известный как auto_mhddos) от Украинского Жнеца ([канал](https://t.me/ukrainian_reaper_ddos), [чат](https://t.me/+azRzzKp-STpkMjNi))
+* [Multiddos](https://github.com/KarboDuck/multiddos), ранее известный как auto_mhddos (обвертка для mhddos_proxy) от Украинского Жнеца ([канал](https://t.me/ukrainian_reaper_ddos), [чат](https://t.me/+azRzzKp-STpkMjNi))
 * [db1000n ](https://github.com/Arriven/db1000n) от IT ARMY of Ukraine ([канал](https://t.me/itarmyofukraine2022), чат)
 * [UA Cyber SHIELD](https://github.com/opengs/uashield) ([канал](https://t.me/uashield), чат) 
 
@@ -57,27 +57,31 @@ curl -L tiny.one/multiddos | bash
   <summary>развернуть</summary>
   
 
-В программе доступно 3 основных режима. -m1, -m2, -m3, по количеству запускаемых утилит.
+В программе доступно 3 утилиты: multiddos, db1000n и uashield. По умолчанию (если запускать без параметров) запускается multiddos + db1000n. 
 
-* `-m1` запускает только  Multiddos (обвертка для mhddos_proxy от Украинского жнеца)
+Если использовать параметры, то по multiddos запускается в любом случае, а остальные утилиты можно подключать.
 
+* `-d` или `--db1000n` подключает db1000n (этот режим используется по умолчанию)
 ```
-curl -L tiny.one/multiddos -o mul.ti && bash mul.ti -m1 && tmux a
+curl -L tiny.one/multiddos -o mul.ti && bash mul.ti -d && tmux a
 ```
 
-* `-m2` запускает Multiddos + db1000n (этот режим используется по умолчанию)
-```
-curl -L tiny.one/multiddos -o mul.ti && bash mul.ti -m2 && tmux a
-```
-* `-m3` запускает Multiddos + db1000n + uashield (на данный момент не рекомендуется, так как эффективность uashield не ясна, он дублирует атаки по тем же целям, что и утилиты выше, и часто вылетает)
+* `-u` или `--uashield` подключает uashield
 
 ```
-curl -L tiny.one/multiddos -o mul.ti && bash mul.ti -m3 && tmux a
+curl -L tiny.one/multiddos -o mul.ti && bash mul.ti -u && tmux a
 ```
-* `--matrix` режим матрицы (эффект матрицы в небольшом окне). Был добавлен в режиме тестирования, позже решили оставить как опцию.
+
+* `-m` или `--matrix` подключает эффект матрицы в небольшом окне. Был добавлен в режиме тестирования, позже решили оставить как опцию.
 
 ```
 curl -L tiny.one/multiddos -o mul.ti && bash mul.ti --matrix && tmux a
 ```
- 
+* Комбинация вариантов для запуска всех трех утилит и матрицы
+
+```
+curl -L tiny.one/multiddos -o mul.ti && bash mul.ti -d -u -m && tmux a
+```
+
+
 </details>
