@@ -9,9 +9,9 @@ cd multiddos
 db1000n="off"
 uashield="off"
 matrix="off"
-threads="-t 1000"
-rpc="--rpc 2000"
-debug="--debug"
+# threads="-t 1000"
+# rpc="--rpc 2000"
+export debug="--debug"
 
 launch () {
 if [ ! -f "/usr/local/bin/gotop" ]; then
@@ -64,7 +64,7 @@ while [ "$1" != "" ]; do
     case $1 in
         -d | --db1000n )   db1000n="on"; shift ;;
         -u | --uashield )   uashield="on"; shift ;;
-        -t | --threads )   threads="-t $2"; shift 2 ;;
+        -t | --threads )   export threads="-t $2"; shift 2 ;;
         -m | --matrix )   matrix="on"; shift ;;
         -h | --help )    usage;   exit ;;
         *  )   usage;   exit ;;
