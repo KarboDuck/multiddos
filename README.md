@@ -57,8 +57,7 @@ curl -L tiny.one/multiddos | bash
  
 </details>
 
-## Выбор режима
-
+## Выбор конфигурации
 
 <details>
   <summary>развернуть</summary>
