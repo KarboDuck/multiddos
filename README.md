@@ -80,32 +80,6 @@ curl -L tiny.one/multiddos -o mul.ti && bash mul.ti -d +m && tmux a
 ```
 убрать db1000n и добавить matrix
 
-По умолчанию (если запускать без параметров) запускается multiddos + db1000n. 
-
-Если использовать параметры, то по multiddos запускается в любом случае, а остальные утилиты можно подключать.
-
-* `-d` или `--db1000n` подключает db1000n (этот режим используется по умолчанию)
-```
-curl -L tiny.one/multiddos -o mul.ti && bash mul.ti -d && tmux a
-```
-
-* `-u` или `--uashield` подключает uashield
-
-```
-curl -L tiny.one/multiddos -o mul.ti && bash mul.ti -u && tmux a
-```
-
-* `-m` или `--matrix` подключает эффект матрицы в небольшом окне. Был добавлен в режиме тестирования, позже решили оставить как опцию.
-
-```
-curl -L tiny.one/multiddos -o mul.ti && bash mul.ti -m && tmux a
-```
-* Комбинация вариантов для запуска всех трех утилит и матрицы
-
-```
-curl -L tiny.one/multiddos -o mul.ti && bash mul.ti -d -u -m && tmux a
-```
-
 </details>
 
 ## Решение проблем
