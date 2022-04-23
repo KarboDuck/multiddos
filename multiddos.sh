@@ -11,7 +11,7 @@ db1000n="on"
 uashield="off"
 vnstat="off"
 matrix="off"
-#threads="-t 1000"
+threads="-t 500"
 #rpc="--rpc 2000"
 export debug="--debug"
 
