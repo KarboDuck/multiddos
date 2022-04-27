@@ -111,10 +111,10 @@ git clone https://github.com/MHProDev/MHDDoS.git
 # Restart attacks and update targets every 30 minutes
 while true; do
     pkill -f start.py; pkill -f runner.py
-    if [ $limit > 0 ]; then
+    if [ $limit -gt 0 ]; then
         current_total=$(vnstat --json y | python3 -c "import sys, json; print(sum([ifc['traffic']['total']['tx']+ifc['traffic']['total']['rx'] for ifc in json.load(sys.stdin)['interfaces']]))")
         echo "Limit is set to ${limit}, current total ${current_total}"
-        if [ $current_total > $limit ]; then
+        if [ $current_total -gt $limit ]; then
             echo "Finish loop: traffic ${total} has reached the ${limit}"
             tmux kill-session -t multiddos; sudo pkill node; sudo pkill shield
             break
