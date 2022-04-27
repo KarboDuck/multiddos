@@ -104,7 +104,6 @@ pip install --upgrade pip
 cat > auto_bash.sh << 'EOF'
 cd ~/multidd/
 git clone https://github.com/porthole-ascend-cinnamon/mhddos_proxy.git
-git clone https://github.com/G3nko0/traffic_proc_killer.git
 cd mhddos_proxy
 python3 -m pip install -r requirements.txt
 git clone https://github.com/MHProDev/MHDDoS.git
