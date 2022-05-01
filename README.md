@@ -127,7 +127,6 @@ curl -LO tiny.one/multiddos && bash multiddos -t 1000 && tmux a
 ```
 
 </details>
----
 
 # **Решение проблем**
 <details>
