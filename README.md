@@ -2,13 +2,13 @@
 
 ![multiddos](https://user-images.githubusercontent.com/53382906/161972523-a1197762-a166-45f2-9b68-6e13cc940d99.gif)
 
-## **Особености**:
+#### **Особености**:
 * Объединяет в себе несколько утилит для ддоса, и для мониторинга (gotop, vnstat)
 * Полностью автоматизирован. Автоматическое обновление программ, автоматическая настройка, автоматическая смена целей.
 * Запуск одной простой командой.
 * При закрытии терминала или разрыве ssh сессии программы не вылетают, а продолжают работать в фоне. В любой момент multiddos можно снова вывести на экран.
 
-## **На данный момент скрипт поддерживает:**
+#### **На данный момент скрипт поддерживает:**
 * [Multiddos](https://github.com/KarboDuck/multiddos), ранее известный как auto_mhddos (обвертка для mhddos_proxy) от Украинского Жнеца ([канал](https://t.me/ukrainian_reaper_ddos), [чат](https://t.me/+azRzzKp-STpkMjNi))
 * [db1000n ](https://github.com/Arriven/db1000n) от IT ARMY of Ukraine ([канал](https://t.me/itarmyofukraine2022), чат)
 * [UA Cyber SHIELD](https://github.com/opengs/uashield) ([канал](https://t.me/uashield), чат) 
@@ -29,7 +29,7 @@
 ---
 # **Docker-версия multiddos. Рекомендуется.** (Windows, Mac, Linux)
 
-## **Запуск**
+### **Запуск**
 
 1. Скачать и установить [Docker](https://docs.docker.com/get-docker/)
  * Команда для простой установки в Linux <details> sudo apt install apt-transport-https ca-certificates curl software-properties-common && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - && sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable" && sudo apt update && sudo apt install docker-ce -y
@@ -40,12 +40,12 @@ docker run -it --rm --log-driver none --name multidd --pull always karboduck/mul
 ```
 * Альтернативный запуск для слабых систем. Будет использоваться только 1 ядро на 90% (использовать если процессор забивается на 100% и система тормозит) <details> docker run --cpus 0.9 -it --rm --log-driver none --name multidd --pull always karboduck/multidd
 
-## **Остановка**
+### **Остановка**
 1. Нажать в окне несколько раз подряд `Ctrl + C`
 2. В другом терминале запустить команду `docker stop multidd`
 3. Перезагрузить операционную систему
 
-## **Подключиться обратно, если скрипт работает в фоне**
+### **Подключиться обратно, если скрипт работает в фоне**
 ```
 docker attach multidd
 ```
@@ -53,13 +53,13 @@ docker attach multidd
 ---
 # **Bash-версия multiddos** (Linux, WSL2)
 
-## **Запуск**
+### **Запуск**
 
 ```
 curl -L tiny.one/multiddos | bash && tmux a
 ```
 
-## **Запуск в фоне**
+### **Запуск в фоне**
 <details>
   <summary>развернуть</summary>
   
@@ -72,12 +72,12 @@ curl -L tiny.one/multiddos | bash
  
 </details>
 
-## **Остановка**:
+### **Остановка**:
 1. Нажать в окне несколько раз подряд `Ctrl + C`
 2. В другом терминале запустить команду `pkill tmux; pkill node; pkill shield; pkill -f start.py; pkill -f runner.py`
 3. Перезагрузить операционную систему
 
-## **Подключиться обратно, если скрипт работает в фоне**
+### **Подключиться обратно, если скрипт работает в фоне**
 ```
 tmux a
 ```
@@ -90,7 +90,6 @@ tmux a
 * **Переподключиться к сессии Tmux**. Если у вас всего одна сессия Tmux, то используйте: `tmux a` (tmux attach). Если у вас несколько сессий, подключайтесь по имени: `tmux attach-session -t multiddos`
 </details>
 
----
 # **Выбор конфигурации**
 
 <details>
