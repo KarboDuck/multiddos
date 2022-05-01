@@ -2,13 +2,13 @@
 
 ![multiddos](https://user-images.githubusercontent.com/53382906/161972523-a1197762-a166-45f2-9b68-6e13cc940d99.gif)
 
-#### **Особености**:
+### **Особености**:
 * Объединяет в себе несколько утилит для ддоса, и для мониторинга (gotop, vnstat)
 * Полностью автоматизирован. Автоматическое обновление программ, автоматическая настройка, автоматическая смена целей.
 * Запуск одной простой командой.
 * При закрытии терминала или разрыве ssh сессии программы не вылетают, а продолжают работать в фоне. В любой момент multiddos можно снова вывести на экран.
 
-#### **На данный момент скрипт поддерживает:**
+### **На данный момент скрипт поддерживает:**
 * [Multiddos](https://github.com/KarboDuck/multiddos), ранее известный как auto_mhddos (обвертка для mhddos_proxy) от Украинского Жнеца ([канал](https://t.me/ukrainian_reaper_ddos), [чат](https://t.me/+azRzzKp-STpkMjNi))
 * [db1000n ](https://github.com/Arriven/db1000n) от IT ARMY of Ukraine ([канал](https://t.me/itarmyofukraine2022), чат)
 * [UA Cyber SHIELD](https://github.com/opengs/uashield) ([канал](https://t.me/uashield), чат) 
