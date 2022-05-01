@@ -13,7 +13,7 @@
 * [db1000n ](https://github.com/Arriven/db1000n) от IT ARMY of Ukraine ([канал](https://t.me/itarmyofukraine2022), чат)
 * [UA Cyber SHIELD](https://github.com/opengs/uashield) ([канал](https://t.me/uashield), чат) 
 
->**Пояснение к выбору конкретных утилит**
+### **Пояснение к выбору конкретных утилит**
 <details>
 <summary>развернуть</summary>
  
