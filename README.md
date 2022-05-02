@@ -27,7 +27,7 @@
 </details>
 
 ---
-# **Multiddos для docker. Рекомендуется.** (Win, Mac, Linux)
+# **Multiddos в docker. Рекомендуется.** (Win, Mac, Linux)
 
 ### **Запуск**
 
@@ -38,6 +38,8 @@
 docker run -it --rm --log-driver none --name multidd --pull always karboduck/multidd
 ```
 * Альтернативный запуск для слабых систем. Будет использоваться только 1 ядро на 90% (использовать если процессор забивается на 100% и система тормозит) <details> docker run --cpus 0.9 -it --rm --log-driver none --name multidd --pull always karboduck/multidd
+
+* Если вам нужно запустить несколько копий multiddos, то либо используйте разные имена (--name multidd1, --name multidd2 и т.д.), либо не используйте имена вообще
 
 ### **Остановка**
 1. Нажать в окне несколько раз подряд `Ctrl + C`
@@ -50,7 +52,7 @@ docker attach multidd
 ```
 
 ---
-# **Multiddos для bash** (Linux, WSL2)
+# **Multiddos в bash** (Linux, WSL2)
 
 ### **Запуск**
 
