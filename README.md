@@ -22,19 +22,18 @@
 * Имеют хорошую эффективность и поддерживаются разработчиками
 * Умеют работать через прокси
 
-Полностью данным требованиям соответствует только mhddos_proxy. DB1000N не умеет работать через прокси. Поэтому в bash-скрипте он запускается через tor. В docker-версии мы отключили DB1000N, так как работа tor там под вопросом. Это сделано для того, чтобы исключить случаи когда пользователь случайно запускает db1000n и "палит" свой IP. А это возможно когда он запускает docker-версию multiddos и у него не включены VPN.
+Полностью данным требованиям соответствует только mhddos_proxy. DB1000N не умеет работать через прокси. Поэтому в bash-скрипте он запускается через tor. В docker-версии мы отключили DB1000N, так как работа tor там под вопросом. Это сделано для того, чтобы исключить случаи когда пользователь случайно запускает db1000n и "палит" свой IP. А это возможно когда он запускает docker-версию multiddos и у него не включен VPN.
  
 </details>
 
 ---
-# **Docker-версия multiddos. Рекомендуется.** (Windows, Mac, Linux)
+# **Multiddos для docker. Рекомендуется.** (Win, Mac, Linux)
 
 ### **Запуск**
 
 1. Скачать и установить [Docker](https://docs.docker.com/get-docker/)
- * Команда для простой установки в Linux <details> sudo apt install apt-transport-https ca-certificates curl software-properties-common && curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add - && sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable" && sudo apt update && sudo apt install docker-ce -y
- * Альтернативная команда для простой установки в Linux <details> sudo apt update -y && sudo apt install -y docker-ce docker-ce-cli containerd.io
-2. Запустить docker-версию multiddos:
+
+2. Запустить multiddos в docker:
 ```
 docker run -it --rm --log-driver none --name multidd --pull always karboduck/multidd
 ```
@@ -51,7 +50,7 @@ docker attach multidd
 ```
 
 ---
-# **Bash-версия multiddos** (Linux, WSL2)
+# **Multiddos для bash** (Linux, WSL2)
 
 ### **Запуск**
 
