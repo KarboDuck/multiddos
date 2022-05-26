@@ -42,7 +42,7 @@ if [[ $t_proxy_manual != "on" ]]; then
     export proxy_threads="2000"
 fi
 
-export methods="--http-methods GET STRESS POST"
+export methods="--http-methods GET STRESS"
 
 ### prepare target files (main and secondary)
 prepare_targets_and_banner () {
