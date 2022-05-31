@@ -23,8 +23,6 @@ typing_on_screen (){
 }
 export -f typing_on_screen
 
-all_args="${@}"
-
 #if launched in docker than variables saved in docker md.sh will be used
 if [[ $docker_mode != "true" ]]; then
     gotop="on"
@@ -173,11 +171,12 @@ while [ "$1" != "" ]; do
         -g | --gotop ) gotop="off"; db1000n="off"; shift ;;
         +v | --vnstat ) vnstat="on"; shift ;;
         -p0| --no-proxy-finder ) export proxy_finder="off"; shift ;;
+        --lite
         #-p | --proxy-threads ) export proxy_threads="$2"; shift 2 ;;
         --no-uvloop ) export uvloop="off"; shift ;;
         -h | --help )    usage;   exit ;;
         #*  )   usage;   exit ;;
-        *   ) export args_to_pass+=" $1 $2"; shift 2; echo $args_to_pass && echo " v2" && sleep 2 ;;
+        *   ) export args_to_pass+=" $1"; shift 1; echo $args_to_pass && echo " v3" && sleep 2 ;;
     esac
 done
 
@@ -219,8 +218,8 @@ fi
 while true; do
         pkill -f start.py; pkill -f runner.py 
         python3 ~/multidd/mhddos_proxy/runner.py -c $t1 $args_to_pass $methods&
-        # sleep 10 # to decrease load on cpu during simultaneous start
-        # python3 ~/multidd/mhddos_proxy/runner.py -c $t2 $threads $methods&
+        sleep 10 # to decrease load on cpu during simultaneous start
+        python3 ~/multidd/mhddos_proxy/runner.py -c $t2 $threads $methods&
         # sleep 10 # to decrease load on cpu during simultaneous start
         # python3 ~/multidd/mhddos_proxy/runner.py -c $t3 $threads $methods&
         # sleep 10 # to decrease load on cpu during simultaneous start
