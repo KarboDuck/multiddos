@@ -176,7 +176,7 @@ while [ "$1" != "" ]; do
         --no-uvloop ) export uvloop="off"; shift ;;
         -h | --help )    usage;   exit ;;
         #*  )   usage;   exit ;;
-        *   ) export args_to_pass+=" $1"; shift 1; echo $args_to_pass && echo " v6" && sleep 2 ;;
+        *   ) export args_to_pass+=" $1"; shift 1; echo $args_to_pass && echo " v6" && sleep 0.5 ;;
     esac
 done
 
