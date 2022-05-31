@@ -132,7 +132,7 @@ fi
 
 if [[ $proxy_finder == "on" ]]; then
 sleep 0.2
-tmux split-window -v -p 20 'rm -rf ~/multidd/proxy_finder; git clone https://github.com/porthole-ascend-cinnamon/proxy_finder ~/multidd/proxy_finder; cd ~/multidd/proxy_finder; python3 -m pip install -r requirements.txt; clear; echo "Шукаю нові проксі... Proxy threads:" $proxy_threads; echo -e "\x1b[32mВ середньому одна робоча проксі знаходиться після 10млн перевірок\x1b[m"; if [[ $proxy_threads == "" ]]; then python3 ~/multidd/proxy_finder/finder.py; else python3 ~/multidd/proxy_finder/finder.py --threads $proxy_threads; fi'
+tmux split-window -v -p 20 'rm -rf ~/multidd/proxy_finder; git clone https://github.com/porthole-ascend-cinnamon/proxy_finder ~/multidd/proxy_finder; cd ~/multidd/proxy_finder; python3 -m pip install -r requirements.txt; clear; echo "Шукаю нові проксі... Proxy threads:" $proxy_threads; echo -e "\x1b[32mВ середньому одна робоча проксі знаходиться після 10млн перевірок\x1b[m"; if [[ $proxy_threads == "" ]]; then bash python3 ~/multidd/proxy_finder/finder.py; else bash python3 ~/multidd/proxy_finder/finder.py --threads $proxy_threads; fi'
 fi
 
 #tmux -2 attach-session -d
@@ -167,7 +167,7 @@ while [ "$1" != "" ]; do
         -p | --proxy-threads ) export proxy_threads="$2"; shift 2 ;;
         --no-uvloop ) export uvloop="off"; shift ;;
         -h | --help )    usage;   exit ;;
-        *   ) export args_to_pass+=" $1"; shift 1; echo $args_to_pass && echo " v9" && sleep 1 ;;
+        *   ) export args_to_pass+=" $1"; shift 1; echo $args_to_pass && echo " v10" && sleep 1 ;;
     esac
 done
 
