@@ -85,11 +85,6 @@ sleep 0.5
 echo -e "\n" && sleep 0.1
 echo -e "Total targets found:" "\x1b[32m $(cat $targets_line_by_line | wc -l)\x1b[m" && sleep 0.1
 echo -e "Uniq targets:" "\x1b[32m $(cat $targets_uniq | wc -l)\x1b[m" && sleep 0.1
-# if [[ $threads == "" ]]; then
-#     echo -e "\nКількість потоків:" "\x1b[32m $(echo "auto" | cut -d " " -f2)\x1b[m" && sleep 0.1
-# else
-#     echo -e "\nКількість потоків:" "\x1b[32m $(echo $threads | cut -d " " -f2)\x1b[m" && sleep 0.1
-# fi
 echo -e "\nЗавантаження..."
 sleep 3
 clear
@@ -137,8 +132,10 @@ fi
 
 if [[ $proxy_finder == "on" ]]; then
 sleep 0.2
-tmux split-window -v -p 20 'rm -rf ~/multidd/proxy_finder; git clone https://github.com/porthole-ascend-cinnamon/proxy_finder ~/multidd/proxy_finder; cd ~/multidd/proxy_finder; python3 -m pip install -r requirements.txt; clear; echo "Шукаю нові проксі... Proxy threads:" $proxy_threads; echo -e "\x1b[32mВ середньому одна робоча проксі знаходиться після 10млн перевірок\x1b[m"; python3 ~/multidd/proxy_finder/finder.py --threads $proxy_threads'
+tmux split-window -v -p 20 'rm -rf ~/multidd/proxy_finder; git clone https://github.com/porthole-ascend-cinnamon/proxy_finder ~/multidd/proxy_finder; cd ~/multidd/proxy_finder; python3 -m pip install -r requirements.txt; clear; echo "Шукаю нові проксі... Proxy threads:" $proxy_threads; echo -e "\x1b[32mВ середньому одна робоча проксі знаходиться після 10млн перевірок\x1b[m"; if [[ $proxy_threads == "" ]]; then python3 ~/multidd/proxy_finder/finder.py; else python3 ~/multidd/proxy_finder/finder.py --threads $proxy_threads'
 fi
+
+
 
 #tmux -2 attach-session -d
 }
@@ -165,7 +162,6 @@ while [ "$1" != "" ]; do
     case $1 in
         +d | --db1000n )   db1000n="on"; shift ;;
         +u | --uashield )   uashield="on"; shift ;;
-       # -t | --threads )   export threads="-t $2"; t_set_manual="on"; shift 2 ;;
         -g | --gotop ) gotop="off"; db1000n="off"; shift ;;
         +v | --vnstat ) vnstat="on"; shift ;;
         -p0| --no-proxy-finder ) export proxy_finder="off"; shift ;;
@@ -173,7 +169,7 @@ while [ "$1" != "" ]; do
         -p | --proxy-threads ) export proxy_threads="$2"; shift 2 ;;
         --no-uvloop ) export uvloop="off"; shift ;;
         -h | --help )    usage;   exit ;;
-        *   ) export args_to_pass+=" $1"; shift 1; echo $args_to_pass && echo " v7" && sleep 0.5 ;;
+        *   ) export args_to_pass+=" $1"; shift 1; echo $args_to_pass && echo " v8" && sleep 0.5 ;;
     esac
 done
 
