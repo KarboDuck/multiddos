@@ -169,7 +169,7 @@ while [ "$1" != "" ]; do
         -p | --proxy-threads ) export proxy_threads="$2"; shift 2 ;;
         --no-uvloop ) export uvloop="off"; shift ;;
         -h | --help )    usage;   exit ;;
-        *   ) export args_to_pass+=" $1"; shift 1; echo $args_to_pass && echo " v11" && sleep 1 ;;
+        *   ) export args_to_pass+=" $1"; shift 1; echo $args_to_pass && echo " v12" && sleep 1 ;;
     esac
 done
 
