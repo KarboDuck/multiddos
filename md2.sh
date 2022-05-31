@@ -51,8 +51,6 @@ export targets_uniq="/var/tmp/uniq.uaripper"
 export targets_lite="/var/tmp/lite.uaripper"
 export t1="/var/tmp/xaa.uaripper"
 export t2="/var/tmp/xab.uaripper"
-export t3="/var/tmp/xac.uaripper"
-export t4="/var/tmp/xad.uaripper"
 rm -f /var/tmp/*uaripper #remove previous copies
 
 # read targets from github and put them in file $targets_curl. Commented and empty lines excluded.
