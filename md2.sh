@@ -169,11 +169,11 @@ while [ "$1" != "" ]; do
     case $1 in
         +d | --db1000n )   db1000n="on"; shift ;;
         +u | --uashield )   uashield="on"; shift ;;
-        -t | --threads )   export threads="-t $2"; t_set_manual="on"; shift 2 ;;
+       # -t | --threads )   export threads="-t $2"; t_set_manual="on"; shift 2 ;;
         -g | --gotop ) gotop="off"; db1000n="off"; shift ;;
         +v | --vnstat ) vnstat="on"; shift ;;
         -p0| --no-proxy-finder ) export proxy_finder="off"; shift ;;
-        -p | --proxy-threads ) export proxy_threads="$2"; shift 2 ;;
+        #-p | --proxy-threads ) export proxy_threads="$2"; shift 2 ;;
         --no-uvloop ) export uvloop="off"; shift ;;
         -h | --help )    usage;   exit ;;
         #*  )   usage;   exit ;;
