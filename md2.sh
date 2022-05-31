@@ -175,7 +175,7 @@ while [ "$1" != "" ]; do
         -p | --proxy-threads ) export proxy_threads="$2"; shift 2 ;;
         --no-uvloop ) export uvloop="off"; shift ;;
         -h | --help )    usage;   exit ;;
-        *  )   usage;   exit ;;
+        #*  )   usage;   exit ;;
     esac
 done
 
