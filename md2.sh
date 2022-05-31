@@ -164,6 +164,7 @@ exit
 
 if [[ "$1" = ""  ]]; then launch; fi
 
+args_to_pass=""
 while [ "$1" != "" ]; do
     case $1 in
         +d | --db1000n )   db1000n="on"; shift ;;
@@ -176,6 +177,7 @@ while [ "$1" != "" ]; do
         --no-uvloop ) export uvloop="off"; shift ;;
         -h | --help )    usage;   exit ;;
         #*  )   usage;   exit ;;
+        *   ) args_to_pass+=" $1"; shift 2; echo $args_to_pass && sleep 2 ;;
     esac
 done
 
