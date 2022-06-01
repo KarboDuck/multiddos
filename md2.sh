@@ -1,6 +1,6 @@
 #!/bin/bash
 # curl -O https://raw.githubusercontent.com/KarboDuck/multiddos/main/md2.sh && bash md2.sh
-clear && echo -e "Loading... v0.5a\n"
+clear && echo -e "Loading... v0.5b\n"
 sudo apt-get update -q -y #>/dev/null 2>&1
 sudo apt-get install -q -y tmux toilet python3 python3-pip 
 pip install --upgrade pip >/dev/null 2>&1
@@ -71,17 +71,21 @@ sudo pkill node shield> /dev/null 2>&1
 grep -qxF 'set -g mouse on' ~/.tmux.conf || echo 'set -g mouse on' >> ~/.tmux.conf
 tmux source-file ~/.tmux.conf > /dev/null 2>&1
 
+echo "1111"; sleep 3
+
 if [[ $gotop == "on" ]]; then
     if [ ! -f "/usr/local/bin/gotop" ]; then
         curl -L https://github.com/cjbassi/gotop/releases/download/3.0.0/gotop_3.0.0_linux_amd64.deb -o gotop.deb
         sudo dpkg -i gotop.deb
     fi
     tmux new-session -s multidd -d 'gotop -sc solarized'
-    #sleep 0.2
+    sleep 0.2
     tmux split-window -h -p 66 'bash auto_bash.sh'
 else
     tmux new-session -s multidd -d 'bash auto_bash.sh'
 fi
+
+echo "2222"; sleep 3
 
 if [[ $vnstat == "on" ]]; then
     sudo apt -yq install vnstat
