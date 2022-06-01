@@ -1,6 +1,6 @@
 #!/bin/bash
 # curl -O https://raw.githubusercontent.com/KarboDuck/multiddos/main/md2.sh && bash md2.sh
-clear && echo -e "Loading...\n"
+clear && echo -e "Loading... v0.5a\n"
 sudo apt-get update -q -y #>/dev/null 2>&1
 sudo apt-get install -q -y tmux toilet python3 python3-pip 
 pip install --upgrade pip >/dev/null 2>&1
@@ -76,11 +76,11 @@ if [[ $gotop == "on" ]]; then
         curl -L https://github.com/cjbassi/gotop/releases/download/3.0.0/gotop_3.0.0_linux_amd64.deb -o gotop.deb
         sudo dpkg -i gotop.deb
     fi
-    sleep 0.2
-    tmux new-session -s multidd -d 'gotop -sc solarized'; sleep 0.2
-    tmux split-window -h -p 66 'bash auto_bash.sh'; sleep 0.2
+    tmux new-session -s multidd -d 'gotop -sc solarized'
+    #sleep 0.2
+    tmux split-window -h -p 66 'bash auto_bash.sh'
 else
-    tmux new-session -s multidd -d 'bash auto_bash.sh'; sleep 0.2
+    tmux new-session -s multidd -d 'bash auto_bash.sh'
 fi
 
 if [[ $vnstat == "on" ]]; then
@@ -98,7 +98,7 @@ if [[ $uashield == "on" ]]; then
 fi
 
 if [[ $proxy_finder == "on" ]]; then
-    sleep 0.2
+    #sleep 0.2
     tmux split-window -v -p 20 'rm -rf ~/multidd/proxy_finder; git clone https://github.com/porthole-ascend-cinnamon/proxy_finder ~/multidd/proxy_finder; cd ~/multidd/proxy_finder; python3 -m pip install -r requirements.txt; clear; echo -e "\x1b[32mШукаю проксі, в середньому одна робоча знаходиться після 10млн перевірок\x1b[m"; python3 ~/multidd/proxy_finder/finder.py  --threads $proxy_threads'
 fi
 tmux attach-session -t multidd
@@ -115,7 +115,7 @@ while [ "$1" != "" ]; do
         +v | --vnstat ) vnstat="on"; shift ;;
         -p0| --no-proxy-finder ) export proxy_finder="off"; shift ;;
         --lite ) export lite="on"; export proxy_threads=1000; shift ;;
-        -p | --proxy-threads ) proxy_finder="on"; export proxy_threads="$2"; shift 2 ;;
+        -p | --proxy-threads ) export proxy_finder="on"; export proxy_threads="$2"; shift 2 ;;
         *   ) export args_to_pass+=" $1"; shift ;;
     esac
 done
