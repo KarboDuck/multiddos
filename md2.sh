@@ -1,6 +1,6 @@
 #!/bin/bash
 # curl -O https://raw.githubusercontent.com/KarboDuck/multiddos/main/md2.sh && bash md2.sh
-clear && echo -e "Loading... v0.5b\n"
+clear && echo -e "Loading... v0.5c\n"
 sudo apt-get update -q -y #>/dev/null 2>&1
 sudo apt-get install -q -y tmux toilet python3 python3-pip 
 pip install --upgrade pip >/dev/null 2>&1
@@ -85,7 +85,7 @@ else
     tmux new-session -s multidd -d 'bash auto_bash.sh'
 fi
 
-echo "2222"; sleep 1
+echo "2222"; sleep 3
 
 if [[ $vnstat == "on" ]]; then
     sudo apt -yq install vnstat
@@ -105,10 +105,10 @@ if [[ $proxy_finder == "on" ]]; then
     #sleep 0.2
     tmux split-window -v -p 20 'rm -rf ~/multidd/proxy_finder; git clone https://github.com/porthole-ascend-cinnamon/proxy_finder ~/multidd/proxy_finder; cd ~/multidd/proxy_finder; python3 -m pip install -r requirements.txt; clear; echo -e "\x1b[32mШукаю проксі, в середньому одна робоча знаходиться після 10млн перевірок\x1b[m"; python3 ~/multidd/proxy_finder/finder.py  --threads $proxy_threads'
 fi
-echo "3333"; sleep 1
+echo "3333"; sleep 3
 #tmux attach-session -t multidd
 tmux a
-echo "4444"; sleep 1
+echo "4444"; sleep 3
 
 }
 
