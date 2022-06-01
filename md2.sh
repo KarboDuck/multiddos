@@ -108,7 +108,7 @@ while [ "$1" != "" ]; do
         +u | --uashield )   uashield="on"; shift ;;
         -g | --gotop ) gotop="off"; db1000n="off"; shift ;;
         +v | --vnstat ) vnstat="on"; shift ;;
-        -p0| --no-proxy-finder ) export proxy_finder="off"; shift ;;
+        # -p0| --no-proxy-finder ) export proxy_finder="off"; shift ;;
         --lite ) export lite="on"; export proxy_threads=1000; shift ;;
         -p | --proxy-threads ) export proxy_finder="on"; export proxy_threads="$2"; shift 2 ;;
         *   ) export args_to_pass+=" $1"; shift ;;
