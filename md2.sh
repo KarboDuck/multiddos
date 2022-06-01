@@ -78,7 +78,7 @@ if [[ $gotop == "on" ]]; then
         sudo dpkg -i gotop.deb
     fi
     tmux new-session -s multidd -d 'gotop -sc solarized'; sleep 0.2
-    tmux split-window -h -p 66 'bash auto_bash.sh'
+    tmux split-window -h -p 66 'bash auto_bash.sh'; sleep 0.2
 else
     tmux new-session -s multidd -d 'bash auto_bash.sh'
 fi
