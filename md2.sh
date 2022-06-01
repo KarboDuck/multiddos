@@ -111,7 +111,7 @@ tmux attach-session -t multidd
 
 if [[ "$1" = ""  ]]; then launch; fi
 
-#args_to_pass=""
+args_to_pass=""
 while [ "$1" != "" ]; do
     case $1 in
         +d | --db1000n )   db1000n="on"; shift ;;
