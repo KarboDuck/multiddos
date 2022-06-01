@@ -72,7 +72,7 @@ cat $targets_line_by_line | sort | uniq | sort -R > $targets_uniq
 
 #split targets in N files
 cd /var/tmp/
-split -n l/2 --additional-suffix=.uaripper $targets_uniq
+split -n l/1 --additional-suffix=.uaripper $targets_uniq
 cd -
 
 # Print greetings and number of targets (secondary, main, total)
@@ -204,8 +204,8 @@ while true; do
         python3 ~/multidd/mhddos_proxy/runner.py -c $targets_lite $methods $args_to_pass -t 2000 &
     else
         python3 ~/multidd/mhddos_proxy/runner.py -c $t1 $methods $args_to_pass &
-        sleep 10 # to decrease load on cpu during simultaneous start
-        python3 ~/multidd/mhddos_proxy/runner.py -c $t2 $methods $args_to_pass &
+        # sleep 5 # to decrease load on cpu during simultaneous start
+        # python3 ~/multidd/mhddos_proxy/runner.py -c $t2 $methods $args_to_pass &
     fi
 sleep 30m
 prepare_targets_and_banner
