@@ -115,7 +115,7 @@ while [ "$1" != "" ]; do
         +v | --vnstat ) vnstat="on"; shift ;;
         -p0| --no-proxy-finder ) export proxy_finder="off"; shift ;;
         --lite ) export lite="on"; export proxy_threads=1000; shift ;;
-        -p | --proxy-threads ) export proxy_threads="$2"; shift 2 ;;
+        -p | --proxy-threads ) proxy_finder="on"; export proxy_threads="$2"; shift 2 ;;
         *   ) export args_to_pass+=" $1"; shift ;;
     esac
 done
