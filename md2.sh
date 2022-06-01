@@ -22,7 +22,7 @@ if [[ $docker_mode != "true" ]]; then
     db1000n="off"
     uashield="off"
     vnstat="off"
-    proxy_finder="on"
+    proxy_finder="off"
 fi
 
 if [[ $t_set_manual != "on" ]]; then export threads="-t 5000"; fi # default threads if not set in cmd
@@ -49,7 +49,7 @@ done
 # find only uniq targets, randomize order and save them in $targets_uniq
 cat $targets_curl | sort | uniq | sort -R > $targets_uniq
 
-# Print greetings and number of targets
+# Print greetings and number of targets; yes, utility name "toilet" is unfortunate
 clear
 toilet -t --metal "Український"
 toilet -t --metal "   жнець"
@@ -65,8 +65,7 @@ export -f prepare_targets_and_banner
 launch () {
 # kill previous sessions or processes in case they still in memory
 tmux kill-session -t multidd > /dev/null 2>&1
-sudo pkill node > /dev/null 2>&1
-sudo pkill shield > /dev/null 2>&1
+sudo pkill node shield> /dev/null 2>&1
 
 # tmux mouse support
 grep -qxF 'set -g mouse on' ~/.tmux.conf || echo 'set -g mouse on' >> ~/.tmux.conf
@@ -77,10 +76,11 @@ if [[ $gotop == "on" ]]; then
         curl -L https://github.com/cjbassi/gotop/releases/download/3.0.0/gotop_3.0.0_linux_amd64.deb -o gotop.deb
         sudo dpkg -i gotop.deb
     fi
+    sleep 0.2
     tmux new-session -s multidd -d 'gotop -sc solarized'; sleep 0.2
     tmux split-window -h -p 66 'bash auto_bash.sh'; sleep 0.2
 else
-    tmux new-session -s multidd -d 'bash auto_bash.sh'
+    tmux new-session -s multidd -d 'bash auto_bash.sh'; sleep 0.2
 fi
 
 if [[ $vnstat == "on" ]]; then
@@ -98,6 +98,7 @@ if [[ $uashield == "on" ]]; then
 fi
 
 if [[ $proxy_finder == "on" ]]; then
+    sleep 0.2
     tmux split-window -v -p 20 'rm -rf ~/multidd/proxy_finder; git clone https://github.com/porthole-ascend-cinnamon/proxy_finder ~/multidd/proxy_finder; cd ~/multidd/proxy_finder; python3 -m pip install -r requirements.txt; clear; echo -e "\x1b[32mШукаю проксі, в середньому одна робоча знаходиться після 10млн перевірок\x1b[m"; python3 ~/multidd/proxy_finder/finder.py  --threads $proxy_threads'
 fi
 tmux attach-session -t multidd
@@ -121,7 +122,7 @@ done
 
 prepare_targets_and_banner
 
-# create small separate script to re-launch only this part of code and not the whole thing
+# create small separate script to re-launch only this small part of code
 cat > auto_bash.sh << 'EOF'
 # create swap file if system doesn't have it
 if [[ $(echo $(swapon --noheadings --bytes | cut -d " " -f3)) == "" ]]; then
