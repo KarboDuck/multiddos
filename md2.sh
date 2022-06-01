@@ -1,6 +1,6 @@
 #!/bin/bash
 # curl -O https://raw.githubusercontent.com/KarboDuck/multiddos/main/md2.sh && bash md2.sh
-clear && echo -e "Loading... v0.5g\n"
+clear && echo -e "Loading... v0.5h\n"
 sudo apt-get update -q -y #>/dev/null 2>&1
 sudo apt-get install -q -y tmux toilet python3 python3-pip 
 pip install --upgrade pip >/dev/null 2>&1
@@ -112,7 +112,7 @@ tmux attach-session -t multidd
 
 }
 
-if [[ "$1" = ""  ]]; then launch; fi
+#if [[ "$1" = ""  ]]; then launch; fi
 
 #args_to_pass=""
 while [ "$1" != "" ]; do
