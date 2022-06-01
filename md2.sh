@@ -206,7 +206,7 @@ while true; do
     pkill -f start.py; pkill -f runner.py 
     if [[ $lite == "on" ]]; then
         tail -n 2000 $targets_uniq > $targets_lite
-        python3 ~/multidd/mhddos_proxy/runner.py -c $targets_lite $methods $args_to_pass -t 7500 &
+        python3 ~/multidd/mhddos_proxy/runner.py -c $targets_lite $methods $args_to_pass -t 5000 &
     else
         python3 ~/multidd/mhddos_proxy/runner.py -c $t1 $methods $args_to_pass &
         sleep 5 # to decrease load on cpu during simultaneous start
