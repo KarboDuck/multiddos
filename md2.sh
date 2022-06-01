@@ -71,7 +71,7 @@ sudo pkill node shield> /dev/null 2>&1
 grep -qxF 'set -g mouse on' ~/.tmux.conf || echo 'set -g mouse on' >> ~/.tmux.conf
 tmux source-file ~/.tmux.conf > /dev/null 2>&1
 
-echo "1111"; sleep 3
+echo "1111"; sleep 1
 
 if [[ $gotop == "on" ]]; then
     if [ ! -f "/usr/local/bin/gotop" ]; then
@@ -85,7 +85,7 @@ else
     tmux new-session -s multidd -d 'bash auto_bash.sh'
 fi
 
-echo "2222"; sleep 3
+echo "2222"; sleep 1
 
 if [[ $vnstat == "on" ]]; then
     sudo apt -yq install vnstat
@@ -105,7 +105,10 @@ if [[ $proxy_finder == "on" ]]; then
     #sleep 0.2
     tmux split-window -v -p 20 'rm -rf ~/multidd/proxy_finder; git clone https://github.com/porthole-ascend-cinnamon/proxy_finder ~/multidd/proxy_finder; cd ~/multidd/proxy_finder; python3 -m pip install -r requirements.txt; clear; echo -e "\x1b[32mШукаю проксі, в середньому одна робоча знаходиться після 10млн перевірок\x1b[m"; python3 ~/multidd/proxy_finder/finder.py  --threads $proxy_threads'
 fi
+echo "3333"; sleep 1
 tmux attach-session -t multidd
+echo "4444"; sleep 1
+
 }
 
 if [[ "$1" = ""  ]]; then launch; fi
