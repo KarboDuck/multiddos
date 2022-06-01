@@ -1,6 +1,6 @@
 #!/bin/bash
 # curl -O https://raw.githubusercontent.com/KarboDuck/multiddos/main/md2.sh && bash md2.sh
-clear && echo -e "Loading... v0.5c\n"
+clear && echo -e "Loading... v0.5d\n"
 sudo apt-get update -q -y #>/dev/null 2>&1
 sudo apt-get install -q -y tmux toilet python3 python3-pip 
 pip install --upgrade pip >/dev/null 2>&1
@@ -78,11 +78,11 @@ if [[ $gotop == "on" ]]; then
         curl -L https://github.com/cjbassi/gotop/releases/download/3.0.0/gotop_3.0.0_linux_amd64.deb -o gotop.deb
         sudo dpkg -i gotop.deb
     fi
-    tmux new-session -s multidd -d 'gotop -sc solarized'
+    tmux new-session -s multidd 'gotop -sc solarized'
     sleep 0.2
     tmux split-window -h -p 66 'bash auto_bash.sh'
 else
-    tmux new-session -s multidd -d 'bash auto_bash.sh'
+    tmux new-session -s multidd 'bash auto_bash.sh'
 fi
 
 echo "2222"; sleep 3
@@ -107,7 +107,7 @@ if [[ $proxy_finder == "on" ]]; then
 fi
 echo "3333"; sleep 3
 #tmux attach-session -t multidd
-tmux a
+#tmux a
 echo "4444"; sleep 3
 
 }
