@@ -5,6 +5,7 @@ sudo apt-get update -q -y #>/dev/null 2>&1
 sudo apt-get install -q -y tmux toilet python3 python3-pip 
 pip install --upgrade pip >/dev/null 2>&1
 rm -rf ~/multidd; mkdir ~/multidd; cd ~/multidd #delete old folder; create new and cd inside
+sudo rm -f /var/tmp/*uaripper #remove previous targets under root
 
 typing_on_screen (){
     tput setaf 2 &>/dev/null # green
