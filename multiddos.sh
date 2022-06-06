@@ -137,7 +137,7 @@ while true; do
     pkill -f start.py; pkill -f runner.py
     if [[ $lite == "on" ]]; then
         tail -n 2000 $targets_uniq > $targets_lite
-        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c $targets_lite $methods $args_to_pass -t 5000 &
+        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c $targets_lite $methods -t 5000 $args_to_pass &
     else
         cd /var/tmp/; split -n l/2 --additional-suffix=.uaripper $targets_uniq; cd - #split targets in 2
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c /var/tmp/xaa.uaripper $methods $threads $args_to_pass &
