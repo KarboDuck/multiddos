@@ -110,7 +110,7 @@ while [ "$1" != "" ]; do
         -g | --gotop ) gotop="off"; db1000n="off"; shift ;;
         +v | --vnstat ) vnstat="on"; shift ;;
         --lite ) export lite="on"; shift ;;
-        --plite ) export lite="on"; export proxy_threads=1000; shift ;;
+        --plite ) export lite="on"; export proxy_finder="on"; export proxy_threads=1000; shift ;;
         -p | --proxy-threads ) export proxy_finder="on"; export proxy_threads="$2"; shift 2 ;;
         *   ) export args_to_pass+=" $1"; shift ;;
     esac
