@@ -2,7 +2,7 @@
 # curl -O https://raw.githubusercontent.com/KarboDuck/multiddos/main/multiddos.sh && bash multiddos.sh
 clear && echo -e "Loading... v0.9a\n"
 sudo apt-get update -q -y #>/dev/null 2>&1
-sudo apt-get install -q -y tmux toilet python3 python3-pip 
+sudo apt-get install -q -y tmux git toilet python3 python3-pip 
 pip install --upgrade pip >/dev/null 2>&1
 rm -rf ~/multidd; mkdir ~/multidd; cd ~/multidd #delete old folder; create new and cd inside
 sudo rm -f /var/tmp/*uaripper #remove previous targets under root
