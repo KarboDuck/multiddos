@@ -31,7 +31,7 @@ if [[ $docker_mode != "true" ]]; then
     proxy_finder="off"
 fi
 
-if [[ $t_set_manual != "on" ]]; then export threads="-t 4000"; fi # default threads if not passed in cmd line
+if [[ $t_set_manual != "on" ]]; then export threads="-t 2500"; fi # default threads if not passed in cmd line
 if [[ $t_proxy_manual != "on" ]]; then export proxy_threads="2000"; fi # default proxy_threads if not passed in cmd line
 
 ### prepare target files and show banner
