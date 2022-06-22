@@ -122,7 +122,6 @@ cat > auto_bash.sh << 'EOF'
 # Restart and update everything (mhddos_proxy and targets) every 30 minutes
 while true; do
     #install mhddos_proxy
-    rm -rf ~/multidd/mhddos_proxy/*;
     cd ~/multidd/
     git clone https://github.com/porthole-ascend-cinnamon/mhddos_proxy.git
     cd ~/multidd/mhddos_proxy
@@ -144,6 +143,7 @@ while true; do
 sleep 60
 pkill -f start.py; pkill -f runner.py;
 prepare_targets_and_banner
+rm -rf ~/multidd/mhddos_proxy/
 done
 EOF
 
