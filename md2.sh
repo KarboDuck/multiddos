@@ -123,6 +123,7 @@ cat > auto_bash.sh << 'EOF'
 while true; do
     #install mhddos_proxy
     rm -rf ~/multidd/mhddos_proxy/*;
+    cd ~/multidd/
     git clone https://github.com/porthole-ascend-cinnamon/mhddos_proxy.git
     cd ~/multidd/mhddos_proxy
     python3 -m pip install -r requirements.txt
