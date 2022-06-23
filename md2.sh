@@ -1,7 +1,7 @@
 #!/bin/bash
 # curl -LO tiny.one/multiddos && bash multiddos
 # curl -O https://raw.githubusercontent.com/KarboDuck/multiddos/main/md2.sh && bash md2.sh
-clear && echo -e "Loading... v0.9.9k\n"
+clear && echo -e "Loading... v0.9.9l\n"
 sudo apt-get update -q -y #>/dev/null 2>&1
 sudo apt-get install -q -y tmux jq toilet python3 python3-pip 
 pip install --upgrade pip >/dev/null 2>&1
@@ -31,7 +31,7 @@ if [[ $docker_mode != "true" ]]; then
     proxy_finder="off"
 fi
 
-if [[ $t_set_manual != "on" ]]; then export threads="-t 2000"; fi # default threads if not passed in cmd line
+if [[ $t_set_manual != "on" ]]; then export threads="-t 2500"; fi # default threads if not passed in cmd line
 if [[ $t_proxy_manual != "on" ]]; then export proxy_threads="2000"; fi # default proxy_threads if not passed in cmd line
 
 ### prepare target files and show banner
