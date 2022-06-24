@@ -3,7 +3,7 @@
 # curl -O https://raw.githubusercontent.com/KarboDuck/multiddos/main/md2.sh && bash md2.sh
 clear && echo -e "Loading... v1.0\n"
 sudo apt-get update -q -y #>/dev/null 2>&1
-sudo apt-get install -q -y tmux jq toilet python3 python3-pip 
+sudo apt-get install -q -y tmux jq git toilet python3 python3-pip 
 pip install --upgrade pip >/dev/null 2>&1
 pkill -f start.py; pkill -f runner.py; #stop old processes if they still running
 rm -rf ~/multidd*; mkdir -p ~/multidd/targets/ ; cd ~/multidd # clean working folder 
