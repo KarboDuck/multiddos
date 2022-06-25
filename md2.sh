@@ -129,7 +129,7 @@ while true; do
     if [[ $quality_settings == "potato" ]]; then
         tail -n 500 ~/multidd/targets/uniq_targets.txt > ~/multidd/targets/lite_targets.txt
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/lite_targets.txt $methods -t 1000 $args_to_pass &
-    if [[ $quality_settings == "low" ]]; then
+    elif [[ $quality_settings == "low" ]]; then
         tail -n 1000 ~/multidd/targets/uniq_targets.txt > ~/multidd/targets/lite_targets.txt
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/lite_targets.txt $methods -t 2000 $args_to_pass &
     elif [[ $quality_settings == "medium" ]]; then
