@@ -41,7 +41,7 @@ echo "$(curl -s -X GET "https://raw.githubusercontent.com/db1000n-coordinators/L
 echo "$(curl -s -X GET "https://raw.githubusercontent.com/db1000n-coordinators/LoadTestConfig/main/config.v0.7.json" 2>/dev/null | jq -r '.jobs[].args.connection.args.address | select (. != null
 )')" > ~/multidd/targets/source3.txt
 
-# remove all empty lines (only spaces, only tabs, only new lines)
+# remove all empty lines (spaces, tabs, new lines)
 sed -i '/^[[:space:]]*$/d' ~/multidd/targets/source*.txt
 # add 'tcp://' to all ip addresses
 sed -i -e 's/^/tcp:\/\//g' ~/multidd/targets/source3.txt
