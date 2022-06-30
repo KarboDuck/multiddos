@@ -38,7 +38,10 @@ echo "$(curl -s https://raw.githubusercontent.com/alexnest-ua/targets/main/speci
 # 2 IT ARMY of Ukraine                             https://t.me/itarmyofukraine2022
 echo "$(curl -s -X GET "https://raw.githubusercontent.com/db1000n-coordinators/LoadTestConfig/main/config.v0.7.json" 2>/dev/null | jq -r '.jobs[].args.request.path')" > ~/multidd/targets/source2.txt
 echo "$(curl -s -X GET "https://raw.githubusercontent.com/db1000n-coordinators/LoadTestConfig/main/config.v0.7.json" 2>/dev/null | jq -r '.jobs[].args.client.static_host.addr | select (. != null)')" > ~/multidd/targets/source3.txt
+# echo "$(curl -s -X GET "https://raw.githubusercontent.com/db1000n-coordinators/LoadTestConfig/main/config.v0.7.json" 2>/dev/null | jq -r '.jobs[].args.connection.static_host.addr | select (. != null)')" > ~/multidd/targets/source3.txt
 
+# remove all empty lines (only spaces, only tabs, only new lines)
+sed -i '/^[[:space:]]*$/d' ttt* ~/multidd/targets/source3.txt
 # add 'tcp://' to all ip addresses
 sed -i -e 's/^/tcp:\/\//g' ~/multidd/targets/source3.txt
 
