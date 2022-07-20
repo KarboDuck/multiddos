@@ -1,7 +1,7 @@
 #!/bin/bash
 # curl -LO tiny.one/multiddos && bash multiddos
 # curl -O https://raw.githubusercontent.com/KarboDuck/multiddos/main/md2.sh && bash md2.sh
-clear && echo -e "Loading... v1.2p\n"
+clear && echo -e "Loading... v1.2q\n"
 sudo apt-get update -q -y #>/dev/null 2>&1
 sudo apt-get install -q -y tmux jq git toilet python3 python3-pip 
 pip install --upgrade pip >/dev/null 2>&1
@@ -139,7 +139,7 @@ if [[ $mhddos_mode == "new" ]]; then
     # echo "here1"
     # sleep 1
 
-    ~/multidd/mhddos_proxy_linux --copies 2 -t 4000 $args_to_pass &
+    bash ~/multidd/mhddos_proxy_linux --copies 2 -t 4000 $args_to_pass &
 
     # if [[ $ddos_size == "XS" ]]; then
     #     ./mhddos_proxy_linux -t 1000 $args_to_pass &
