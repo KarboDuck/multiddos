@@ -140,6 +140,8 @@ cat > auto_bash.sh << 'EOF'
 # pkill -f mhddos_proxy_linux
 
 if [[ $mhddos_mode == "new" ]]; then
+    echo "!!!NEW MODE!!!"
+    sleep 5
     cd ~/multidd/
 
     if [[ $ddos_size == "AUTO" ]]; then
