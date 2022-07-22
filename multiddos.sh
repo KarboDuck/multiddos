@@ -1,7 +1,7 @@
 #!/bin/bash
 # curl -LO tiny.one/multiddos && bash multiddos
 # curl -O https://raw.githubusercontent.com/KarboDuck/multiddos/main/md2.sh && bash md2.sh
-clear && echo -e "Loading... v1.2a\n"
+clear && echo -e "Loading... v1.2b\n"
 sudo apt-get update -q -y #>/dev/null 2>&1
 sudo apt-get install -q -y tmux jq git toilet python3 python3-pip 
 pip install --upgrade pip >/dev/null 2>&1
@@ -63,7 +63,7 @@ toilet -t --metal "Український"
 toilet -t --metal "   жнець"
 toilet -t --metal " MULTIDDOS"
 
-if [[ $mhddos_mode == "new" ]]; then
+if [[ $mhddos_mode == "new22222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222" ]]; then
     typing_on_screen 'Шукаю завдання від IT ARMY...' && sleep 2&
 else
     typing_on_screen 'Шукаю завдання...' ; sleep 0.5
