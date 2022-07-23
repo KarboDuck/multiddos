@@ -153,11 +153,11 @@ if [[ $mhddos_mode == "new" ]]; then
     elif [[ $ddos_size == "L" ]]; then
         ./mhddos_proxy_linux --copies auto -t 4000 $args_to_pass
     elif [[ $ddos_size == "XL" ]]; then
-        ./mhddos_proxy_linux --copies 4 -t 3000 $args_to_pass
-    elif [[ $ddos_size == "XXL" ]]; then
         ./mhddos_proxy_linux --copies 4 -t 4000 $args_to_pass
+    elif [[ $ddos_size == "XXL" ]]; then
+        ./mhddos_proxy_linux --copies 4 -t 6000 $args_to_pass
     elif [[ $ddos_size == "XXXL" ]]; then
-        ./mhddos_proxy_linux --copies 4 -t 5000 $args_to_pass
+        ./mhddos_proxy_linux --copies 4 -t 8000 $args_to_pass
     fi
 
 else
